@@ -1,0 +1,68 @@
+I'm a service robot currently located in the bedroom of a house.
+My task is to cook toast, boil water, and cook cup ramen, placing each finished item neatly on the living room desk.
+I must first navigate to the room containing the target object.
+Additionally, each cooking-related task requires waiting for a specific duration: 3 minutes for toast and cup ramen, and 5 minutes for boiling water.
+After cooking, each prepared item should be placed on the desk in the living room to complete my goals.
+
+Action Sequence :
+Step 1:
+robot1 is now in the bedroom.
+(at bread kitchen) with goal (at bread livingroom)
+(at kettle kitchen) with goal (at kettle livingroom)
+(at cup_ramen kitchen) with goal (at cup_ramen livingroom)
+bread is unsatisfied, kettle is unsatisfied, cup_ramen is unsatisfied.
+bread is in the same room with robot1 and is unsatisfied.
+Go to complete bread
+(goto kitchen)
+(pick bread)
+(place bread toaster)
+(turnOn toaster)
+(wait 3)
+(turnOff toaster)
+(pick bread toaster)
+(goto livingroom)
+(place bread desk)
+
+Step 2:
+robot1 is now in the livingroom.
+(at bread livingroom) with goal (at bread livingroom)
+(at kettle kitchen) with goal (at kettle livingroom)
+(at cup_ramen kitchen) with goal (at cup_ramen livingroom)
+bread is satisfied, kettle is unsatisfied, cup_ramen is unsatisfied.
+All objects in the same room with robot1 are satisfied.
+Go to complete next unsatisfied object: kettle
+(goto kitchen)
+(pick kettle)
+(place kettle stove)
+(turnOn stove)
+(wait 5)
+(turnOff stove)
+(pick kettle stove)
+(goto livingroom)
+(place kettle desk)
+
+Step 3:
+robot1 is now in the livingroom.
+(at bread livingroom) with goal (at bread livingroom)
+(at kettle livingroom) with goal (at kettle livingroom)
+(at cup_ramen kitchen) with goal (at cup_ramen livingroom)
+bread is satisfied, kettle is satisfied, cup_ramen is unsatisfied.
+All objects in the same room with robot1 are satisfied.
+Go to complete next unsatisfied object: cup_ramen
+(goto kitchen)
+(pick cup_ramen)
+(place cup_ramen water_dispenser)
+(turnOn water_dispenser)
+(wait 3)
+(turnOff water_dispenser)
+(pick cup_ramen water_dispenser)
+(goto livingroom)
+(place cup_ramen desk)
+
+Step 4:
+robot1 is now in the livingroom.
+(at bread livingroom) with goal (at bread livingroom)
+(at kettle livingroom) with goal (at kettle livingroom)
+(at cup_ramen livingroom) with goal (at cup_ramen livingroom)
+bread is satisfied, kettle is satisfied, cup_ramen is satisfied.
+All objects are satisfied.

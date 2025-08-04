@@ -1,0 +1,150 @@
+Question:
+Initial state:
+(at robot1 bedroom)
+(at dishcloth livingroom)
+(at phone bedroom)
+(at charger bedroom)
+(at water_bottle kitchen)
+(at desk livingroom)
+(not (on charger))
+
+Goal state:
+(wiped desk)
+(charged phone)
+(at water_bottle desk)
+
+Examined action sequence:
+(goto livingroom)
+(pick dishcloth)
+(wipe dishcloth desk)
+(goto bedroom)
+(pick phone)
+(place phone charger)
+(turnOn charger)
+(wait 10)
+(turnOff charger)
+(pick phone charger)
+(goto livingroom)
+(place phone desk)
+(goto kitchen)
+(pick water_bottle)
+(goto livingroom)
+(place water_bottle)
+
+Answer:
+Analysis:
+Initial state:
+(at robot1 bedroom),
+(at dishcloth livingroom),
+(at phone bedroom),
+(at charger bedroom),
+(at water_bottle kitchen),
+(at desk livingroom),
+(not (on charger))
+
+(goto livingroom)
+Resulting state: (at robot1 livingroom) 
+Inverse action: (goto bedroom)
+Inversed state: (at robot1 bedroom) 
+Difference: none
+inversed state is the same as resulting state, action is correct
+
+(pick dishcloth)
+Resulting state: (arm-dishcloth), (not (at dishcloth livingroom)) 
+Inverse action: (place dishcloth)
+Inversed state: (at dishcloth livingroom), (not (arm-dishcloth))
+Difference: none
+inversed state is the same as resulting state, action is correct
+
+(wipe dishcloth desk)
+effect applied successfully, action is correct
+
+(goto bedroom)
+Resulting state: (at robot1 bedroom) 
+Inverse action: (goto livingroom)
+Inversed state: (at robot1 livingroom) 
+Difference: none
+inversed state is the same as resulting state, action is correct
+
+(pick phone)
+Resulting state: (arm-phone), (not (at phone bedroom)) 
+Inverse action: (place phone)
+Inversed state: (at phone bedroom), (not (arm-phone)) 
+Difference: none
+inversed state is the same as resulting state, action is correct
+
+(place phone charger)
+Resulting state: (at phone charger), (not (arm-phone)) 
+Inverse action: (pick phone charger)
+Inversed state: (arm-phone), (not (at phone charger)) 
+Difference: none
+inversed state is the same as resulting state, action is correct
+
+(turnOn charger)
+Resulting state: (on charger) 
+Inverse action: (turnOff charger)
+Inversed state: (not (on charger)) 
+Difference: none
+inversed state is the same as resulting state, action is correct
+
+(wait 10)
+effect applied successfully, action is correct
+
+(turnOff charger)
+Resulting state: (not (on charger)), (charged phone) 
+Inverse action: (turnOn charger)
+Inversed state: (on charger), (charged phone) 
+Difference: none
+inversed state is the same as resulting state, action is correct
+
+(pick phone charger)
+Resulting state: (arm-phone), (not (at phone charger)), (charged phone) 
+Inverse action: (place phone charger)
+Inversed state: (at phone charger), (not (arm-phone)), (charged phone) 
+Difference: none
+inversed state is the same as resulting state, action is correct
+
+(goto livingroom)
+Resulting state: (at robot1 livingroom) 
+Inverse action: (goto bedroom)
+Inversed state: (at robot1 bedroom) 
+Difference: none
+inversed state is the same as resulting state, action is correct
+
+(place phone desk)
+Resulting state: (at phone desk), (not (arm-phone)) 
+Inverse action: (pick phone desk)
+Inversed state: (arm-phone), (not (at phone desk)) 
+Difference: none
+inversed state is the same as resulting state, action is correct
+
+(goto kitchen)
+Resulting state: (at robot1 kitchen) 
+Inverse action: (goto livingroom)
+Inversed state: (at robot1 livingroom) 
+Difference: none
+inversed state is the same as resulting state, action is correct
+
+(pick water_bottle)
+Resulting state: (arm-water_bottle), (not (at water_bottle kitchen)) 
+Inverse action: (place water_bottle)
+Inversed state: (at water_bottle kitchen), (not (arm-water_bottle)) 
+Difference: none
+inversed state is the same as resulting state, action is correct
+
+(goto livingroom)
+Resulting state: (at robot1 livingroom), (arm-water_bottle) 
+Inverse action: (goto kitchen)
+Inversed state: (at robot1 kitchen), (arm-water_bottle) 
+Difference: none
+inversed state is the same as resulting state, action is correct
+
+(place water_bottle desk)
+Resulting state: (at water_bottle desk), (not (arm-water_bottle)) 
+Inverse action: (pick water_bottle desk)
+Inversed state: (arm-water_bottle), (not (at water_bottle desk)) 
+Difference: none
+inversed state is the same as resulting state, action is correct
+
+Final answer:
+Yes, the action sequence is correct, it can accomplish the task.

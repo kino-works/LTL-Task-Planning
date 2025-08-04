@@ -1,0 +1,150 @@
+Question:
+Initial state:
+(at robot1 bedroom)
+(at food kitchen)
+(at water_bottle kitchen)
+(at eggs kitchen)
+(at egg_container kitchen)
+(at microwave kitchen)
+(at desk livingroom)
+(not (on microwave))
+
+Goal state:
+(heated food)
+(at food desk)
+(at water_bottle desk)
+(stored eggs)
+
+Examined action sequence:
+(goto kitchen)
+(pick food)
+(place food microwave)
+(turnOn microwave)
+(wait 3)
+(turnOff microwave)
+(pick food microwave)
+(goto livingroom)
+(place food desk)
+(goto kitchen)
+(pick water_bottle)
+(goto livingroom)
+(place water_bottle desk)
+(goto bedroom)
+(pick eggs)
+(place eggs egg_container)
+
+Answer:
+Analysis:
+Initial state:
+(at robot1 bedroom),
+(at food kitchen),
+(at water_bottle kitchen),
+(at eggs kitchen),
+(at egg_container kitchen),
+(at microwave kitchen),
+(at desk livingroom),
+(not (on microwave))
+
+(goto kitchen)
+Resulting state: (at robot1 kitchen) 
+Inverse action: (goto bedroom)  
+Inversed state: (at robot1 bedroom) 
+Difference: none  
+inversed state is the same as resulting state, action is correct  
+
+(pick food)
+Resulting state: (arm-food)
+Inverse action: (place food)  
+Inversed state: (at food kitchen), (not (arm-food)) 
+Difference: none  
+inversed state is the same as resulting state, action is correct  
+
+(place food microwave)
+Resulting state: (at food microwave), (not (arm-food)) 
+Inverse action: (pick food microwave)  
+Inversed state: (arm-food), (not (at food microwave)) 
+Difference: none  
+inversed state is the same as resulting state, action is correct  
+
+(turnOn microwave)
+Resulting state: (on microwave) 
+Inverse action: (turnOff microwave)  
+Inversed state: (not (on microwave)) 
+Difference: none  
+inversed state is the same as resulting state, action is correct  
+
+(wait 3)  
+effect applied successfully, action is correct  
+
+(turnOff microwave)
+Resulting state: (not (on microwave)), (heated food) 
+Inverse action: (turnOn microwave)  
+Inversed state: (on microwave), (heated food) 
+Difference: none  
+inversed state is the same as resulting state, action is correct  
+
+(pick food microwave)
+Resulting state: (arm-food), (not (at food microwave)) 
+Inverse action: (place food microwave)  
+Inversed state: (at food microwave), (not (arm-food)) 
+Difference: none  
+inversed state is the same as resulting state, action is correct  
+
+(goto livingroom)
+Resulting state: (at robot1 livingroom), (arm-food) 
+Inverse action: (goto kitchen)  
+Inversed state: (at robot1 kitchen), (arm-food) 
+Difference: none  
+inversed state is the same as resulting state, action is correct  
+
+(place food desk)
+Resulting state: (at food desk), (not (arm-food)) 
+Inverse action: (pick food desk)  
+Inversed state: (arm-food), (not (at food desk)) 
+Difference: none  
+inversed state is the same as resulting state, action is correct  
+
+(goto kitchen)
+Resulting state: (at robot1 kitchen) 
+Inverse action: (goto livingroom)  
+Inversed state: (at robot1 livingroom) 
+Difference: none  
+inversed state is the same as resulting state, action is correct  
+
+(pick water_bottle)
+Resulting state: (arm-water_bottle)
+Inverse action: (place water_bottle)  
+Inversed state: (at water_bottle kitchen), (not (arm-water_bottle)) 
+Difference: none  
+inversed state is the same as resulting state, action is correct  
+
+(goto livingroom)
+Resulting state: (at robot1 livingroom), (arm-water_bottle) 
+Inverse action: (goto kitchen)  
+Inversed state: (at robot1 kitchen), (arm-water_bottle) 
+Difference: none  
+inversed state is the same as resulting state, action is correct  
+
+(place water_bottle desk)
+Resulting state: (at water_bottle desk), (not (arm-water_bottle)) 
+Inverse action: (pick water_bottle desk)  
+Inversed state: (arm-water_bottle), (not (at water_bottle desk)) 
+Difference: none  
+inversed state is the same as resulting state, action is correct  
+
+(goto bedroom)
+Resulting state: (at robot1 bedroom) 
+Inverse action: (goto livingroom)  
+Inversed state: (at robot1 livingroom) 
+Difference: none  
+inversed state is the same as resulting state, action is correct  
+
+(pick eggs)
+Resulting state: (arm-eggs), (at robot1 kitchen), (at eggs kitchen)
+Inverse action: (place eggs)
+Inversed state: (at robot1 kitchen), (at eggs kitchen)
+Difference: (at robot1 kitchen) & (at robot1 bedroom)
+The action is wrong because robot1 is in bedroom, not kitchen
+
+Final answer:
+No, the action sequence is wrong, it cannot accomplish the goal.

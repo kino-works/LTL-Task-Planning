@@ -1,0 +1,130 @@
+Domain file:
+(define (domain housework)
+  (:requirements :strips :typing :durative-actions)
+  (:types robot room object appliance)
+  
+  (:predicates
+    (at ?r - robot ?rm - room)
+    (at ?o - object ?loc - (either room appliance))
+    (on ?a - appliance)
+    (wiped ?loc - room)
+    (charged ?o - object)
+  )
+  
+  (:action goto
+    :parameters (?r - robot ?from ?to - room)
+    :precondition (at ?r ?from)
+    :effect (and (not (at ?r ?from)) (at ?r ?to))
+  )
+  
+  (:action pick
+    :parameters (?r - robot ?o - object ?loc - (either room appliance))
+    :precondition (and (at ?r ?loc) (at ?o ?loc))
+    :effect (not (at ?o ?loc))
+  )
+  
+  (:action place
+    :parameters (?r - robot ?o - object ?loc - (either room appliance))
+    :precondition (at ?r ?loc)
+    :effect (at ?o ?loc)
+  )
+  
+  (:action turnOn
+    :parameters (?r - robot ?a - appliance ?rm - room)
+    :precondition (and (at ?r ?rm) (at ?a ?rm))
+    :effect (on ?a)
+  )
+  
+  (:action turnOff
+    :parameters (?r - robot ?a - appliance ?rm - room)
+    :precondition (and (at ?r ?rm) (at ?a ?rm) (on ?a))
+    :effect (not (on ?a))
+  )
+  
+  (:action wipe
+    :parameters (?r - robot ?w - object ?loc - room)
+    :precondition (and (at ?r ?loc) (at ?w ?loc))
+    :effect (wiped ?loc)
+  )
+  
+  (:durative-action wait
+    :parameters (?r - robot ?o - object ?a - appliance ?loc - room)
+    :condition (and (over all (at ?r ?loc))
+                    (over all (at ?o ?loc))
+                    (over all (on ?a)))
+    :effect (at end (charged ?o))
+  )
+)
+
+Problem file:
+(define (problem doing_housework)
+  (:domain housework)
+  (:objects
+    robot1 - robot
+    kitchen bathroom bedroom livingroom - room
+    charger desk - appliance
+    dishcloth phone water_bottle - object
+  )
+  (:init
+    (at robot1 bedroom)
+    (at dishcloth livingroom)
+    (at phone bedroom)
+    (at charger bedroom)
+    (at water_bottle kitchen)
+    (at desk livingroom)
+    (not (on charger))
+  )
+  (:goal (and
+    (wiped desk)
+    (charged phone)
+    (at water_bottle desk)
+  ))
+)
+
+Action Sequence :
+Step 1:
+robot1 is now in the bedroom.
+(at dishcloth livingroom) with goal (wiped desk)
+(at phone bedroom)   with goal (charged phone)
+(at water_bottle kitchen) with goal (at water_bottle desk)
+dishcloth is unsatisfied, phone is unsatisfied, water_bottle is unsatisfied.
+Go to complete wipe(desk):
+(goto livingroom)
+(pick dishcloth)
+(wipe dishcloth desk)
+
+Step 2:
+robot1 is now in the livingroom.
+(at dishcloth livingroom) with goal (wiped desk)
+(at phone bedroom)   with goal (charged phone)
+(at water_bottle kitchen) with goal (at water_bottle desk)
+wipe is satisfied, phone is unsatisfied, water_bottle is unsatisfied.
+Go to complete charge(phone):
+(goto bedroom)
+(pick phone)
+(place phone charger)
+(turnOn charger)
+(wait 10)
+(turnOff charger)
+(pick phone charger)
+(goto livingroom)
+(place phone desk)
+
+Step 3:
+robot1 is now in the livingroom.
+(at phone livingroom) with goal (charged phone)
+(at water_bottle kitchen) with goal (at water_bottle desk)
+charged(phone) is satisfied, water_bottle is unsatisfied.
+Go to complete place(water_bottle, desk):
+(goto kitchen)
+(pick water_bottle)
+(goto livingroom)
+(place water_bottle)
+
+Step 4:
+robot1 is now in the livingroom.
+(at dishcloth livingroom) with goal (wiped desk)
+(at phone desk) with goal (charged phone)
+(at water_bottle desk) with goal (at water_bottle desk)
+wiped(desk) is satisfied, charged(phone) is satisfied, water_bottle is satisfied.
+All objects are satisfied.

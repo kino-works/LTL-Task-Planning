@@ -1,0 +1,56 @@
+I’m a service robot currently located in the bedroom of a house.
+My goals are to heat the food, place the water bottle on the living room desk, and store the eggs in the egg container.
+To accomplish each goal, I must first navigate to the room containing the target object.
+Heating food requires using the microwave in the kitchen and waiting 3 minutes.
+After heating, the food should be placed on the desk in the living room.
+Placing the water bottle simply involves picking it up in the kitchen and carrying it to the living room desk.
+Storing the eggs means picking them up from the kitchen and placing them into the egg container in the kitchen.
+
+Action Sequence :
+Step 1:
+robot1 is now in the bedroom.
+(at food kitchen) with goal (heated food) and (at food desk)
+(at water_bottle kitchen) with goal (at water_bottle desk)
+(at eggs kitchen) with goal (stored eggs)
+food is unsatisfied, water_bottle is unsatisfied, eggs is unsatisfied.
+Go to complete food:
+(goto kitchen)
+(pick food)
+(place food microwave)
+(turnOn microwave)
+(wait 3)
+(turnOff microwave)
+(pick food microwave)
+(goto livingroom)
+(place food desk)
+
+Step 2:
+robot1 is now in the livingroom.
+(at food desk) with goal (at food desk), (heated food) already satisfied
+(at water_bottle kitchen) with goal (at water_bottle desk)
+(at eggs kitchen) with goal (stored eggs)
+food is satisfied, water_bottle is unsatisfied, eggs is unsatisfied.
+Go to complete water_bottle:
+(goto kitchen)
+(pick water_bottle)
+(goto livingroom)
+(place water_bottle desk)
+
+Step 3:
+robot1 is now in the livingroom.
+(at food desk) with goal (at food desk)
+(at water_bottle desk) with goal (at water_bottle desk)
+(at eggs kitchen) with goal (stored eggs)
+food and water_bottle are satisfied, eggs is unsatisfied.
+Go to complete eggs:
+(goto kitchen)
+(pick eggs)
+(place eggs egg_container)
+
+Step 4:
+robot1 is now in the kitchen.
+(at food desk) with goal (at food desk)
+(at water_bottle desk) with goal (at water_bottle desk)
+(at eggs egg_container) with goal (stored eggs)
+food is satisfied, water_bottle is satisfied, eggs is satisfied.
+All objects are satisfied.

@@ -1,0 +1,80 @@
+I'm a service robot currently located in the bedroom of a house.
+My task is to cook toast, boil water, and cook cup ramen, placing each finished item neatly on the living room desk.
+I must first navigate to the room containing the target object.
+Additionally, each cooking-related task requires waiting for a specific duration: 3 minutes for toast and cup ramen, and 5 minutes for boiling water.
+After cooking, each prepared item should be placed on the desk in the living room to complete my goals.
+
+Domain file:
+(define (domain housework)
+    (:requirements :strips :typing :durative-actions)
+    (:types robot room object appliance)
+    (:predicates
+        (at ?r - robot ?rm - room)
+        (at ?o - object ?loc - (either room appliance desk))
+        (on ?a - appliance)
+        (cooked ?o - object)
+        (boiled ?o - object)
+    )
+    (:action goto
+        :parameters (?r - robot ?from ?to - room)
+        :precondition (at ?r ?from)
+        :effect (and (not (at ?r ?from)) (at ?r ?to))
+    )
+    (:action pick
+        :parameters (?r - robot ?o - object ?loc - (either room appliance desk))
+        :precondition (and (at ?r ?loc) (at ?o ?loc))
+        :effect (and (not (at ?o ?loc)))
+    )
+    (:action place
+        :parameters (?r - robot ?o - object ?loc - (either room appliance desk))
+        :precondition (and (at ?r ?loc))
+        :effect (at ?o ?loc)
+    )
+    (:action turnOn
+        :parameters (?r - robot ?a - appliance ?rm - room)
+        :precondition (and (at ?r ?rm) (at ?a ?rm))
+        :effect (on ?a)
+    )
+    (:action turnOff
+        :parameters (?r - robot ?a - appliance ?rm - room)
+        :precondition (and (at ?r ?rm) (at ?a ?rm) (on ?a))
+        :effect (not (on ?a))
+    )
+    (:durative-action wait
+        :parameters (?r - robot ?o - object ?a - appliance ?loc - room)
+        :condition (and (over all (at ?r ?loc)) (over all (at ?o ?loc)) (over all (on ?a)))
+        :effect (and (at end (or (when (= ?o kettle) (boiled ?o)) (when (or (= ?o bread) (= ?o cup_ramen)) (cooked ?o)))))
+    )
+)
+
+Problem file:
+(define (problem doing_housework)
+    (:domain housework)
+    (:objects
+        robot1 - robot
+        kitchen bathroom bedroom livingroom - room
+        toaster stove water_dispenser desk - appliance
+        bread cup_ramen kettle - object
+    )
+    (:init
+        (at robot1 bedroom)
+        (at bread kitchen)
+        (at cup_ramen kitchen)
+        (at kettle kitchen)
+        (at toaster kitchen)
+        (at stove kitchen)
+        (at water_dispenser kitchen)
+        (at desk livingroom)
+        (not (on toaster))
+        (not (on stove))
+        (not (on water_dispenser))
+    )
+    (:goal (and
+        (cooked bread)
+        (boiled kettle)
+        (cooked cup_ramen)
+        (at bread desk)
+        (at kettle desk)
+        (at cup_ramen desk)
+    ))
+)

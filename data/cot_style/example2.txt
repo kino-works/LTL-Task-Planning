@@ -1,0 +1,54 @@
+I’m a service robot currently located in the bedroom of a house.
+My goals are to wipe the living room desk, charge the phone, and place the water bottle on the living room desk.
+To wipe the desk, I need the dishcloth in the living room.
+To charge the phone, I must use the charger in the bedroom and wait 10 minutes.
+After charging, I’ll bring the phone to the living room desk.
+To place the water bottle, I simply pick it up in the kitchen and carry it to the living room desk.
+
+Action Sequence :
+Step 1:
+robot1 is now in the bedroom.
+(at dishcloth livingroom) with goal (wiped desk)
+(at phone bedroom)   with goal (charged phone)
+(at water_bottle kitchen) with goal (at water_bottle desk)
+dishcloth is unsatisfied, phone is unsatisfied, water_bottle is unsatisfied.
+Go to complete wipe(desk):
+(goto livingroom)
+(pick dishcloth)
+(wipe dishcloth desk)
+
+Step 2:
+robot1 is now in the livingroom.
+(at dishcloth livingroom) with goal (wiped desk)
+(at phone bedroom)   with goal (charged phone)
+(at water_bottle kitchen) with goal (at water_bottle desk)
+wipe is satisfied, phone is unsatisfied, water_bottle is unsatisfied.
+Go to complete charge(phone):
+(goto bedroom)
+(pick phone)
+(place phone charger)
+(turnOn charger)
+(wait 10)
+(turnOff charger)
+(pick phone charger)
+(goto livingroom)
+(place phone desk)
+
+Step 3:
+robot1 is now in the livingroom.
+(at phone livingroom) with goal (charged phone)
+(at water_bottle kitchen) with goal (at water_bottle desk)
+charged(phone) is satisfied, water_bottle is unsatisfied.
+Go to complete place(water_bottle, desk):
+(goto kitchen)
+(pick water_bottle)
+(goto livingroom)
+(place water_bottle)
+
+Step 4:
+robot1 is now in the livingroom.
+(at dishcloth livingroom) with goal (wiped desk)
+(at phone desk) with goal (charged phone)
+(at water_bottle desk) with goal (at water_bottle desk)
+wiped(desk) is satisfied, charged(phone) is satisfied, water_bottle is satisfied.
+All objects are satisfied.

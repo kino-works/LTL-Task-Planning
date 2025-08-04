@@ -1,0 +1,87 @@
+I’m a service robot currently located in the bedroom of a house.
+My goals are to heat the food, place the water bottle on the living room desk, and store the eggs in the egg container.
+To accomplish each goal, I must first navigate to the room containing the target object.
+Heating food requires using the microwave in the kitchen and waiting 3 minutes.
+After heating, the food should be placed on the desk in the living room.
+Placing the water bottle simply involves picking it up in the kitchen and carrying it to the living room desk.
+Storing the eggs means picking them up from the kitchen and placing them into the egg container in the kitchen.
+
+Domain file:
+(define (domain housework)
+  (:requirements :strips :typing :durative-actions)
+  (:types robot room object appliance)
+  
+  (:predicates
+    (at ?r - robot ?rm - room)
+    (at ?o - object ?loc - (either room appliance))
+    (on ?a - appliance)
+    (heated ?o - object)
+    (stored ?o - object)
+  )
+  
+  (:action goto
+    :parameters (?r - robot ?from ?to - room)
+    :precondition (at ?r ?from)
+    :effect (and (not (at ?r ?from)) (at ?r ?to))
+  )
+  
+  (:action pick
+    :parameters (?r - robot ?o - object ?loc - (either room appliance))
+    :precondition (and (at ?r ?loc) (at ?o ?loc))
+    :effect (not (at ?o ?loc))
+  )
+  
+  (:action place
+    :parameters (?r - robot ?o - object ?loc - (either room appliance))
+    :precondition (at ?r ?loc)
+    :effect (at ?o ?loc)
+  )
+  
+  (:action turnOn
+    :parameters (?r - robot ?a - appliance ?rm - room)
+    :precondition (and (at ?r ?rm) (at ?a ?rm))
+    :effect (on ?a)
+  )
+  
+  (:action turnOff
+    :parameters (?r - robot ?a - appliance ?rm - room)
+    :precondition (and (at ?r ?rm) (at ?a ?rm) (on ?a))
+    :effect (not (on ?a))
+  )
+  
+  (:durative-action wait
+    :parameters (?r - robot ?o - object ?a - appliance ?loc - room)
+    :condition (and (over all (at ?r ?loc))
+                    (over all (at ?o ?loc))
+                    (over all (on ?a)))
+    :effect (at end (heated ?o))
+  )
+)
+
+Problem file:
+(define (problem doing_housework)
+  (:domain housework)
+  (:objects
+    robot1 - robot
+    kitchen bedroom livingroom - room
+    microwave - appliance
+    desk - appliance
+    food water_bottle eggs egg_container - object
+  )
+  (:init
+    (at robot1 bedroom)
+    (at food kitchen)
+    (at water_bottle kitchen)
+    (at eggs kitchen)
+    (at egg_container kitchen)
+    (at microwave kitchen)
+    (at desk livingroom)
+    (not (on microwave))
+  )
+  (:goal (and
+    (heated food)
+    (at food desk)
+    (at water_bottle desk)
+    (stored eggs)
+  ))
+)
