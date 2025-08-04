@@ -3,12 +3,10 @@ from .target import generate_domain_query
 EXHOUSEWORK = {
     "scene": ["home", "exhome"],
     "add_obj": None,
-    "add_act": [
-        "pick(<agent>, <item>, <room>): <agent> picks up an <item> at <room>. <item> must be accessible, located in <room>, the 'pick' action must be in the <item>'s affordance, and <agent> state must be 'hand-free'. As a result, <agent> state will change to 'holding', and the <item> is now held by the agent.",
-        "place(<agent>, <item>, <surface>, <room>): <agent> places an <item> it is holding onto a <surface> in a <room>. The 'place' action must be in the <item>'s affordance, <agent> must be in <room> and holding the <item>. As a result, the <item> will be on the <surface>, and the <agent> state will change to 'hand-free'.",
-        "turnon(<agent>, <item>, <room>): <agent> turns on an <item> at <room>. <item> must be accessible, the 'turnOn' action must be in the <item>'s affordance, both <agent> and <item> must be in <room>, <agent> must not be holding an item, and the <item> state must be 'off'. As a result, the <item> state will change to 'on'.",
-        "turnoff(<agent>, <item>, <room>): <agent> turns off an <item> at <room>. <item> must be accessible, the 'turnOff' action must be in the <item>'s affordance, both <agent> and <item> must be in <room>, <agent> must not be holding an item, and the <item> state must be 'on'. As a result, the <item> state will change to 'off'.",
-        "wait(<agent>): <agent> waits for a process to complete. This is often necessary after starting an appliance like a toaster or washing machine. As a result, the state of the item being processed changes (e.g., bread becomes 'toasted')."
+    "add_act": [,
+        "toast_bread(<agent>, <bread>, <toaster>, <room>): To toast bread, the agent must be in the same room as the bread and the toaster. The bread must be inside the toaster, and the toaster must be turned on. After waiting, the bread becomes toasted.",
+        "boil_water(<agent>, <kettle>, <stove>, <room>): To boil water, the kettle must be on the stove, and the stove must be turned on. The agent must be in the same room. After waiting, the water in the kettle becomes boiled.",
+        "cook_ramen(<agent>, <cup_ramen>, <water_dispenser>, <room>): To cook cup ramen, the ramen must be placed at the water dispenser, and the dispenser must be turned on to pour hot water. After waiting, the cup ramen becomes cooked."
     ],
     "gt_cost": {
         "home": 26,

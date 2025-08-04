@@ -6,6 +6,13 @@ from util.delta_util.sayplan_utils import sayplan_output_format, sayplan_search_
 actions = """
     For example, a domain has the following object types: agent, room, and item. The agent can perform the following basic actions:
     goto(<agent>, <room_1>, <room_2>): <agent> goes from <room_1> to <room_2>, where <room_1> and <room_2> should be neighbors. As a result, <agent> will leave <room_1> and be located in <room_2>.
+    pickfromroom(<agent>, <item>, <room>): <agent> picks up an <item> that is located in <room>. The <item> must be accessible and pickable, the <agent> must be hand-free and in the same room. As a result, the <agent> will be holding the <item>, and the <item> will no longer be in the room.
+    pickfromappliance(<agent>, <item>, <appliance>, <room>): <agent> picks up an <item> that is inside an <appliance> in <room>. The <agent> must be in the same room, hand-free, and the appliance must be turned off. As a result, the <agent> will be holding the <item>, and it will be removed from the appliance.
+    placeonsurface(<agent>, <item>, <surface>, <room>): <agent> places a held <item> onto a <surface> in <room>. The <agent> must be holding the item and located in the same room as the surface. As a result, the item will be placed on the surface, and the agent's hand will become free.
+    placeinappliance(<agent>, <item>, <appliance>, <room>): <agent> places a held <item> into an <appliance> in <room>. The <agent> must be holding the item and located in the same room as the appliance. As a result, the item will be inside the appliance, and the agent's hand will become free.
+    turnon(<agent>, <item>, <room>): <agent> turns on an <item> at <room>. <item> must be accessible, the 'turnOn' action must be in the <item>'s affordance, both <agent> and <item> must be in <room>, <agent> must not be holding an item, and the <item> state must be 'off'. As a result, the <item> state will change to 'on'.
+    turnoff(<agent>, <item>, <room>): <agent> turns off an <item> at <room>. <item> must be accessible, the 'turnOff' action must be in the <item>'s affordance, both <agent> and <item> must be in <room>, <agent> must not be holding an item, and the <item> state must be 'on'. As a result, the <item> state will change to 'off'.
+    wait(<agent>): <agent> waits for a process to complete. This is often necessary after starting an appliance like a toaster or washing machine. As a result, the state of the item being processed changes (e.g., bread becomes 'toasted').
 """
 
 sg_example = {
@@ -128,8 +135,10 @@ def p_template(x): return """
     
     Here are the basic actions the agent can do:
     goto(<agent>, <room_1>, <room_2>): <agent> goes from <room_1> to <room_2>, where <room_1> and <room_2> should be neighbors. As a result, <agent> will leave <room_1> and be located in <room_2>.
-    pick(<agent>, <item>, <room>): <agent> picks up an <item> at <room>. <item> must be accessible, located in <room>, the 'pick' action must be in the <item>'s affordance, and <agent> state must be 'hand-free'. As a result, <agent> state will change to 'holding', and the <item> is now held by the agent.
-    place(<agent>, <item>, <surface>, <room>): <agent> places an <item> it is holding onto a <surface> in a <room>. The 'place' action must be in the <item>'s affordance, <agent> must be in <room> and holding the <item>. As a result, the <item> will be on the <surface>, and the <agent> state will change to 'hand-free'.
+    pickfromroom(<agent>, <item>, <room>): <agent> picks up an <item> that is located in <room>. The <item> must be accessible and pickable, the <agent> must be hand-free and in the same room. As a result, the <agent> will be holding the <item>, and the <item> will no longer be in the room.
+    pickfromappliance(<agent>, <item>, <appliance>, <room>): <agent> picks up an <item> that is inside an <appliance> in <room>. The <agent> must be in the same room, hand-free, and the appliance must be turned off. As a result, the <agent> will be holding the <item>, and it will be removed from the appliance.
+    placeonsurface(<agent>, <item>, <surface>, <room>): <agent> places a held <item> onto a <surface> in <room>. The <agent> must be holding the item and located in the same room as the surface. As a result, the item will be placed on the surface, and the agent's hand will become free.
+    placeinappliance(<agent>, <item>, <appliance>, <room>): <agent> places a held <item> into an <appliance> in <room>. The <agent> must be holding the item and located in the same room as the appliance. As a result, the item will be inside the appliance, and the agent's hand will become free.
     turnon(<agent>, <item>, <room>): <agent> turns on an <item> at <room>. <item> must be accessible, the 'turnOn' action must be in the <item>'s affordance, both <agent> and <item> must be in <room>, <agent> must not be holding an item, and the <item> state must be 'off'. As a result, the <item> state will change to 'on'.
     turnoff(<agent>, <item>, <room>): <agent> turns off an <item> at <room>. <item> must be accessible, the 'turnOff' action must be in the <item>'s affordance, both <agent> and <item> must be in <room>, <agent> must not be holding an item, and the <item> state must be 'on'. As a result, the <item> state will change to 'off'.
     wipe(<agent>, <item>, <surface>, <room>): <agent> wipes a <surface> with an <item> (e.g., dishcloth) in a <room>. The 'wipe' action must be in the <item>'s affordance, and the <surface> state must be 'dirty'. As a result, the <surface> state will change to 'clean'.
@@ -157,8 +166,10 @@ def sg_2_plan(sg_exp: dict, sg_qry: dict, goal_exp: str, goal_qry: str,
     A domain has the following object types: agent, room, item{info_add_obj_exp}. 
     The agent can perform the following basic actions:
     goto(<agent>, <room_1>, <room_2>): <agent> goes from <room_1> to <room_2>, where <room_1> and <room_2> should be neighbors. As result, <agent> will leave <room_1> and locates in <room_2>.
-    pick(<agent>, <item>, <room>): <agent> picks up an <item> at <room>. <item> must be accessible and located in <room>, the 'pick' action is in <item>'s affordance, and <agent> state is hand-free. As result, <agent> state will change to 'holding', and <item> is now held by the agent.
-    place(<agent>, <item>, <surface>, <room>): <agent> places an <item> it is holding onto a <surface> in a <room>. <item> is accessible, the 'place' action is in <item>'s affordance, <agent> is in <room> and has <item> in hand. As result, <item> will be on the <surface>, and <agent> state will change to hand-free.
+    pickfromroom(<agent>, <item>, <room>): <agent> picks up an <item> that is located in <room>. The <item> must be accessible and pickable, the <agent> must be hand-free and in the same room. As a result, the <agent> will be holding the <item>, and the <item> will no longer be in the room.
+    pickfromappliance(<agent>, <item>, <appliance>, <room>): <agent> picks up an <item> that is inside an <appliance> in <room>. The <agent> must be in the same room, hand-free, and the appliance must be turned off. As a result, the <agent> will be holding the <item>, and it will be removed from the appliance.
+    placeonsurface(<agent>, <item>, <surface>, <room>): <agent> places a held <item> onto a <surface> in <room>. The <agent> must be holding the item and located in the same room as the surface. As a result, the item will be placed on the surface, and the agent's hand will become free.
+    placeinappliance(<agent>, <item>, <appliance>, <room>): <agent> places a held <item> into an <appliance> in <room>. The <agent> must be holding the item and located in the same room as the appliance. As a result, the item will be inside the appliance, and the agent's hand will become free.
     {info_add_act_exp}
     
     Here is an example of a scene graph in the form of a nested dictionary in Python:
@@ -240,8 +251,10 @@ def nl_2_pddl_domain(domain_exp: str, domain_qry_name: str, add_obj_exp: str = N
     For example, a domain has the following object types: agent, room, item{info_add_obj_exp}. 
     The agent can perform the following basic actions:
     goto(<agent>, <room_1>, <room_2>): <agent> goes from <room_1> to <room_2>, where <room_1> and <room_2> should be neighbors. As result, <agent> will leave <room_1> and locates in <room_2>.
-    pick(<agent>, <item>, <room>): <agent> picks up an <item> at <room>. <item> must be accessible and located in <room>, the 'pick' action is in <item>'s affordance, and <agent> state is hand-free. As result, <agent> state will change to 'holding', and <item> is now held by the agent.
-    place(<agent>, <item>, <surface>, <room>): <agent> places an <item> it is holding onto a <surface> in a <room>. <item> is accessible, the 'place' action is in <item>'s affordance, <agent> is in <room> and has <item> in hand. As result, <item> will be on the <surface>, and <agent> state will change to hand-free.
+    pickfromroom(<agent>, <item>, <room>): <agent> picks up an <item> that is located in <room>. The <item> must be accessible and pickable, the <agent> must be hand-free and in the same room. As a result, the <agent> will be holding the <item>, and the <item> will no longer be in the room.
+    pickfromappliance(<agent>, <item>, <appliance>, <room>): <agent> picks up an <item> that is inside an <appliance> in <room>. The <agent> must be in the same room, hand-free, and the appliance must be turned off. As a result, the <agent> will be holding the <item>, and it will be removed from the appliance.
+    placeonsurface(<agent>, <item>, <surface>, <room>): <agent> places a held <item> onto a <surface> in <room>. The <agent> must be holding the item and located in the same room as the surface. As a result, the item will be placed on the surface, and the agent's hand will become free.
+    placeinappliance(<agent>, <item>, <appliance>, <room>): <agent> places a held <item> into an <appliance> in <room>. The <agent> must be holding the item and located in the same room as the appliance. As a result, the item will be inside the appliance, and the agent's hand will become free.
     {info_add_act_exp}
     
     A PDDL domain file describes the object types, the predicates, and the action knowledge (the preconditions and effects of an action).
@@ -440,11 +453,14 @@ def sayplan_plan_prompt(add_obj_exp: str = None, add_act_exp: str = None, add_st
     There are the following object types in the environment: agent, room, item.
     Note that robot is an instance of agent, and the robot can perform the following basic actions:
     goto(<agent>, <room_1>, <room_2>): <agent> goes from <room_1> to <room_2>, where <room_1> and <room_2> should be neighbors. As result, <agent> will leave <room_1> and locates in <room_2>.
-    pick(<agent>, <item>, <room>): <agent> picks up an <item> at <room>. <item> must be accessible and located in <room>, the 'pick' action is in <item>'s affordance, and <agent> state is hand-free. As result, <agent> state will change to 'holding', and <item> is now held by the agent.
-    place(<agent>, <item>, <surface>, <room>): <agent> places an <item> it is holding onto a <surface> in a <room>. The 'place' action must be in the <item>'s affordance, <agent> is in <room> and holding the <item>. As result, the <item> will be on the <surface>, and the <agent> state will change to 'hand-free'.
+    pickfromroom(<agent>, <item>, <room>): <agent> picks up an <item> that is located in <room>. The <item> must be accessible and pickable, the <agent> must be hand-free and in the same room. As a result, the <agent> will be holding the <item>, and the <item> will no longer be in the room.
+    pickfromappliance(<agent>, <item>, <appliance>, <room>): <agent> picks up an <item> that is inside an <appliance> in <room>. The <agent> must be in the same room, hand-free, and the appliance must be turned off. As a result, the <agent> will be holding the <item>, and it will be removed from the appliance.
+    placeonsurface(<agent>, <item>, <surface>, <room>): <agent> places a held <item> onto a <surface> in <room>. The <agent> must be holding the item and located in the same room as the surface. As a result, the item will be placed on the surface, and the agent's hand will become free.
+    placeinappliance(<agent>, <item>, <appliance>, <room>): <agent> places a held <item> into an <appliance> in <room>. The <agent> must be holding the item and located in the same room as the appliance. As a result, the item will be inside the appliance, and the agent's hand will become free.
     turnon(<agent>, <item>, <room>): <agent> turns on an <item> at <room>. <item> must be accessible, the 'turnOn' action must be in the <item>'s affordance, both <agent> and <item> are in <room>, <agent> isn't holding an item, and <item> state is off. As result, <item> state will change to on.
     turnoff(<agent>, <item>, <room>): <agent> turns off an <item> at <room>. <item> must be accessible, the 'turnOff' action must be in the <item>'s affordance, both <agent> and <item> are in <room>, <agent> isn't holding an item, and <item> state is on. As result, <item> state will change to off.
-    
+    wait(<agent>): <agent> waits for a process to complete. This is often necessary after starting an appliance like a toaster or washing machine. As a result, the state of the item being processed changes (e.g., bread becomes 'toasted').
+
     ENVIRONMENT STATES:
     neighbor(<room_1>, <room_2>): Room <room_1> and room <room_2> are neighboring to each other.
     agent_at(<agent>, <room>): <agent> is in <room>.
@@ -506,8 +522,10 @@ def sayplan_prompt(add_obj_exp: str = None, add_act_exp: str = None, add_state_e
     There are the following object types in the environment: agent, room, item.
     Note that robot is an instance of agent, and the robot can perform the following basic actions:
     goto(<agent>, <room_1>, <room_2>): <agent> goes from <room_1> to <room_2>, where <room_1> and <room_2> should be neighbors. As result, <agent> will leave <room_1> and locates in <room_2>.
-    pick(<agent>, <item>, <room>): <agent> picks up an <item> at <room>. <item> must be accessible and located in <room>, the 'pick' action is in <item>'s affordance, and <agent> state is hand-free. As result, <agent> state will change to 'holding', and <item> is now held by the agent.
-    place(<agent>, <item>, <surface>, <room>): <agent> places an <item> it is holding onto a <surface> in a <room>. The 'place' action must be in the <item>'s affordance, <agent> is in <room> and holding the <item>. As result, the <item> will be on the <surface>, and the <agent> state will change to 'hand-free'.
+    pickfromroom(<agent>, <item>, <room>): <agent> picks up an <item> that is located in <room>. The <item> must be accessible and pickable, the <agent> must be hand-free and in the same room. As a result, the <agent> will be holding the <item>, and the <item> will no longer be in the room.
+    pickfromappliance(<agent>, <item>, <appliance>, <room>): <agent> picks up an <item> that is inside an <appliance> in <room>. The <agent> must be in the same room, hand-free, and the appliance must be turned off. As a result, the <agent> will be holding the <item>, and it will be removed from the appliance.
+    placeonsurface(<agent>, <item>, <surface>, <room>): <agent> places a held <item> onto a <surface> in <room>. The <agent> must be holding the item and located in the same room as the surface. As a result, the item will be placed on the surface, and the agent's hand will become free.
+    placeinappliance(<agent>, <item>, <appliance>, <room>): <agent> places a held <item> into an <appliance> in <room>. The <agent> must be holding the item and located in the same room as the appliance. As a result, the item will be inside the appliance, and the agent's hand will become free.
     turnon(<agent>, <item>, <room>): <agent> turns on an <item> at <room>. <item> must be accessible, the 'turnOn' action must be in the <item>'s affordance, both <agent> and <item> are in <room>, <agent> isn't holding an item, and <item> state is off. As result, <item> state will change to on.
     turnoff(<agent>, <item>, <room>): <agent> turns off an <item> at <room>. <item> must be accessible, the 'turnOff' action must be in the <item>'s affordance, both <agent> and <item> are in <room>, <agent> isn't holding an item, and <item> state is on. As result, <item> state will change to off.
     wipe(<agent>, <item>, <surface>, <room>): <agent> wipes a <surface> with an <item> (e.g., dishcloth) in a <room>. The 'wipe' action must be in the <item>'s affordance, and the <surface> state must be 'dirty'. As result, the <surface> state will change to 'clean'.

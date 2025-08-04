@@ -1,4 +1,4 @@
-;Header and description
+; Header and description
 (define (domain exhousework)
 
     (:requirements :strips :typing :adl)
@@ -17,6 +17,8 @@
 
         (item_at ?i - item ?r - room)
         (item_on ?i - item ?s - surface)
+        (item_in ?i - item ?ap - item)
+
         (item_accessible ?i - item)
         (item_pickable ?i - item)
 
@@ -38,6 +40,7 @@
     ; End predicates
 
     ; Begin actions
+
     (:action goto
         :parameters (?a - agent ?from - room ?to - room)
         :precondition (and
@@ -50,7 +53,7 @@
         )
     )
 
-    (:action pick
+    (:action pickfromroom
         :parameters (?a - agent ?i - item ?r - room)
         :precondition (and
             (agent_at ?a ?r)
@@ -66,12 +69,29 @@
         )
     )
 
-    (:action place-on
+    (:action pickfromappliance
+        :parameters (?a - agent ?i - item ?ap - item ?r - room)
+        :precondition (and
+            (agent_at ?a ?r)
+            (item_in ?i ?ap)
+            (item_at ?ap ?r)
+            (item_accessible ?ap)
+            (agent_hand_free ?a)
+            (not (appliance_on ?ap))
+        )
+        :effect (and
+            (not (item_in ?i ?ap))
+            (not (agent_hand_free ?a))
+            (agent_has_item ?a ?i)
+        )
+    )
+
+    (:action placeonsurface
         :parameters (?a - agent ?i - item ?s - surface ?r - room)
         :precondition (and
             (agent_at ?a ?r)
-            (item_at ?s ?r) ; The surface must be in the same room
             (agent_has_item ?a ?i)
+            (item_at ?s ?r)    ; 표면이 있는 방
         )
         :effect (and
             (not (agent_has_item ?a ?i))
@@ -79,12 +99,30 @@
             (item_on ?i ?s)
         )
     )
-    
-    (:action turn_on_appliance
+
+    (:action placeinappliance
+        :parameters (?a - agent ?i - item ?ap - item ?r - room)
+        :precondition (and
+            (agent_at ?a ?r)
+            (agent_has_item ?a ?i)
+            (item_at ?ap ?r)
+            (item_accessible ?ap)
+            (not (appliance_on ?ap))
+        )
+        :effect (and
+            (not (agent_has_item ?a ?i))
+            (agent_hand_free ?a)
+            (item_in ?i ?ap)
+        )
+    )
+
+    (:action turnon
         :parameters (?a - agent ?i - item ?r - room)
         :precondition (and
             (agent_at ?a ?r)
             (item_at ?i ?r)
+            (item_accessible ?i)
+            (agent_hand_free ?a)
             (not (appliance_on ?i))
         )
         :effect (and
@@ -92,15 +130,34 @@
         )
     )
 
-    (:action toast-bread
+    (:action turnoff
+        :parameters (?a - agent ?i - item ?r - room)
+        :precondition (and
+            (agent_at ?a ?r)
+            (item_at ?i ?r)
+            (item_accessible ?i)
+            (agent_hand_free ?a)
+            (appliance_on ?i)
+        )
+        :effect (and
+            (not (appliance_on ?i))
+        )
+    )
+
+    (:action wait
+        :parameters (?a - agent)
+        :precondition ()
+        :effect ()
+    )
+
+    (:action toast_bread
         :parameters (?a - agent ?b - item ?t - item ?r - room)
         :precondition (and
             (agent_at ?a ?r)
-            (item_at ?b ?r)
+            (item_in ?b ?t)
             (is_bread ?b)
-            (item_at ?t ?r)
             (is_toaster ?t)
-            (appliance_on ?t) ; Toaster must be on
+            (appliance_on ?t)
             (not (toasted ?b))
         )
         :effect (and
@@ -108,7 +165,7 @@
         )
     )
 
-    (:action boil-water
+    (:action boil_water
         :parameters (?a - agent ?k - item ?s - item ?r - room)
         :precondition (and
             (agent_at ?a ?r)
@@ -116,7 +173,7 @@
             (is_kettle ?k)
             (item_at ?s ?r)
             (is_stove ?s)
-            (appliance_on ?s) ; Stove must be on
+            (appliance_on ?s)
             (not (boiled ?k))
         )
         :effect (and
@@ -124,7 +181,7 @@
         )
     )
 
-    (:action cook-ramen
+    (:action cook_ramen
         :parameters (?a - agent ?cr - item ?wd - item ?r - room)
         :precondition (and
             (agent_at ?a ?r)
@@ -132,7 +189,7 @@
             (is_cup_ramen ?cr)
             (item_at ?wd ?r)
             (is_water_dispenser ?wd)
-            (appliance_on ?wd) ; Water dispenser must be on
+            (appliance_on ?wd)
             (not (cooked ?cr))
         )
         :effect (and

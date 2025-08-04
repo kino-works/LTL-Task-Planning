@@ -5,12 +5,7 @@ TASK_DEFINITIONS: Dict[str, Dict] = {
         "scene": ["home", "exhome"],
         "add_obj": None,
         "add_act": [
-            "pick(<agent>, <item>, <room>): <agent> picks up an <item> at <room>. <item> must be accessible, located in <room>, the 'pick' action must be in the <item>'s affordance, and <agent> state must be 'hand-free'. As a result, <agent> state will change to 'holding', and the <item> is now held by the agent.",
-            "place(<agent>, <item>, <surface>, <room>): <agent> places an <item> it is holding onto a <surface> in a <room>. The 'place' action must be in the <item>'s affordance, <agent> must be in <room> and holding the <item>. As a result, the <item> will be on the <surface>, and the <agent> state will change to 'hand-free'.",
-            "turnon(<agent>, <item>, <room>): <agent> turns on an <item> at <room>. <item> must be accessible, the 'turnOn' action must be in the <item>'s affordance, both <agent> and <item> must be in <room>, <agent> must not be holding an item, and the <item> state must be 'off'. As a result, the <item> state will change to 'on'.",
-            "turnoff(<agent>, <item>, <room>): <agent> turns off an <item> at <room>. <item> must be accessible, the 'turnOff' action must be in the <item>'s affordance, both <agent> and <item> must be in <room>, <agent> must not be holding an item, and the <item> state must be 'on'. As a result, the <item> state will change to 'off'.",
-            "wait(<agent>): <agent> waits for a process to complete. This is often necessary after starting an appliance like a toaster or washing machine. As a result, the state of the item being processed changes (e.g., bread becomes 'toasted')."
-
+            "toast_bread(<agent>, <bread>, <toaster>, <room>): To toast bread, the agent must be in the same room as the bread and the toaster. The bread must be inside the toaster, and the toaster must be turned on. After waiting, the bread becomes toasted."
         ],
         "goal": "Make toast and place it on the desk in the living room.",
         "cost": {"home": 9, "exhome": 9},
@@ -34,11 +29,7 @@ TASK_DEFINITIONS: Dict[str, Dict] = {
         "scene": ["home", "exhome"],
         "add_obj": None,
         "add_act": [
-            "pick(<agent>, <item>, <room>): <agent> picks up an <item> at <room>. <item> must be accessible, located in <room>, the 'pick' action must be in the <item>'s affordance, and <agent> state must be 'hand-free'. As a result, <agent> state will change to 'holding', and the <item> is now held by the agent.",
-            "place(<agent>, <item>, <surface>, <room>): <agent> places an <item> it is holding onto a <surface> in a <room>. The 'place' action must be in the <item>'s affordance, <agent> must be in <room> and holding the <item>. As a result, the <item> will be on the <surface>, and the <agent> state will change to 'hand-free'.",
-            "turnon(<agent>, <item>, <room>): <agent> turns on an <item> at <room>. <item> must be accessible, the 'turnOn' action must be in the <item>'s affordance, both <agent> and <item> must be in <room>, <agent> must not be holding an item, and the <item> state must be 'off'. As a result, the <item> state will change to 'on'.",
-            "turnoff(<agent>, <item>, <room>): <agent> turns off an <item> at <room>. <item> must be accessible, the 'turnOff' action must be in the <item>'s affordance, both <agent> and <item> must be in <room>, <agent> must not be holding an item, and the <item> state must be 'on'. As a result, the <item> state will change to 'off'.",
-            "wait(<agent>): <agent> waits for a process to complete. This is often necessary after starting an appliance like a toaster or washing machine. As a result, the state of the item being processed changes (e.g., bread becomes 'toasted')."
+            "boil_water(<agent>, <kettle>, <stove>, <room>): To boil water, the kettle must be on the stove, and the stove must be turned on. The agent must be in the same room. After waiting, the water in the kettle becomes boiled."
         ],
         "goal": "Boil water in the kettle and place it on the desk in the living room.",
         "cost": {"home": 9, "exhome": 9},
@@ -61,11 +52,7 @@ TASK_DEFINITIONS: Dict[str, Dict] = {
         "scene": ["home", "exhome"],
         "add_obj": None,
         "add_act": [
-            "pick(<agent>, <item>, <room>): <agent> picks up an <item> at <room>. <item> must be accessible, located in <room>, the 'pick' action must be in the <item>'s affordance, and <agent> state must be 'hand-free'. As a result, <agent> state will change to 'holding', and the <item> is now held by the agent.",
-            "place(<agent>, <item>, <surface>, <room>): <agent> places an <item> it is holding onto a <surface> in a <room>. The 'place' action must be in the <item>'s affordance, <agent> must be in <room> and holding the <item>. As a result, the <item> will be on the <surface>, and the <agent> state will change to 'hand-free'.",
-            "turnon(<agent>, <item>, <room>): <agent> turns on an <item> at <room>. <item> must be accessible, the 'turnOn' action must be in the <item>'s affordance, both <agent> and <item> must be in <room>, <agent> must not be holding an item, and the <item> state must be 'off'. As a result, the <item> state will change to 'on'.",
-            "turnoff(<agent>, <item>, <room>): <agent> turns off an <item> at <room>. <item> must be accessible, the 'turnOff' action must be in the <item>'s affordance, both <agent> and <item> must be in <room>, <agent> must not be holding an item, and the <item> state must be 'on'. As a result, the <item> state will change to 'off'.",
-            "wait(<agent>): <agent> waits for a process to complete. This is often necessary after starting an appliance like a toaster or washing machine. As a result, the state of the item being processed changes (e.g., bread becomes 'toasted')."
+            "heat_pot(<agent>, <pot>, <induction>, <room>): To heat a pot, the pot must be on the induction cooker, and the induction must be turned on. The agent must be in the same room. After waiting, the pot becomes heated."
         ],
         "goal": "Heat the pot using the induction and place it on the desk in the living room.",
         "cost": {"home": 9, "exhome": 9},
@@ -88,11 +75,7 @@ TASK_DEFINITIONS: Dict[str, Dict] = {
         "scene": ["home"],
         "add_obj": None,
         "add_act": [
-            "pick(<agent>, <item>, <room>): <agent> picks up an <item> at <room>. <item> must be accessible, located in <room>, the 'pick' action must be in the <item>'s affordance, and <agent> state must be 'hand-free'. As a result, <agent> state will change to 'holding', and the <item> is now held by the agent.",
-            "place(<agent>, <item>, <surface>, <room>): <agent> places an <item> it is holding onto a <surface> in a <room>. The 'place' action must be in the <item>'s affordance, <agent> must be in <room> and holding the <item>. As a result, the <item> will be on the <surface>, and the <agent> state will change to 'hand-free'.",
-            "turnon(<agent>, <item>, <room>): <agent> turns on an <item> at <room>. <item> must be accessible, the 'turnOn' action must be in the <item>'s affordance, both <agent> and <item> must be in <room>, <agent> must not be holding an item, and the <item> state must be 'off'. As a result, the <item> state will change to 'on'.",
-            "turnoff(<agent>, <item>, <room>): <agent> turns off an <item> at <room>. <item> must be accessible, the 'turnOff' action must be in the <item>'s affordance, both <agent> and <item> must be in <room>, <agent> must not be holding an item, and the <item> state must be 'on'. As a result, the <item> state will change to 'off'.",
-            "wait(<agent>): <agent> waits for a process to complete. This is often necessary after starting an appliance like a toaster or washing machine. As a result, the state of the item being processed changes (e.g., bread becomes 'toasted')."
+            "wash_clothes(<agent>, <clothes>, <washing_machine>, <room>): To wash clothes, the clothes must be inside the washing machine, and the machine must be turned on. After waiting, the clothes become clean."
         ],
         "goal": "Wash the clothes in the washing machine and place them back in the bedroom.",
         "cost": {"home": 10},
@@ -115,11 +98,7 @@ TASK_DEFINITIONS: Dict[str, Dict] = {
         "scene": ["home", "exhome"],
         "add_obj": None,
         "add_act": [
-            "pick(<agent>, <item>, <room>): <agent> picks up an <item> at <room>. <item> must be accessible, located in <room>, the 'pick' action must be in the <item>'s affordance, and <agent> state must be 'hand-free'. As a result, <agent> state will change to 'holding', and the <item> is now held by the agent.",
-            "place(<agent>, <item>, <surface>, <room>): <agent> places an <item> it is holding onto a <surface> in a <room>. The 'place' action must be in the <item>'s affordance, <agent> must be in <room> and holding the <item>. As a result, the <item> will be on the <surface>, and the <agent> state will change to 'hand-free'.",
-            "turnon(<agent>, <item>, <room>): <agent> turns on an <item> at <room>. <item> must be accessible, the 'turnOn' action must be in the <item>'s affordance, both <agent> and <item> must be in <room>, <agent> must not be holding an item, and the <item> state must be 'off'. As a result, the <item> state will change to 'on'.",
-            "turnoff(<agent>, <item>, <room>): <agent> turns off an <item> at <room>. <item> must be accessible, the 'turnOff' action must be in the <item>'s affordance, both <agent> and <item> must be in <room>, <agent> must not be holding an item, and the <item> state must be 'on'. As a result, the <item> state will change to 'off'.",
-            "wait(<agent>): <agent> waits for a process to complete. This is often necessary after starting an appliance like a toaster or washing machine. As a result, the state of the item being processed changes (e.g., bread becomes 'toasted')."
+            "cook_ramen(<agent>, <cup_ramen>, <water_dispenser>, <room>): To cook cup ramen, the ramen must be placed at the water dispenser, and the dispenser must be turned on to pour hot water. After waiting, the cup ramen becomes cooked."
         ],
         "goal": "Cook cup ramen using the water dispenser and place it on the desk in the living room.",
         "cost": {"home": 8, "exhome": 8},
@@ -142,11 +121,7 @@ TASK_DEFINITIONS: Dict[str, Dict] = {
         "scene": ["home", "exhome"],
         "add_obj": None,
         "add_act": [
-            "pick(<agent>, <item>, <room>): <agent> picks up an <item> at <room>. <item> must be accessible, located in <room>, the 'pick' action must be in the <item>'s affordance, and <agent> state must be 'hand-free'. As a result, <agent> state will change to 'holding', and the <item> is now held by the agent.",
-            "place(<agent>, <item>, <surface>, <room>): <agent> places an <item> it is holding onto a <surface> in a <room>. The 'place' action must be in the <item>'s affordance, <agent> must be in <room> and holding the <item>. As a result, the <item> will be on the <surface>, and the <agent> state will change to 'hand-free'.",
-            "turnon(<agent>, <item>, <room>): <agent> turns on an <item> at <room>. <item> must be accessible, the 'turnOn' action must be in the <item>'s affordance, both <agent> and <item> must be in <room>, <agent> must not be holding an item, and the <item> state must be 'off'. As a result, the <item> state will change to 'on'.",
-            "turnoff(<agent>, <item>, <room>): <agent> turns off an <item> at <room>. <item> must be accessible, the 'turnOff' action must be in the <item>'s affordance, both <agent> and <item> must be in <room>, <agent> must not be holding an item, and the <item> state must be 'on'. As a result, the <item> state will change to 'off'.",
-            "wait(<agent>): <agent> waits for a process to complete. This is often necessary after starting an appliance like a toaster or washing machine. As a result, the state of the item being processed changes (e.g., bread becomes 'toasted')."
+            "heat_food(<agent>, <food>, <microwave>, <room>): To heat food, the food must be inside the microwave, and the microwave must be turned on. After waiting, the food becomes heated."
         ],
         "goal": "Heat the food in the microwave and place it on the desk in the living room.",
         "cost": {"home": 9, "exhome": 9},
@@ -170,11 +145,7 @@ TASK_DEFINITIONS: Dict[str, Dict] = {
         "scene": ["home"],
         "add_obj": None,
         "add_act": [
-            "pick(<agent>, <item>, <room>): <agent> picks up an <item> at <room>. <item> must be accessible, located in <room>, the 'pick' action must be in the <item>'s affordance, and <agent> state must be 'hand-free'. As a result, <agent> state will change to 'holding', and the <item> is now held by the agent.",
-            "place(<agent>, <item>, <surface>, <room>): <agent> places an <item> it is holding onto a <surface> in a <room>. The 'place' action must be in the <item>'s affordance, <agent> must be in <room> and holding the <item>. As a result, the <item> will be on the <surface>, and the <agent> state will change to 'hand-free'.",
-            "turnon(<agent>, <item>, <room>): <agent> turns on an <item> at <room>. <item> must be accessible, the 'turnOn' action must be in the <item>'s affordance, both <agent> and <item> must be in <room>, <agent> must not be holding an item, and the <item> state must be 'off'. As a result, the <item> state will change to 'on'.",
-            "turnoff(<agent>, <item>, <room>): <agent> turns off an <item> at <room>. <item> must be accessible, the 'turnOff' action must be in the <item>'s affordance, both <agent> and <item> must be in <room>, <agent> must not be holding an item, and the <item> state must be 'on'. As a result, the <item> state will change to 'off'.",
-            "wait(<agent>): <agent> waits for a process to complete. This is often necessary after starting an appliance like a toaster or washing machine. As a result, the state of the item being processed changes (e.g., bread becomes 'toasted')."
+            "charge_phone(<agent>, <phone>, <charger>, <room>): To charge a phone, the phone must be placed on the charger, and the charger must be turned on. After waiting, the phone becomes charged."
         ],
         "goal": "Charge the phone in the bedroom and place it on the desk in the living room.",
         "cost": {"home": 9},
@@ -198,8 +169,9 @@ TASK_DEFINITIONS: Dict[str, Dict] = {
         "scene": ["home", "exhome"],
         "add_obj": None,
         "add_act": [
-            "pick(<agent>, <item>, <room>): <agent> picks up an <item> at <room>. <item> must be accessible, located in <room>, the 'pick' action must be in the <item>'s affordance, and <agent> state must be 'hand-free'. As a result, <agent> state will change to 'holding', and the <item> is now held by the agent.",
-            "place(<agent>, <item>, <surface>, <room>): <agent> places an <item> it is holding onto a <surface> in a <room>. The 'place' action must be in the <item>'s affordance, <agent> must be in <room> and holding the <item>. As a result, the <item> will be on the <surface>, and the <agent> state will change to 'hand-free'.",
+            "pickfromroom(<agent>, <item>, <room>): <agent> picks up an <item> that is located in <room>. The <item> must be accessible and pickable, the <agent> must be hand-free and in the same room. As a result, the <agent> will be holding the <item>, and the <item> will no longer be in the room.",
+            "placeinappliance(<agent>, <item>, <appliance>, <room>): <agent> places a held <item> into an <appliance> in <room>. The <agent> must be holding the item and located in the same room as the appliance. As a result, the item will be inside the appliance, and the agent's hand will become free."
+   
         ],
         "goal": "Place the water bottle from the kitchen onto the desk in the living room.",
         "cost": {"home": 4, "exhome": 4},
@@ -221,9 +193,8 @@ TASK_DEFINITIONS: Dict[str, Dict] = {
         "scene": ["home", "exhome"],
         "add_obj": None,
         "add_act": [
-            "pick(<agent>, <item>, <room>): <agent> picks up an <item> at <room>. <item> must be accessible, located in <room>, the 'pick' action must be in the <item>'s affordance, and <agent> state must be 'hand-free'. As a result, <agent> state will change to 'holding', and the <item> is now held by the agent.",
-            "wipe(<agent>, <item>, <surface>, <room>): <agent> wipes a <surface> with an <item> (e.g., dishcloth) in a <room>. The 'wipe' action must be in the <item>'s affordance, and the <surface> state must be 'dirty'. As a result, the <surface> state will change to 'clean'.",
-        ],
+            "wipe_surface(<agent>, <cloth>, <surface>, <room>): To wipe a surface, the agent must be holding the cloth and be in the same room as the surface. The surface must be dirty. As a result, the surface becomes clean."
+        ]
         "goal": "Wipe the desk in the living room using the dishcloth.",
         "cost": {"home": 3, "exhome": 3},
         "item_keep": ["dishcloth", "desk"],
@@ -287,8 +258,8 @@ TASK_DEFINITIONS: Dict[str, Dict] = {
         "scene": ["home", "exhome"],
         "add_obj": None,
         "add_act": [
-            "pick(<agent>, <item>, <room>): <agent> picks up an <item> at <room>. <item> must be accessible, located in <room>, the 'pick' action must be in the <item>'s affordance, and <agent> state must be 'hand-free'. As a result, <agent> state will change to 'holding', and the <item> is now held by the agent.",
-            "place(<agent>, <item>, <surface>, <room>): <agent> places an <item> it is holding onto a <surface> in a <room>. The 'place' action must be in the <item>'s affordance, <agent> must be in <room> and holding the <item>. As a result, the <item> will be on the <surface>, and the <agent> state will change to 'hand-free'.",
+            "pickfromappliance(<agent>, <item>, <appliance>, <room>): <agent> picks up an <item> that is inside an <appliance> in <room>. The <agent> must be in the same room, hand-free, and the appliance must be turned off. As a result, the <agent> will be holding the <item>, and it will be removed from the appliance."
+            "placeinappliance(<agent>, <item>, <appliance>, <room>): <agent> places a held <item> into an <appliance> in <room>. The <agent> must be holding the item and located in the same room as the appliance. As a result, the item will be inside the appliance, and the agent's hand will become free."
         ],
         "goal": "Organize all the dishes by placing them onto the shelf in the kitchen.",
         "cost": {"home": 7, "exhome": 7},
@@ -311,8 +282,7 @@ TASK_DEFINITIONS: Dict[str, Dict] = {
         "scene": ["home", "exhome"],
         "add_obj": None,
         "add_act": [
-            "pick(<agent>, <item>, <room>): <agent> picks up an <item> at <room>. <item> must be accessible, located in <room>, the 'pick' action must be in the <item>'s affordance, and <agent> state must be 'hand-free'. As a result, <agent> state will change to 'holding', and the <item> is now held by the agent.",
-            "place(<agent>, <item>, <surface>, <room>): <agent> places an <item> it is holding onto a <surface> in a <room>. The 'place' action must be in the <item>'s affordance, <agent> must be in <room> and holding the <item>. As a result, the <item> will be on the <surface>, and the <agent> state will change to 'hand-free'.",
+            "store_item(<agent>, <item>, <container>, <room>): To store an item, the agent must be holding the item and be in the same room as the container. As a result, the item is inside the container, and the agent's hand is free."
         ],
         "goal": "Store the eggs in the egg container in the kitchen.",
         "cost": {"home": 3, "exhome": 3},
