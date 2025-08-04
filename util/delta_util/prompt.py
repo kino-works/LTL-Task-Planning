@@ -3,19 +3,11 @@ import os
 import util.delta_util.utils as utils
 from util.delta_util.sayplan_utils import sayplan_output_format, sayplan_search_exp, sayplan_plan_exp
 
-# Action 설명을 scene_graph.py를 참고하여 수정하고 wait 액션 추가
 actions = """
     For example, a domain has the following object types: agent, room, and item. The agent can perform the following basic actions:
     goto(<agent>, <room_1>, <room_2>): <agent> goes from <room_1> to <room_2>, where <room_1> and <room_2> should be neighbors. As a result, <agent> will leave <room_1> and be located in <room_2>.
-    pick(<agent>, <item>, <room>): <agent> picks up an <item> at <room>. <item> must be accessible, located in <room>, the 'pick' action must be in the <item>'s affordance, and <agent> state must be 'hand-free'. As a result, <agent> state will change to 'holding', and the <item> is now held by the agent.
-    place(<agent>, <item>, <surface>, <room>): <agent> places an <item> it is holding onto a <surface> in a <room>. The 'place' action must be in the <item>'s affordance, <agent> must be in <room> and holding the <item>. As a result, the <item> will be on the <surface>, and the <agent> state will change to 'hand-free'.
-    turnon(<agent>, <item>, <room>): <agent> turns on an <item> at <room>. <item> must be accessible, the 'turnOn' action must be in the <item>'s affordance, both <agent> and <item> must be in <room>, <agent> must not be holding an item, and the <item> state must be 'off'. As a result, the <item> state will change to 'on'.
-    turnoff(<agent>, <item>, <room>): <agent> turns off an <item> at <room>. <item> must be accessible, the 'turnOff' action must be in the <item>'s affordance, both <agent> and <item> must be in <room>, <agent> must not be holding an item, and the <item> state must be 'on'. As a result, the <item> state will change to 'off'.
-    wipe(<agent>, <item>, <surface>, <room>): <agent> wipes a <surface> with an <item> (e.g., dishcloth) in a <room>. The 'wipe' action must be in the <item>'s affordance, and the <surface> state must be 'dirty'. As a result, the <surface> state will change to 'clean'.
-    wait(<agent>): <agent> waits for a process to complete. This is often necessary after starting an appliance like a toaster or washing machine. As a result, the state of the item being processed changes (e.g., bread becomes 'toasted').
 """
 
-# sg_example을 scene_graph.py의 EXHOME['rooms']['kitchen'] 내용으로 수정
 sg_example = {
     "kitchen": {
         "items": {
@@ -106,8 +98,6 @@ sg_example = {
     }
 }
 
-
-# sg_exp_str이 수정된 sg_example(kitchen)을 참조하도록 내용 수정
 sg_exp_str = """
     E.g., a kitchen in a scene graph is defined as:
     ```\n{}\n```
@@ -193,7 +183,6 @@ def sg_2_plan(sg_exp: dict, sg_qry: dict, goal_exp: str, goal_qry: str,
 
 
 def sg_2_pddl(sg_example: dict, sg_query: dict, goal: str, add_action: str = None):
-    # Load PDDL files
     pddl_path = os.path.join(os.getcwd(), "data/pddl/example/")
     domain_file = os.path.join(
         pddl_path, "{}_domain.pddl".format(sg_example["name"]))
@@ -211,7 +200,6 @@ def sg_2_pddl(sg_example: dict, sg_query: dict, goal: str, add_action: str = Non
         raise ("Cannot find problem file :{}".format(problem_file))
 
     content = "You are an excellent PDDL file generator. Given a scene graph representation of an environment, you can use it to generate a domain description file and a problem instance file in PDDL."
-    # p_template이 수정되었으므로 이 함수는 자동으로 수정된 내용을 사용합니다.
     prompt = p_template(dict(itertools.islice(sg_example.items(), 3))) + f"""
     Output Response Format:
     <Domain file> in PDDL, which describes the object types, the predicates, and the action knowledge (the preconditions and effects of an action).
@@ -563,60 +551,3 @@ def sayplan_replan_prompt(err_info: str):
     return content, prompt
 
 
-def llmgenplan_domain_summary(domain_qry: str, problem_exps: list):
-    problems = "\n".join(["Problem {}: \n{}".format(i, p)
-                          for i, p in enumerate(problem_exps)])
-
-    content = "You are an excellent PDDL domain summarizer. Given a PDDL domain file and a list of PDDL problem files, you can summarize the domain knowledge in words."
-    prompt = f"""
-    Domain:\n{domain_qry}
-    
-    Example problem(s):\n{problems}
-    
-    Write a short summary of this domain in words.
-    """
-    return content, prompt
-
-
-def llmgenplan_strategy(domain_summary: str = None):
-    domain = "Given a domain summary:\n{}\n".format(
-        domain_summary) if domain_summary is not None else ""
-    content = "You are an excellent strategy generator. Given a summary of the domain knowledge, you can generate a strategy to solve the problem."
-    prompt = f"""{domain}There is a simple strategy for solving all problems in this domain without using search. What is that strategy?"""
-    return content, prompt
-
-
-def llmgenplan_impl_func(strategy: str = None, typed: bool = False):
-    stg = "Given the following strategy: \n{}\n".format(
-        strategy) if strategy is not None else ""
-    object_description = "a set of (object name, type name) tuples" if typed else "a set of objects (string names)"
-    content = "You are an excellent Python function writer. Given a strategy to solve the problem, you can implement Python functions to execute the strategy."
-    prompt = f"""
-    {stg}Implement the strategy as a Python function.
-
-    The code should should be of the form
-
-    ```python
-    def get_plan(objects, init, goal):
-        # Your code here
-        return plan
-    ```
-
-    where
-        - `objects` is {object_description}
-        - `init` is a set of ground atoms represented as tuples of predicate
-        names and arguments (e.g., ('predicate-foo', 'object-bar', ...))
-        - `goal` is also a set of ground atoms represented in the same way
-        - `plan` is a list of actions, where each action is a ground operator
-        represented as a string (e.g., '(operator-baz object-qux ...)')
-    
-    Use ``` to wrap the code.
-    """
-    return content, prompt
-
-
-def llmgenplan_replan(err_info: str = None):
-    err = "Error: {}\n".format(err_info) if err_info is not None else ""
-    content = "You are an excellent replanner. Given an error message, you can fix the Python code to recover from the error."
-    prompt = f"{err}\nFix the code."
-    return content, prompt

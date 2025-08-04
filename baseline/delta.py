@@ -20,12 +20,16 @@ import util.delta_util.planner as planner
 import util.delta_util.prompt as p
 import time
 
+from dotenv import load_dotenv
+load_dotenv()
+openai.api_key = os.getenv("OPENAI_API_KEY")
+
 
 # Parameters
 DEFAULT_LLM = "gpt-4o"
 TEMPERATURE = 0.0
 TOP_P = 1.0
-EPISODE = 20
+EPISODE = 2
 MAX_TIME = 60
 
 # Examples (prompt 예시용으로 EXHOME 사용)
@@ -33,8 +37,6 @@ DOMAIN_EXAMPLE = "exhousework"
 SCENE_EXAMPLE   = "exhome"
 
 # Queries (실제 실행할 HOME 도메인/씬)
-selected_tasks = ["Cookedtoast", "Boiledwater", "Cookedcupramen"]
-HOUSEWORK = generate_domain_query(selected_tasks)["HOUSEWORK"]
 DOMAIN_QUERY    = "housework"
 SCENE_QUERY     = "home"
 
@@ -95,6 +97,11 @@ if __name__ == "__main__":
     )
     parser.add_argument(
         "--max-time", type=float, dest="max_time", default=MAX_TIME
+    )
+    parser.add_argument(
+        "--logdir", "-l", type=str, dest="logdir", default="result"
+    )
+    parser.add_argument("-n", "--episode", type=int, dest="episode", default=EPISODE
     )
 
     args = parser.parse_args()

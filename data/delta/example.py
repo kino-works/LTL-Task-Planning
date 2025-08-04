@@ -1,7 +1,15 @@
+from .target import generate_domain_query
+
 EXHOUSEWORK = {
     "scene": ["home", "exhome"],
     "add_obj": None,
-    "add_act": None,
+    "add_act": [
+        "pick(<agent>, <item>, <room>): <agent> picks up an <item> at <room>. <item> must be accessible, located in <room>, the 'pick' action must be in the <item>'s affordance, and <agent> state must be 'hand-free'. As a result, <agent> state will change to 'holding', and the <item> is now held by the agent.",
+        "place(<agent>, <item>, <surface>, <room>): <agent> places an <item> it is holding onto a <surface> in a <room>. The 'place' action must be in the <item>'s affordance, <agent> must be in <room> and holding the <item>. As a result, the <item> will be on the <surface>, and the <agent> state will change to 'hand-free'.",
+        "turnon(<agent>, <item>, <room>): <agent> turns on an <item> at <room>. <item> must be accessible, the 'turnOn' action must be in the <item>'s affordance, both <agent> and <item> must be in <room>, <agent> must not be holding an item, and the <item> state must be 'off'. As a result, the <item> state will change to 'on'.",
+        "turnoff(<agent>, <item>, <room>): <agent> turns off an <item> at <room>. <item> must be accessible, the 'turnOff' action must be in the <item>'s affordance, both <agent> and <item> must be in <room>, <agent> must not be holding an item, and the <item> state must be 'on'. As a result, the <item> state will change to 'off'.",
+        "wait(<agent>): <agent> waits for a process to complete. This is often necessary after starting an appliance like a toaster or washing machine. As a result, the state of the item being processed changes (e.g., bread becomes 'toasted')."
+    ],
     "gt_cost": {
         "home": 26,
         "exhome": 26
@@ -47,10 +55,12 @@ EXHOUSEWORK = {
     ]
 }
 
+selected_tasks = ["Heatedfood", "Placedwaterbottle", "Storedeggs"]
+HOUSEWORK = generate_domain_query(selected_tasks)["HOUSEWORK"]
 
 def get_example(domain: str, scene: str = None):
-    return {"home": HOME, "exhome": EXHOME}[domain]
+    return eval(domain.upper())
 
 
 def get_scenes(domain: str):
-    return {"home": HOME["scene"], "exhome": EXHOME["scene"]}[domain]
+    return eval(domain.upper())["scene"]
