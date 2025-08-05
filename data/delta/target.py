@@ -2,306 +2,177 @@ from typing import List, Dict, Any
 
 TASK_DEFINITIONS: Dict[str, Dict] = {
     "Cookedtoast": {
-        "scene": ["home", "exhome"],
-        "add_obj": None,
+        "scene": ["home", "exhome"], "add_obj": None,
         "add_act": [
-            "toast_bread(<agent>, <bread>, <toaster>, <room>): To toast bread, the agent must be in the same room as the bread and the toaster. The bread must be inside the toaster, and the toaster must be turned on. After waiting, the bread becomes toasted."
+            "pick_from_room(<agent>, <item>, <room>): The agent picks up an item from a general location in a room.",
+            "pick_from_appliance(<agent>, <item>, <appliance>, <room>): The agent picks up a finished item from inside an appliance.",
+            "place_in_appliance(<agent>, <item>, <appliance>, <room>): The agent places a held item into an appliance like a toaster.",
+            "place_on_surface(<agent>, <item>, <surface>, <room>): The agent places a held item onto a surface like a desk.",
+            "turnon(<agent>, <appliance>, <room>): The agent turns on an appliance.",
+            "turnoff(<agent>, <appliance>, <room>): The agent turns off an appliance.",
+            "toast_bread(<agent>, <bread>, <toaster>, <room>): After turning the toaster on and waiting, the bread inside becomes toasted."
         ],
-        "goal": "Make toast and place it on the desk in the living room.",
-        "cost": {"home": 9, "exhome": 9},
-        "item_keep": ["bread", "toaster", "desk"],
-        "subgoal": [
-            "Toast the bread in the toaster",
-            "Move the toasted bread to the living room desk"
-        ],
-        "subgoal_pddl": [
-            "(:goal (and (toasted bread)))",
-            "(:goal (and (item_at bread livingroom) (item_on bread desk)))"
-        ],
-        "env_state": [
-            "item_is_bread(bread): bread is a food item.",
-            "item_is_toaster(toaster): toaster is a kitchen appliance.",
-            "toasted(bread): bread is toasted.",
-            "item_on(bread, desk): bread is on the desk."
-        ],
+        "goal": "Make toast and place it on the desk in the living room.", "cost": {"home": 9, "exhome": 9},
+        "item_keep": ["bread", "toaster", "desk"], "subgoal": ["Toast the bread", "Move the toast to the desk"],
+        "subgoal_pddl": ["(:goal (and (toasted bread)))", "(:goal (and (item_on bread desk)))"],
+        "env_state": ["toasted(bread): bread is toasted.", "item_on(bread, desk): bread is on the desk."]
     },
     "Boiledwater": {
-        "scene": ["home", "exhome"],
-        "add_obj": None,
+        "scene": ["home", "exhome"], "add_obj": None,
         "add_act": [
-            "boil_water(<agent>, <kettle>, <stove>, <room>): To boil water, the kettle must be on the stove, and the stove must be turned on. The agent must be in the same room. After waiting, the water in the kettle becomes boiled."
+            "pick_from_room(<agent>, <item>, <room>): The agent picks up an item like a kettle.",
+            "place_in_appliance(<agent>, <item>, <appliance>, <room>): The agent places a held item onto a heating appliance like a stove.",
+            "place_on_surface(<agent>, <item>, <surface>, <room>): The agent places a held item onto a surface.",
+            "turnon(<agent>, <appliance>, <room>): The agent turns on an appliance like a stove.",
+            "turnoff(<agent>, <appliance>, <room>): The agent turns off an appliance.",
+            "boil_water(<agent>, <kettle>, <stove>, <room>): After turning the stove on and waiting, the water inside the kettle on the stove becomes boiled."
         ],
-        "goal": "Boil water in the kettle and place it on the desk in the living room.",
-        "cost": {"home": 9, "exhome": 9},
-        "item_keep": ["kettle", "stove", "desk"],
-        "subgoal": [
-            "Boil the water in the kettle",
-            "Move the boiled kettle to the living room desk"
-        ],
-        "subgoal_pddl": [
-            "(:goal (and (boiled kettle)))",
-            "(:goal (and (item_at kettle livingroom) (item_on kettle desk)))"
-        ],
-        "env_state": [
-            "item_is_kettle(kettle): kettle is a container for boiling water.",
-            "boiled(kettle): kettle contains boiled water.",
-            "item_on(kettle, desk): kettle is on the desk."
-        ],
+        "goal": "Boil water in the kettle and place it on the desk in the living room.", "cost": {"home": 9, "exhome": 9},
+        "item_keep": ["kettle", "stove", "desk"], "subgoal": ["Boil the water", "Move the kettle to the desk"],
+        "subgoal_pddl": ["(:goal (and (boiled kettle)))", "(:goal (and (item_on kettle desk)))"],
+        "env_state": ["boiled(kettle): kettle contains boiled water.", "item_on(kettle, desk): kettle is on the desk."]
     },
     "Heatedpot": {
-        "scene": ["home", "exhome"],
-        "add_obj": None,
+        "scene": ["home", "exhome"], "add_obj": None,
         "add_act": [
-            "heat_pot(<agent>, <pot>, <induction>, <room>): To heat a pot, the pot must be on the induction cooker, and the induction must be turned on. The agent must be in the same room. After waiting, the pot becomes heated."
+            "pick_from_room(<agent>, <item>, <room>): The agent picks up an item like a pot.",
+            "pick_from_appliance(<agent>, <item>, <appliance>, <room>): The agent picks up a heated item from an appliance.",
+            "place_in_appliance(<agent>, <item>, <appliance>, <room>): The agent places a held item onto a heating appliance like an induction cooker.",
+            "place_on_surface(<agent>, <item>, <surface>, <room>): The agent places a held item onto a surface.",
+            "turnon(<agent>, <appliance>, <room>): The agent turns on an appliance like an induction cooker.",
+            "turnoff(<agent>, <appliance>, <room>): The agent turns off an appliance.",
+            "heat_pot(<agent>, <pot>, <induction>, <room>): After turning the induction on and waiting, the pot on it becomes heated."
         ],
-        "goal": "Heat the pot using the induction and place it on the desk in the living room.",
-        "cost": {"home": 9, "exhome": 9},
-        "item_keep": ["pot", "induction", "desk"],
-        "subgoal": [
-            "Heat the pot on the induction",
-            "Move the heated pot to the living room desk"
-        ],
-        "subgoal_pddl": [
-            "(:goal (and (heated pot)))",
-            "(:goal (and (item_at pot livingroom) (item_on pot desk)))"
-        ],
-        "env_state": [
-            "item_is_pot(pot): pot is a container for cooking.",
-            "heated(pot): pot is heated.",
-            "item_on(pot, desk): pot is on the desk."
-        ],
+        "goal": "Heat the pot using the induction and place it on the desk in the living room.", "cost": {"home": 9, "exhome": 9},
+        "item_keep": ["pot", "induction", "desk"], "subgoal": ["Heat the pot", "Move the pot to the desk"],
+        "subgoal_pddl": ["(:goal (and (heated pot)))", "(:goal (and (item_on pot desk)))"],
+        "env_state": ["heated(pot): pot is heated.", "item_on(pot, desk): pot is on the desk."]
     },
     "Washedclothes": {
-        "scene": ["home"],
-        "add_obj": None,
+        "scene": ["home"], "add_obj": None,
         "add_act": [
-            "wash_clothes(<agent>, <clothes>, <washing_machine>, <room>): To wash clothes, the clothes must be inside the washing machine, and the machine must be turned on. After waiting, the clothes become clean."
+            "pick_from_room(<agent>, <item>, <room>): The agent picks up items like clothes.",
+            "pick_from_appliance(<agent>, <item>, <appliance>, <room>): The agent picks up clean clothes from a washing machine.",
+            "place_in_appliance(<agent>, <item>, <appliance>, <room>): The agent places held clothes into a washing machine.",
+            "place_on_surface(<agent>, <item>, <surface>, <room>): The agent places held items in a room.",
+            "turnon(<agent>, <appliance>, <room>): The agent turns on the washing machine.",
+            "turnoff(<agent>, <appliance>, <room>): The agent turns off the washing machine.",
+            "wash_clothes(<agent>, <clothes>, <washing_machine>, <room>): After turning the machine on and waiting, the clothes inside become clean."
         ],
-        "goal": "Wash the clothes in the washing machine and place them back in the bedroom.",
-        "cost": {"home": 10},
-        "item_keep": ["clothes", "washing_machine"],
-        "subgoal": [
-            "Wash the clothes using the washing machine",
-            "Return the washed clothes to the bedroom"
-        ],
-        "subgoal_pddl": [
-            "(:goal (and (cloth_clean clothes)))",
-            "(:goal (and (cloth_clean clothes) (item_at clothes bedroom)))"
-        ],
-        "env_state": [
-            "item_is_clothes(clothes): clothes to be washed.",
-            "item_is_washing_machine(washing_machine): washing machine is a laundry appliance.",
-            "cloth_clean(clothes): clothes are clean."
-        ],
+        "goal": "Wash the clothes in the washing machine and place them back in the bedroom.", "cost": {"home": 10},
+        "item_keep": ["clothes", "washing_machine"], "subgoal": ["Wash the clothes", "Return clothes to the bedroom"],
+        "subgoal_pddl": ["(:goal (and (cloth_clean clothes)))", "(:goal (and (item_at clothes bedroom)))"],
+        "env_state": ["cloth_clean(clothes): clothes are clean."]
     },
     "Cookedcupramen": {
-        "scene": ["home", "exhome"],
-        "add_obj": None,
+        "scene": ["home", "exhome"], "add_obj": None,
         "add_act": [
-            "cook_ramen(<agent>, <cup_ramen>, <water_dispenser>, <room>): To cook cup ramen, the ramen must be placed at the water dispenser, and the dispenser must be turned on to pour hot water. After waiting, the cup ramen becomes cooked."
+            "pick_from_room(<agent>, <item>, <room>): The agent picks up an item like cup ramen.",
+            "pick_from_appliance(<agent>, <item>, <appliance>, <room>): The agent picks up the cooked ramen from the water dispenser area.",
+            "place_in_appliance(<agent>, <item>, <appliance>, <room>): The agent places the cup ramen at the water dispenser to fill it with hot water.",
+            "place_on_surface(<agent>, <item>, <surface>, <room>): The agent places the cooked ramen on a desk.",
+            "turnon(<agent>, <appliance>, <room>): The agent turns on the water dispenser.",
+            "cook_ramen(<agent>, <cup_ramen>, <water_dispenser>, <room>): After turning the dispenser on and waiting, the ramen becomes cooked."
         ],
-        "goal": "Cook cup ramen using the water dispenser and place it on the desk in the living room.",
-        "cost": {"home": 8, "exhome": 8},
-        "item_keep": ["cup_ramen", "water_dispenser", "desk"],
-        "subgoal": [
-            "Cook cup ramen with the water dispenser",
-            "Move the cooked cup ramen to the living room desk"
-        ],
-        "subgoal_pddl": [
-            "(:goal (and (cooked cup_ramen)))",
-            "(:goal (and (item_at cup_ramen livingroom) (item_on cup_ramen desk)))"
-        ],
-        "env_state": [
-            "item_is_cup_ramen(cup_ramen): cup ramen is a food item.",
-            "cooked(cup_ramen): cup ramen is cooked.",
-            "item_on(cup_ramen, desk): cup ramen is on the desk."
-        ],
+        "goal": "Cook cup ramen using the water dispenser and place it on the desk in the living room.", "cost": {"home": 8, "exhome": 8},
+        "item_keep": ["cup_ramen", "water_dispenser", "desk"], "subgoal": ["Cook the cup ramen", "Move the ramen to the desk"],
+        "subgoal_pddl": ["(:goal (and (cooked cup_ramen)))", "(:goal (and (item_on cup_ramen desk)))"],
+        "env_state": ["cooked(cup_ramen): cup ramen is cooked.", "item_on(cup_ramen, desk): cup ramen is on the desk."]
     },
     "Heatedfood": {
-        "scene": ["home", "exhome"],
-        "add_obj": None,
+        "scene": ["home", "exhome"], "add_obj": None,
         "add_act": [
-            "heat_food(<agent>, <food>, <microwave>, <room>): To heat food, the food must be inside the microwave, and the microwave must be turned on. After waiting, the food becomes heated."
+            "pick_from_room(<agent>, <item>, <room>): The agent picks up the food from a location in a room.",
+            "pick_from_appliance(<agent>, <item>, <appliance>, <room>): The agent picks up the heated food from inside the microwave.",
+            "place_in_appliance(<agent>, <item>, <appliance>, <room>): The agent places the held food into the microwave.",
+            "place_on_surface(<agent>, <item>, <surface>, <room>): The agent places the heated food on the desk.",
+            "turnon(<agent>, <appliance>, <room>): The agent turns on the microwave.",
+            "turnoff(<agent>, <appliance>, <room>): The agent turns off the microwave.",
+            "heat_food(<agent>, <food>, <microwave>, <room>): After turning the microwave on and waiting, the food inside becomes heated."
         ],
-        "goal": "Heat the food in the microwave and place it on the desk in the living room.",
-        "cost": {"home": 9, "exhome": 9},
-        "item_keep": ["food", "microwave", "desk"],
-        "subgoal": [
-            "Heat the food using the microwave",
-            "Move the heated food to the living room desk"
-        ],
-        "subgoal_pddl": [
-            "(:goal (and (heated food)))",
-            "(:goal (and (item_at food livingroom) (item_on food desk)))"
-        ],
-        "env_state": [
-            "item_is_food(food): food item to be heated.",
-            "item_is_microwave(microwave): microwave oven.",
-            "heated(food): food is heated.",
-            "item_on(food, desk): food is on the desk."
-        ],
+        "goal": "Heat the food in the microwave and place it on the desk in the living room.", "cost": {"home": 9, "exhome": 9},
+        "item_keep": ["food", "microwave", "desk"], "subgoal": ["Heat the food", "Move the food to the desk"],
+        "subgoal_pddl": ["(:goal (and (heated food)))", "(:goal (and (item_on food desk)))"],
+        "env_state": ["heated(food): food is heated.", "item_on(food, desk): food is on the desk."]
     },
     "Chargedphone": {
-        "scene": ["home"],
-        "add_obj": None,
+        "scene": ["home"], "add_obj": None,
         "add_act": [
-            "charge_phone(<agent>, <phone>, <charger>, <room>): To charge a phone, the phone must be placed on the charger, and the charger must be turned on. After waiting, the phone becomes charged."
+            "pick_from_room(<agent>, <item>, <room>): The agent picks up the phone.",
+            "pick_from_appliance(<agent>, <item>, <appliance>, <room>): The agent picks up the charged phone from the charger.",
+            "place_in_appliance(<agent>, <item>, <appliance>, <room>): The agent places the phone on the charger.",
+            "place_on_surface(<agent>, <item>, <surface>, <room>): The agent places the charged phone on the desk.",
+            "turnon(<agent>, <appliance>, <room>): The agent turns on the charger.",
+            "turnoff(<agent>, <appliance>, <room>): The agent turns off the charger.",
+            "charge_phone(<agent>, <phone>, <charger>, <room>): After turning the charger on and waiting, the phone becomes charged."
         ],
-        "goal": "Charge the phone in the bedroom and place it on the desk in the living room.",
-        "cost": {"home": 9},
-        "item_keep": ["phone", "charger", "desk"],
-        "subgoal": [
-            "Charge the phone using the charger",
-            "Move the charged phone to the living room desk"
-        ],
-        "subgoal_pddl": [
-            "(:goal (and (charged phone)))",
-            "(:goal (and (item_at phone livingroom) (item_on phone desk)))"
-        ],
-        "env_state": [
-            "item_is_phone(phone): mobile phone.",
-            "item_is_charger(charger): charger device.",
-            "charged(phone): phone is fully charged.",
-            "item_on(phone, desk): phone is on the desk."
-        ],
+        "goal": "Charge the phone in the bedroom and place it on the desk in the living room.", "cost": {"home": 9},
+        "item_keep": ["phone", "charger", "desk"], "subgoal": ["Charge the phone", "Move the phone to the desk"],
+        "subgoal_pddl": ["(:goal (and (charged phone)))", "(:goal (and (item_on phone desk)))"],
+        "env_state": ["charged(phone): phone is fully charged.", "item_on(phone, desk): phone is on the desk."]
     },
     "Placedwaterbottle": {
-        "scene": ["home", "exhome"],
-        "add_obj": None,
+        "scene": ["home", "exhome"], "add_obj": None,
         "add_act": [
-            "pickfromroom(<agent>, <item>, <room>): <agent> picks up an <item> that is located in <room>. The <item> must be accessible and pickable, the <agent> must be hand-free and in the same room. As a result, the <agent> will be holding the <item>, and the <item> will no longer be in the room.",
-            "placeinappliance(<agent>, <item>, <appliance>, <room>): <agent> places a held <item> into an <appliance> in <room>. The <agent> must be holding the item and located in the same room as the appliance. As a result, the item will be inside the appliance, and the agent's hand will become free."
-   
+            "pick_from_room(<agent>, <item>, <room>): The agent picks up an item like a water bottle.",
+            "place_on_surface(<agent>, <item>, <surface>, <room>): The agent places the held water bottle onto a surface like a desk."
         ],
-        "goal": "Place the water bottle from the kitchen onto the desk in the living room.",
-        "cost": {"home": 4, "exhome": 4},
-        "item_keep": ["water_bottle", "desk"],
-        "subgoal": [
-            "Pick up the water bottle",
-            "Move the water bottle to the living room desk"
-        ],
-        "subgoal_pddl": [
-            "(:goal (and (item_at water_bottle livingroom)))",
-            "(:goal (and (item_on water_bottle desk)))"
-        ],
-        "env_state": [
-            "item_is_water_bottle(water_bottle): water bottle.",
-            "item_on(water_bottle, desk): water bottle is on the desk."
-        ],
+        "goal": "Place the water bottle from the kitchen onto the desk in the living room.", "cost": {"home": 4, "exhome": 4},
+        "item_keep": ["water_bottle", "desk"], "subgoal": ["Pick up the water bottle", "Move it to the desk"],
+        "subgoal_pddl": ["(:goal (and (item_on water_bottle desk)))"],
+        "env_state": ["item_on(water_bottle, desk): water bottle is on the desk."]
     },
     "Wipeddesk": {
-        "scene": ["home", "exhome"],
-        "add_obj": None,
+        "scene": ["home", "exhome"], "add_obj": None,
         "add_act": [
-            "wipe_surface(<agent>, <cloth>, <surface>, <room>): To wipe a surface, the agent must be holding the cloth and be in the same room as the surface. The surface must be dirty. As a result, the surface becomes clean."
-        ]
-        "goal": "Wipe the desk in the living room using the dishcloth.",
-        "cost": {"home": 3, "exhome": 3},
-        "item_keep": ["dishcloth", "desk"],
-        "subgoal": [
-            "Pick the dishcloth",
-            "Wipe the desk in the living room"
+            "pick_from_room(<agent>, <item>, <room>): The agent picks up a cleaning item like a dishcloth.",
+            "wipe(<agent>, <cloth>, <surface>, <room>): The agent uses the held cloth to wipe a dirty surface, making it clean."
         ],
-        "subgoal_pddl": [
-            "(:goal (and (desk_clean livingroom)))"
-        ],
-        "env_state": [
-            "item_is_dishcloth(dishcloth): cleaning cloth.",
-            "desk_clean(livingroom): the desk is clean."
-        ],
+        "goal": "Wipe the desk in the living room using the dishcloth.", "cost": {"home": 3, "exhome": 3},
+        "item_keep": ["dishcloth", "desk"], "subgoal": ["Pick the dishcloth", "Wipe the desk"],
+        "subgoal_pddl": ["(:goal (and (desk_clean livingroom)))"],
+        "env_state": ["desk_clean(livingroom): the desk is clean."]
     },
     "Turnonswitch": {
-        "scene": ["home", "exhome"],
-        "add_obj": None,
-        "add_act": [
-            "turnon(<agent>, <item>, <room>): <agent> turns on an <item> at <room>. <item> must be accessible, the 'turnOn' action must be in the <item>'s affordance, both <agent> and <item> must be in <room>, <agent> must not be holding an item, and the <item> state must be 'off'. As a result, the <item> state will change to 'on'.",
-        ],
-        "goal": "Turn on the light switch in the specified room.",
-        "cost": {"home": 2, "exhome": 2},
-        "item_keep": ["<room1>_lightswitch"],
-        "subgoal": [
-            "Go to the room",
-            "Turn on the light switch"
-        ],
-        "subgoal_pddl": [
-            "(:goal (and (at agent <room1>)))",
-            "(:goal (and (on <room1>_lightswitch)))"
-        ],
-        "env_state": [
-            "item_is_lightswitch(<room1>_lightswitch): light switch in the room.",
-            "on(<room1>_lightswitch): the light switch is on."
-        ],
+        "scene": ["home", "exhome"], "add_obj": None,
+        "add_act": ["turnon(<agent>, <item>, <room>): The agent turns on an item like a lightswitch."],
+        "goal": "Turn on the light switch in the specified room.", "cost": {"home": 2, "exhome": 2},
+        "item_keep": ["<room1>_lightswitch"], "subgoal": ["Go to the room", "Turn on the switch"],
+        "subgoal_pddl": ["(:goal (and (on <room1>_lightswitch)))"],
+        "env_state": ["on(<room1>_lightswitch): the light switch is on."]
     },
     "Turnoffswitch": {
-        "scene": ["home", "exhome"],
-        "add_obj": None,
-        "add_act": [
-            "turnoff(<agent>, <item>, <room>): <agent> turns off an <item> at <room>. <item> must be accessible, the 'turnOff' action must be in the <item>'s affordance, both <agent> and <item> must be in <room>, <agent> must not be holding an item, and the <item> state must be 'on'. As a result, the <item> state will change to 'off'.",
-        ],
-        "goal": "Turn off the light switch in the specified room.",
-        "cost": {"home": 2, "exhome": 2},
-        "item_keep": ["<room1>_lightswitch"],
-        "subgoal": [
-            "Go to the room",
-            "Turn off the light switch"
-        ],
-        "subgoal_pddl": [
-            "(:goal (and (at agent <room1>)))",
-            "(:goal (and (not (on <room1>_lightswitch))))"
-        ],
-        "env_state": [
-            "item_is_lightswitch(<room1>_lightswitch): light switch in the room.",
-            "on(<room1>_lightswitch): the light switch is on."
-        ],
+        "scene": ["home", "exhome"], "add_obj": None,
+        "add_act": ["turnoff(<agent>, <item>, <room>): The agent turns off an item like a lightswitch."],
+        "goal": "Turn off the light switch in the specified room.", "cost": {"home": 2, "exhome": 2},
+        "item_keep": ["<room1>_lightswitch"], "subgoal": ["Go to the room", "Turn off the switch"],
+        "subgoal_pddl": ["(:goal (and (not (on <room1>_lightswitch))))"],
+        "env_state": ["on(<room1>_lightswitch): the light switch is on."]
     },
     "Organizeddishes": {
-        "scene": ["home", "exhome"],
-        "add_obj": None,
+        "scene": ["home", "exhome"], "add_obj": None,
         "add_act": [
-            "pickfromappliance(<agent>, <item>, <appliance>, <room>): <agent> picks up an <item> that is inside an <appliance> in <room>. The <agent> must be in the same room, hand-free, and the appliance must be turned off. As a result, the <agent> will be holding the <item>, and it will be removed from the appliance."
-            "placeinappliance(<agent>, <item>, <appliance>, <room>): <agent> places a held <item> into an <appliance> in <room>. The <agent> must be holding the item and located in the same room as the appliance. As a result, the item will be inside the appliance, and the agent's hand will become free."
+            "pick_from_room(<agent>, <item>, <room>): The agent picks up a dish.",
+            "place_on_surface(<agent>, <item>, <surface>, <room>): The agent places a held dish onto a storage surface like a shelf."
         ],
-        "goal": "Organize all the dishes by placing them onto the shelf in the kitchen.",
-        "cost": {"home": 7, "exhome": 7},
-        "item_keep": ["dish_1", "dish_2", "dish_3", "shelf"],
-        "subgoal": [
-            "Pick and place each dish on the shelf"
-        ],
-        "subgoal_pddl": [
-            "(:goal (and (item_on dish_1 shelf) (item_on dish_2 shelf) (item_on dish_3 shelf)))"
-        ],
-        "env_state": [
-            "item_is_dish(dish_1): dish for eating.",
-            "item_is_dish(dish_2): dish for eating.",
-            "item_is_dish(dish_3): dish for eating.",
-            "item_is_shelf(shelf): storage shelf.",
-            "item_on(dish_1, shelf): dish 1 is on the shelf."
-        ],
+        "goal": "Organize all the dishes by placing them onto the shelf in the kitchen.", "cost": {"home": 7, "exhome": 7},
+        "item_keep": ["dish_1", "dish_2", "dish_3", "shelf"], "subgoal": ["Place all dishes on the shelf"],
+        "subgoal_pddl": ["(:goal (and (item_on dish_1 shelf) (item_on dish_2 shelf) (item_on dish_3 shelf)))"],
+        "env_state": ["item_on(dish_1, shelf): dish 1 is on the shelf."]
     },
     "Storedeggs": {
-        "scene": ["home", "exhome"],
-        "add_obj": None,
+        "scene": ["home", "exhome"], "add_obj": None,
         "add_act": [
-            "store_item(<agent>, <item>, <container>, <room>): To store an item, the agent must be holding the item and be in the same room as the container. As a result, the item is inside the container, and the agent's hand is free."
+            "pick_from_room(<agent>, <item>, <room>): The agent picks up the eggs.",
+            "store_in_container(<agent>, <item>, <container>, <room>): The agent places the held eggs into a container like an egg_container."
         ],
-        "goal": "Store the eggs in the egg container in the kitchen.",
-        "cost": {"home": 3, "exhome": 3},
-        "item_keep": ["eggs", "egg_container"],
-        "subgoal": [
-            "Pick the eggs",
-            "Place the eggs in the egg container"
-        ],
-        "subgoal_pddl": [
-            "(:goal (and (picked eggs)))",
-            "(:goal (and (in eggs egg_container)))"
-        ],
-        "env_state": [
-            "item_is_eggs(eggs): eggs for storage.",
-            "item_is_egg_container(egg_container): container for eggs.",
-            "in(eggs, egg_container): eggs are in the egg container."
-        ],
+        "goal": "Store the eggs in the egg container in the kitchen.", "cost": {"home": 3, "exhome": 3},
+        "item_keep": ["eggs", "egg_container"], "subgoal": ["Pick the eggs", "Place them in the container"],
+        "subgoal_pddl": ["(:goal (and (in eggs egg_container)))"],
+        "env_state": ["in(eggs, egg_container): eggs are in the egg container."]
     }
 }
+
 
 def generate_domain_query(task_names: List[str]) -> Dict[str, Dict[str, Any]]:
     

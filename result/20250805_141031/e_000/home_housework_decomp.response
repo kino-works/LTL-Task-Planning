@@ -1,0 +1,19 @@
+1. Heat the food in the microwave:
+   ```pddl
+   (:goal (and (heated food)))
+   ```
+
+2. Place the heated food on the desk in the living room:
+   ```pddl
+   (:goal (and (item_on food desk)))
+   ```
+
+3. Place the water bottle on the desk in the living room:
+   ```pddl
+   (:goal (and (item_on water_bottle desk)))
+   ```
+
+4. Store the eggs in the egg container in the kitchen:
+   ```pddl
+   (:goal (and (item_in_container eggs egg_container)))
+   ```

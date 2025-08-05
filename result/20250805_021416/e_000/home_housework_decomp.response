@@ -1,0 +1,17 @@
+1. Heat the food in the microwave.
+   ```(:goal (and (heated food)))```
+
+2. Move the heated food to the living room.
+   ```(:goal (and (item_at food livingroom)))```
+
+3. Place the heated food on the desk in the living room.
+   ```(:goal (and (item_on food desk)))```
+
+4. Move the water bottle to the living room.
+   ```(:goal (and (item_at water_bottle livingroom)))```
+
+5. Place the water bottle on the desk in the living room.
+   ```(:goal (and (item_on water_bottle desk)))```
+
+6. Store the eggs in the egg container.
+   ```(:goal (and (item_in eggs egg_container)))```

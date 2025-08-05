@@ -1,0 +1,150 @@
+You are an excellent PDDL domain file generator. Given a description of object types, predicates, and action knowledge, you can use it to generate a PDDL domain description file.
+    For example, a domain has the following object types: agent, room, item. 
+    The agent can perform the following basic actions:
+    goto(<agent>, <room_1>, <room_2>): <agent> goes from <room_1> to <room_2>, where <room_1> and <room_2> should be neighbors. As result, <agent> will leave <room_1> and locates in <room_2>.
+    pickfromroom(<agent>, <item>, <room>): <agent> picks up an <item> that is located in <room>. The <item> must be accessible and pickable, the <agent> must be hand-free and in the same room. As a result, the <agent> will be holding the <item>, and the <item> will no longer be in the room.
+    pickfromappliance(<agent>, <item>, <appliance>, <room>): <agent> picks up an <item> that is inside an <appliance> in <room>. The <agent> must be in the same room, hand-free, and the appliance must be turned off. As a result, the <agent> will be holding the <item>, and it will be removed from the appliance.
+    placeonsurface(<agent>, <item>, <surface>, <room>): <agent> places a held <item> onto a <surface> in <room>. The <agent> must be holding the item and located in the same room as the surface. As a result, the item will be placed on the surface, and the agent's hand will become free.
+    placeinappliance(<agent>, <item>, <appliance>, <room>): <agent> places a held <item> into an <appliance> in <room>. The <agent> must be holding the item and located in the same room as the appliance. As a result, the item will be inside the appliance, and the agent's hand will become free.
+    and the following additional action(s): 
+toast_bread(<agent>, <bread>, <toaster>, <room>): To toast bread, the agent must be in the same room as the bread and the toaster. The bread must be inside the toaster, and the toaster must be turned on. After waiting, the bread becomes toasted.
+boil_water(<agent>, <kettle>, <stove>, <room>): To boil water, the kettle must be on the stove, and the stove must be turned on. The agent must be in the same room. After waiting, the water in the kettle becomes boiled.
+cook_ramen(<agent>, <cup_ramen>, <water_dispenser>, <room>): To cook cup ramen, the ramen must be placed at the water dispenser, and the dispenser must be turned on to pour hot water. After waiting, the cup ramen becomes cooked.
+    
+    A PDDL domain file describes the object types, the predicates, and the action knowledge (the preconditions and effects of an action).
+    The corresponding PDDL domain file with respect to the previous actions looks like: 
+```
+;Header and description
+(define (domain exhousework)
+
+    (:requirements :strips :typing :adl)
+
+    ; Begin types
+    (:types
+        agent room item - object
+        surface appliance - item ; Surfaces and appliances are special types of items
+    )
+    ; End types
+
+    ; Begin predicates
+    (:predicates
+        (agent_at ?a - agent ?r - room)
+        (agent_hand_free ?a - agent)
+        (agent_has_item ?a - agent ?i - item)
+
+        (item_at ?i - item ?r - room)
+        (item_on ?i - item ?s - surface)
+        (item_in ?i1 - item ?i2 - appliance) ; Represents an item being inside an appliance
+
+        (item_accessible ?i - item)
+        (item_pickable ?i - item)
+
+        (neighbor ?r1 - room ?r2 - room)
+        (appliance_on ?app - appliance)
+
+        ; Task-specific states
+        (toasted ?i - item)
+        (boiled ?i - item)
+        (cooked ?i - item)
+
+        ; Item type identification
+        (is_bread ?i - item)
+        (is_toaster ?i - appliance)
+        (is_kettle ?i - item)
+        (is_stove ?i - appliance)
+        (is_cup_ramen ?i - item)
+        (is_water_dispenser ?i - appliance)
+        (is_desk ?s - surface)
+    )
+    ; End predicates
+
+    ; Begin actions
+    (:action goto
+        :parameters (?a - agent ?from - room ?to - room)
+        :precondition (and (agent_at ?a ?from) (neighbor ?from ?to))
+        :effect (and (not (agent_at ?a ?from)) (agent_at ?a ?to))
+    )
+
+    (:action pick
+        :parameters (?a - agent ?i - item ?r - room)
+        :precondition (and (agent_at ?a ?r) (item_at ?i ?r) (item_accessible ?i) (item_pickable ?i) (agent_hand_free ?a))
+        :effect (and (not (item_at ?i ?r)) (not (agent_hand_free ?a)) (agent_has_item ?a ?i))
+    )
+
+    (:action place-on-surface
+        :parameters (?a - agent ?i - item ?s - surface ?r - room)
+        :precondition (and (agent_at ?a ?r) (item_at ?s ?r) (agent_has_item ?a ?i))
+        :effect (and (not (agent_has_item ?a ?i)) (agent_hand_free ?a) (item_on ?i ?s))
+    )
+    
+    (:action place-in-appliance
+        :parameters (?a - agent ?i - item ?app - appliance ?r - room)
+        :precondition (and (agent_at ?a ?r) (item_at ?app ?r) (agent_has_item ?a ?i))
+        :effect (and (not (agent_has_item ?a ?i)) (agent_hand_free ?a) (item_in ?i ?app))
+    )
+
+    (:action turnon
+        :parameters (?a - agent ?app - appliance ?r - room)
+        :precondition (and (agent_at ?a ?r) (item_at ?app ?r) (not (appliance_on ?app)))
+        :effect (appliance_on ?app)
+    )
+
+    (:action turnoff
+        :parameters (?a - agent ?app - appliance ?r - room)
+        :precondition (and (agent_at ?a ?r) (item_at ?app ?r) (appliance_on ?app))
+        :effect (not (appliance_on ?app))
+    )
+
+    (:action toast_bread
+        :parameters (?a - agent ?b - item ?t - appliance ?r - room)
+        :precondition (and
+            (agent_at ?a ?r) (item_at ?t ?r) (is_toaster ?t)
+            (item_in ?b ?t)
+            (appliance_on ?t)
+            (not (toasted ?b))
+        )
+        :effect (toasted ?b)
+    )
+
+    (:action boil_water
+        :parameters (?a - agent ?k - item ?s - appliance ?r - room)
+        :precondition (and
+            (agent_at ?a ?r) (item_at ?s ?r) (is_stove ?s)
+            (item_in ?k ?s)
+            (appliance_on ?s)
+            (not (boiled ?k))
+        )
+        :effect (boiled ?k)
+    )
+
+    (:action cook_ramen
+        :parameters (?a - agent ?cr - item ?wd - appliance ?r - room)
+        :precondition (and
+            (agent_at ?a ?r) (item_at ?wd ?r) (is_water_dispenser ?wd)
+            (item_in ?cr ?wd)
+            (appliance_on ?wd)
+            (not (cooked ?cr))
+        )
+        :effect (cooked ?cr)
+    )
+    ; End actions
+)
+
+```
+    with the first line of code defining the name of the domain.
+    
+    Now in a new domain named "housework",  
+Besides the basic actions (goto, pick, place), there are the following additional action(s): 
+pick(<agent>, <item>, <room>): The agent picks up the food.
+place_in_appliance(<agent>, <item>, <appliance>, <room>): The agent places the held food into the microwave.
+place_on_surface(<agent>, <item>, <surface>, <room>): The agent places the heated food on the desk.
+turnon(<agent>, <appliance>, <room>): The agent turns on the microwave.
+turnoff(<agent>, <appliance>, <room>): The agent turns off the microwave.
+heat_food(<agent>, <food>, <microwave>, <room>): After turning the microwave on and waiting, the food inside becomes heated.
+pick(<agent>, <item>, <room>): The agent picks up an item like a water bottle.
+place_on_surface(<agent>, <item>, <surface>, <room>): The agent places the held water bottle onto a surface like a desk.
+pick(<agent>, <item>, <room>): The agent picks up the eggs.
+store_in_container(<agent>, <item>, <container>, <room>): The agent places the held eggs into a container like an egg_container.
+
+    Please provide a new PDDL domain file with respect to this new domain and define the domain name as "housework" directly without further explanations. Please also keep the comments such as "; Begin actions", "; End actions" etc. in the domain file.
+    

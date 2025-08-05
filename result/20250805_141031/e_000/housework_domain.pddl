@@ -1,0 +1,102 @@
+(define (domain housework)
+
+    (:requirements :strips :typing :adl)
+
+    ; Begin types
+    (:types
+        agent room item - object
+        surface appliance container - item ; Surfaces, appliances, and containers are special types of items
+    )
+    ; End types
+
+    ; Begin predicates
+    (:predicates
+        (agent_at ?a - agent ?r - room)
+        (agent_hand_free ?a - agent)
+        (agent_has_item ?a - agent ?i - item)
+
+        (item_at ?i - item ?r - room)
+        (item_on ?i - item ?s - surface)
+        (item_in ?i1 - item ?i2 - appliance) ; Represents an item being inside an appliance
+        (item_in_container ?i1 - item ?i2 - container) ; Represents an item being inside a container
+
+        (item_accessible ?i - item)
+        (item_pickable ?i - item)
+
+        (neighbor ?r1 - room ?r2 - room)
+        (appliance_on ?app - appliance)
+
+        ; Task-specific states
+        (heated ?i - item)
+
+        ; Item type identification
+        (is_food ?i - item)
+        (is_microwave ?i - appliance)
+        (is_water_bottle ?i - item)
+        (is_desk ?s - surface)
+        (is_egg ?i - item)
+        (is_egg_container ?c - container)
+    )
+    ; End predicates
+
+    ; Begin actions
+    (:action goto
+        :parameters (?a - agent ?from - room ?to - room)
+        :precondition (and (agent_at ?a ?from) (neighbor ?from ?to))
+        :effect (and (not (agent_at ?a ?from)) (agent_at ?a ?to))
+    )
+
+    (:action pick_from_room
+        :parameters (?a - agent ?i - item ?r - room)
+        :precondition (and (agent_at ?a ?r) (item_at ?i ?r) (item_accessible ?i) (item_pickable ?i) (agent_hand_free ?a))
+        :effect (and (not (item_at ?i ?r)) (not (agent_hand_free ?a)) (agent_has_item ?a ?i))
+    )
+
+    (:action pick_from_appliance
+        :parameters (?a - agent ?i - item ?app - appliance ?r - room)
+        :precondition (and (agent_at ?a ?r) (item_in ?i ?app) (appliance_on ?app) (agent_hand_free ?a))
+        :effect (and (not (item_in ?i ?app)) (not (agent_hand_free ?a)) (agent_has_item ?a ?i))
+    )
+
+    (:action place_on_surface
+        :parameters (?a - agent ?i - item ?s - surface ?r - room)
+        :precondition (and (agent_at ?a ?r) (item_at ?s ?r) (agent_has_item ?a ?i))
+        :effect (and (not (agent_has_item ?a ?i)) (agent_hand_free ?a) (item_on ?i ?s))
+    )
+    
+    (:action place_in_appliance
+        :parameters (?a - agent ?i - item ?app - appliance ?r - room)
+        :precondition (and (agent_at ?a ?r) (item_at ?app ?r) (agent_has_item ?a ?i))
+        :effect (and (not (agent_has_item ?a ?i)) (agent_hand_free ?a) (item_in ?i ?app))
+    )
+
+    (:action turnon
+        :parameters (?a - agent ?app - appliance ?r - room)
+        :precondition (and (agent_at ?a ?r) (item_at ?app ?r) (not (appliance_on ?app)))
+        :effect (appliance_on ?app)
+    )
+
+    (:action turnoff
+        :parameters (?a - agent ?app - appliance ?r - room)
+        :precondition (and (agent_at ?a ?r) (item_at ?app ?r) (appliance_on ?app))
+        :effect (not (appliance_on ?app))
+    )
+
+    (:action heat_food
+        :parameters (?a - agent ?f - item ?m - appliance ?r - room)
+        :precondition (and
+            (agent_at ?a ?r) (item_at ?m ?r) (is_microwave ?m)
+            (item_in ?f ?m)
+            (appliance_on ?m)
+            (not (heated ?f))
+        )
+        :effect (heated ?f)
+    )
+
+    (:action store_in_container
+        :parameters (?a - agent ?i - item ?c - container ?r - room)
+        :precondition (and (agent_at ?a ?r) (item_at ?c ?r) (agent_has_item ?a ?i))
+        :effect (and (not (agent_has_item ?a ?i)) (agent_hand_free ?a) (item_in_container ?i ?c))
+    )
+    ; End actions
+)
