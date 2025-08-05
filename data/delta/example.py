@@ -5,7 +5,7 @@ EXHOUSEWORK = {
     "add_obj": None,
     "add_act": [
         "pick_from_room(<agent>, <item>, <room>): The agent picks up an item from a general location in a room.",
-        "pick_from_appliance(<agent>, <item>, <appliance>, <room>): The agent picks up a finished item from inside an appliance.",
+        "pick_from_appliance(<agent>, <item>, <appliance>, <room>): The agent picks up an item from inside an appliance. The appliance must be turned off.",
         "place_in_appliance(<agent>, <item>, <appliance>, <room>): The agent places a held item into an appliance.",
         "place_on_surface(<agent>, <item>, <surface>, <room>): The agent places a held item onto a surface like a desk.",
         "turnon(<agent>, <appliance>, <room>): The agent turns on an appliance.",
@@ -38,6 +38,8 @@ EXHOUSEWORK = {
         "cooked(cup_ramen): cup ramen is cooked.", "item_on(cup_ramen, desk): cup ramen is on the desk."
     ]
 }
+
+
 
 
 selected_tasks = ["Heatedfood", "Placedwaterbottle", "Storedeggs"]

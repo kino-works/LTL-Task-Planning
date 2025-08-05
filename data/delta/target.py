@@ -5,7 +5,7 @@ TASK_DEFINITIONS: Dict[str, Dict] = {
         "scene": ["home", "exhome"], "add_obj": None,
         "add_act": [
             "pick_from_room(<agent>, <item>, <room>): The agent picks up an item from a general location in a room.",
-            "pick_from_appliance(<agent>, <item>, <appliance>, <room>): The agent picks up a finished item from inside an appliance.",
+            "pick_from_appliance(<agent>, <item>, <appliance>, <room>): The agent picks up an item from inside an appliance. It is a critical safety rule that the appliance must be turned off before picking an item from it.",
             "place_in_appliance(<agent>, <item>, <appliance>, <room>): The agent places a held item into an appliance like a toaster.",
             "place_on_surface(<agent>, <item>, <surface>, <room>): The agent places a held item onto a surface like a desk.",
             "turnon(<agent>, <appliance>, <room>): The agent turns on an appliance.",
@@ -21,6 +21,7 @@ TASK_DEFINITIONS: Dict[str, Dict] = {
         "scene": ["home", "exhome"], "add_obj": None,
         "add_act": [
             "pick_from_room(<agent>, <item>, <room>): The agent picks up an item like a kettle.",
+            "pick_from_appliance(<agent>, <item>, <appliance>, <room>): The agent picks up the kettle from the stove. It is a critical safety rule that the appliance must be turned off before picking an item from it.",
             "place_in_appliance(<agent>, <item>, <appliance>, <room>): The agent places a held item onto a heating appliance like a stove.",
             "place_on_surface(<agent>, <item>, <surface>, <room>): The agent places a held item onto a surface.",
             "turnon(<agent>, <appliance>, <room>): The agent turns on an appliance like a stove.",
@@ -36,7 +37,7 @@ TASK_DEFINITIONS: Dict[str, Dict] = {
         "scene": ["home", "exhome"], "add_obj": None,
         "add_act": [
             "pick_from_room(<agent>, <item>, <room>): The agent picks up an item like a pot.",
-            "pick_from_appliance(<agent>, <item>, <appliance>, <room>): The agent picks up a heated item from an appliance.",
+            "pick_from_appliance(<agent>, <item>, <appliance>, <room>): The agent picks up a heated item from an appliance. It is a critical safety rule that the appliance must be turned off before picking an item from it.",
             "place_in_appliance(<agent>, <item>, <appliance>, <room>): The agent places a held item onto a heating appliance like an induction cooker.",
             "place_on_surface(<agent>, <item>, <surface>, <room>): The agent places a held item onto a surface.",
             "turnon(<agent>, <appliance>, <room>): The agent turns on an appliance like an induction cooker.",
@@ -52,7 +53,7 @@ TASK_DEFINITIONS: Dict[str, Dict] = {
         "scene": ["home"], "add_obj": None,
         "add_act": [
             "pick_from_room(<agent>, <item>, <room>): The agent picks up items like clothes.",
-            "pick_from_appliance(<agent>, <item>, <appliance>, <room>): The agent picks up clean clothes from a washing machine.",
+            "pick_from_appliance(<agent>, <item>, <appliance>, <room>): The agent picks up clean clothes from a washing machine. It is a critical safety rule that the appliance must be turned off before picking an item from it.",
             "place_in_appliance(<agent>, <item>, <appliance>, <room>): The agent places held clothes into a washing machine.",
             "place_on_surface(<agent>, <item>, <surface>, <room>): The agent places held items in a room.",
             "turnon(<agent>, <appliance>, <room>): The agent turns on the washing machine.",
@@ -83,7 +84,7 @@ TASK_DEFINITIONS: Dict[str, Dict] = {
         "scene": ["home", "exhome"], "add_obj": None,
         "add_act": [
             "pick_from_room(<agent>, <item>, <room>): The agent picks up the food from a location in a room.",
-            "pick_from_appliance(<agent>, <item>, <appliance>, <room>): The agent picks up the heated food from inside the microwave.",
+            "pick_from_appliance(<agent>, <item>, <appliance>, <room>): The agent picks up the heated food from inside the microwave. It is a critical safety rule that the appliance must be turned off before picking an item from it.",
             "place_in_appliance(<agent>, <item>, <appliance>, <room>): The agent places the held food into the microwave.",
             "place_on_surface(<agent>, <item>, <surface>, <room>): The agent places the heated food on the desk.",
             "turnon(<agent>, <appliance>, <room>): The agent turns on the microwave.",
@@ -99,7 +100,7 @@ TASK_DEFINITIONS: Dict[str, Dict] = {
         "scene": ["home"], "add_obj": None,
         "add_act": [
             "pick_from_room(<agent>, <item>, <room>): The agent picks up the phone.",
-            "pick_from_appliance(<agent>, <item>, <appliance>, <room>): The agent picks up the charged phone from the charger.",
+            "pick_from_appliance(<agent>, <item>, <appliance>, <room>): The agent picks up the charged phone from the charger. It is a critical safety rule that the appliance must be turned off before picking an item from it.",
             "place_in_appliance(<agent>, <item>, <appliance>, <room>): The agent places the phone on the charger.",
             "place_on_surface(<agent>, <item>, <surface>, <room>): The agent places the charged phone on the desk.",
             "turnon(<agent>, <appliance>, <room>): The agent turns on the charger.",
@@ -168,10 +169,12 @@ TASK_DEFINITIONS: Dict[str, Dict] = {
         ],
         "goal": "Store the eggs in the egg container in the kitchen.", "cost": {"home": 3, "exhome": 3},
         "item_keep": ["eggs", "egg_container"], "subgoal": ["Pick the eggs", "Place them in the container"],
-        "subgoal_pddl": ["(:goal (and (in eggs egg_container)))"],
-        "env_state": ["in(eggs, egg_container): eggs are in the egg container."]
+        "subgoal_pddl": ["(:goal (and (item_in_container eggs egg_container)))"],
+        "env_state": ["item_in_container(eggs, egg_container): eggs are in the egg container.", "is_eggs(eggs): identifies the item as eggs."]
     }
 }
+
+
 
 
 def generate_domain_query(task_names: List[str]) -> Dict[str, Dict[str, Any]]:
