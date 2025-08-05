@@ -25,12 +25,7 @@ EXHOUSEWORK = {
         "Cook cup ramen with the water dispenser", "Move the cooked cup ramen to the living room desk"
     ],
     "subgoal_pddl": [
-        "(:goal (and (toasted bread)))",
-        "(:goal (and (item_on bread desk)))",
-        "(:goal (and (boiled kettle)))",
-        "(:goal (and (item_on kettle desk)))",
-        "(:goal (and (cooked cup_ramen)))",
-        "(:goal (and (item_on cup_ramen desk)))"
+        "(:goal (and (toasted bread) (item_on bread desk) (boiled kettle) (item_on kettle desk) (cooked cup_ramen) (item_on cup_ramen desk)))"
     ],
     "env_state": [
         "toasted(bread): bread is toasted.", "item_on(bread, desk): bread is on the desk.",

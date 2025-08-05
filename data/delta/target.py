@@ -5,7 +5,7 @@ TASK_DEFINITIONS: Dict[str, Dict] = {
         "scene": ["home", "exhome"], "add_obj": None,
         "add_act": [
             "pick_from_room(<agent>, <item>, <room>): The agent picks up an item from a general location in a room.",
-            "pick_from_appliance(<agent>, <item>, <appliance>, <room>): The agent picks up an item from inside an appliance. It is a critical safety rule that the appliance must be turned off before picking an item from it.",
+            "pick_from_appliance(<agent>, <item>, <appliance>, <room>): The agent picks up an item from inside an appliance. The appliance must be turned off.",
             "place_in_appliance(<agent>, <item>, <appliance>, <room>): The agent places a held item into an appliance like a toaster.",
             "place_on_surface(<agent>, <item>, <surface>, <room>): The agent places a held item onto a surface like a desk.",
             "turnon(<agent>, <appliance>, <room>): The agent turns on an appliance.",
@@ -14,14 +14,14 @@ TASK_DEFINITIONS: Dict[str, Dict] = {
         ],
         "goal": "Make toast and place it on the desk in the living room.", "cost": {"home": 9, "exhome": 9},
         "item_keep": ["bread", "toaster", "desk"], "subgoal": ["Toast the bread", "Move the toast to the desk"],
-        "subgoal_pddl": ["(:goal (and (toasted bread)))", "(:goal (and (item_on bread desk)))"],
+        "subgoal_pddl": ["(:goal (and (toasted bread) (item_on bread desk)))"],
         "env_state": ["toasted(bread): bread is toasted.", "item_on(bread, desk): bread is on the desk."]
     },
     "Boiledwater": {
         "scene": ["home", "exhome"], "add_obj": None,
         "add_act": [
             "pick_from_room(<agent>, <item>, <room>): The agent picks up an item like a kettle.",
-            "pick_from_appliance(<agent>, <item>, <appliance>, <room>): The agent picks up the kettle from the stove. It is a critical safety rule that the appliance must be turned off before picking an item from it.",
+            "pick_from_appliance(<agent>, <item>, <appliance>, <room>): The agent picks up the kettle from the stove. The stove must be turned off.",
             "place_in_appliance(<agent>, <item>, <appliance>, <room>): The agent places a held item onto a heating appliance like a stove.",
             "place_on_surface(<agent>, <item>, <surface>, <room>): The agent places a held item onto a surface.",
             "turnon(<agent>, <appliance>, <room>): The agent turns on an appliance like a stove.",
@@ -30,14 +30,14 @@ TASK_DEFINITIONS: Dict[str, Dict] = {
         ],
         "goal": "Boil water in the kettle and place it on the desk in the living room.", "cost": {"home": 9, "exhome": 9},
         "item_keep": ["kettle", "stove", "desk"], "subgoal": ["Boil the water", "Move the kettle to the desk"],
-        "subgoal_pddl": ["(:goal (and (boiled kettle)))", "(:goal (and (item_on kettle desk)))"],
+        "subgoal_pddl": ["(:goal (and (boiled kettle) (item_on kettle desk)))"],
         "env_state": ["boiled(kettle): kettle contains boiled water.", "item_on(kettle, desk): kettle is on the desk."]
     },
     "Heatedpot": {
         "scene": ["home", "exhome"], "add_obj": None,
         "add_act": [
             "pick_from_room(<agent>, <item>, <room>): The agent picks up an item like a pot.",
-            "pick_from_appliance(<agent>, <item>, <appliance>, <room>): The agent picks up a heated item from an appliance. It is a critical safety rule that the appliance must be turned off before picking an item from it.",
+            "pick_from_appliance(<agent>, <item>, <appliance>, <room>): The agent picks up a heated item from an appliance. The appliance must be turned off.",
             "place_in_appliance(<agent>, <item>, <appliance>, <room>): The agent places a held item onto a heating appliance like an induction cooker.",
             "place_on_surface(<agent>, <item>, <surface>, <room>): The agent places a held item onto a surface.",
             "turnon(<agent>, <appliance>, <room>): The agent turns on an appliance like an induction cooker.",
@@ -46,14 +46,14 @@ TASK_DEFINITIONS: Dict[str, Dict] = {
         ],
         "goal": "Heat the pot using the induction and place it on the desk in the living room.", "cost": {"home": 9, "exhome": 9},
         "item_keep": ["pot", "induction", "desk"], "subgoal": ["Heat the pot", "Move the pot to the desk"],
-        "subgoal_pddl": ["(:goal (and (heated pot)))", "(:goal (and (item_on pot desk)))"],
+        "subgoal_pddl": ["(:goal (and (heated pot) (item_on pot desk)))"],
         "env_state": ["heated(pot): pot is heated.", "item_on(pot, desk): pot is on the desk."]
     },
     "Washedclothes": {
         "scene": ["home"], "add_obj": None,
         "add_act": [
             "pick_from_room(<agent>, <item>, <room>): The agent picks up items like clothes.",
-            "pick_from_appliance(<agent>, <item>, <appliance>, <room>): The agent picks up clean clothes from a washing machine. It is a critical safety rule that the appliance must be turned off before picking an item from it.",
+            "pick_from_appliance(<agent>, <item>, <appliance>, <room>): The agent picks up clean clothes from a washing machine. The machine must be turned off.",
             "place_in_appliance(<agent>, <item>, <appliance>, <room>): The agent places held clothes into a washing machine.",
             "place_on_surface(<agent>, <item>, <surface>, <room>): The agent places held items in a room.",
             "turnon(<agent>, <appliance>, <room>): The agent turns on the washing machine.",
@@ -62,7 +62,7 @@ TASK_DEFINITIONS: Dict[str, Dict] = {
         ],
         "goal": "Wash the clothes in the washing machine and place them back in the bedroom.", "cost": {"home": 10},
         "item_keep": ["clothes", "washing_machine"], "subgoal": ["Wash the clothes", "Return clothes to the bedroom"],
-        "subgoal_pddl": ["(:goal (and (cloth_clean clothes)))", "(:goal (and (item_at clothes bedroom)))"],
+        "subgoal_pddl": ["(:goal (and (cloth_clean clothes) (item_at clothes bedroom)))"],
         "env_state": ["cloth_clean(clothes): clothes are clean."]
     },
     "Cookedcupramen": {
@@ -77,14 +77,14 @@ TASK_DEFINITIONS: Dict[str, Dict] = {
         ],
         "goal": "Cook cup ramen using the water dispenser and place it on the desk in the living room.", "cost": {"home": 8, "exhome": 8},
         "item_keep": ["cup_ramen", "water_dispenser", "desk"], "subgoal": ["Cook the cup ramen", "Move the ramen to the desk"],
-        "subgoal_pddl": ["(:goal (and (cooked cup_ramen)))", "(:goal (and (item_on cup_ramen desk)))"],
+        "subgoal_pddl": ["(:goal (and (cooked cup_ramen) (item_on cup_ramen desk)))"],
         "env_state": ["cooked(cup_ramen): cup ramen is cooked.", "item_on(cup_ramen, desk): cup ramen is on the desk."]
     },
     "Heatedfood": {
         "scene": ["home", "exhome"], "add_obj": None,
         "add_act": [
             "pick_from_room(<agent>, <item>, <room>): The agent picks up the food from a location in a room.",
-            "pick_from_appliance(<agent>, <item>, <appliance>, <room>): The agent picks up the heated food from inside the microwave. It is a critical safety rule that the appliance must be turned off before picking an item from it.",
+            "pick_from_appliance(<agent>, <item>, <appliance>, <room>): The agent picks up the heated food from inside the microwave. The microwave must be turned off.",
             "place_in_appliance(<agent>, <item>, <appliance>, <room>): The agent places the held food into the microwave.",
             "place_on_surface(<agent>, <item>, <surface>, <room>): The agent places the heated food on the desk.",
             "turnon(<agent>, <appliance>, <room>): The agent turns on the microwave.",
@@ -93,14 +93,14 @@ TASK_DEFINITIONS: Dict[str, Dict] = {
         ],
         "goal": "Heat the food in the microwave and place it on the desk in the living room.", "cost": {"home": 9, "exhome": 9},
         "item_keep": ["food", "microwave", "desk"], "subgoal": ["Heat the food", "Move the food to the desk"],
-        "subgoal_pddl": ["(:goal (and (heated food)))", "(:goal (and (item_on food desk)))"],
+        "subgoal_pddl": ["(:goal (and (heated food) (item_on food desk)))"],
         "env_state": ["heated(food): food is heated.", "item_on(food, desk): food is on the desk."]
     },
     "Chargedphone": {
         "scene": ["home"], "add_obj": None,
         "add_act": [
             "pick_from_room(<agent>, <item>, <room>): The agent picks up the phone.",
-            "pick_from_appliance(<agent>, <item>, <appliance>, <room>): The agent picks up the charged phone from the charger. It is a critical safety rule that the appliance must be turned off before picking an item from it.",
+            "pick_from_appliance(<agent>, <item>, <appliance>, <room>): The agent picks up the charged phone from the charger. The charger must be turned off.",
             "place_in_appliance(<agent>, <item>, <appliance>, <room>): The agent places the phone on the charger.",
             "place_on_surface(<agent>, <item>, <surface>, <room>): The agent places the charged phone on the desk.",
             "turnon(<agent>, <appliance>, <room>): The agent turns on the charger.",
@@ -109,7 +109,7 @@ TASK_DEFINITIONS: Dict[str, Dict] = {
         ],
         "goal": "Charge the phone in the bedroom and place it on the desk in the living room.", "cost": {"home": 9},
         "item_keep": ["phone", "charger", "desk"], "subgoal": ["Charge the phone", "Move the phone to the desk"],
-        "subgoal_pddl": ["(:goal (and (charged phone)))", "(:goal (and (item_on phone desk)))"],
+        "subgoal_pddl": ["(:goal (and (charged phone) (item_on phone desk)))"],
         "env_state": ["charged(phone): phone is fully charged.", "item_on(phone, desk): phone is on the desk."]
     },
     "Placedwaterbottle": {
@@ -169,8 +169,8 @@ TASK_DEFINITIONS: Dict[str, Dict] = {
         ],
         "goal": "Store the eggs in the egg container in the kitchen.", "cost": {"home": 3, "exhome": 3},
         "item_keep": ["eggs", "egg_container"], "subgoal": ["Pick the eggs", "Place them in the container"],
-        "subgoal_pddl": ["(:goal (and (item_in_container eggs egg_container)))"],
-        "env_state": ["item_in_container(eggs, egg_container): eggs are in the egg container.", "is_eggs(eggs): identifies the item as eggs."]
+        "subgoal_pddl": ["(:goal (and (item_in eggs egg_container)))"],
+        "env_state": ["item_in(eggs, egg_container): eggs are in the egg container."]
     }
 }
 
@@ -219,6 +219,14 @@ def generate_domain_query(task_names: List[str]) -> Dict[str, Dict[str, Any]]:
         subgoal_pddl.extend(t.get("subgoal_pddl", []))
         env_state.extend(t.get("env_state", []))
     
+    if subgoal_pddl:
+        combined_conds = []
+        for goal_str in subgoal_pddl:
+            inner = goal_str[len("(:goal (and "):-len("))")]
+            combined_conds.append(inner)
+        merged = f"(:goal (and {' '.join(combined_conds)}))"
+        subgoal_pddl = [merged]
+
     composite = {
         "scene": scenes,
         "add_obj": add_obj,
