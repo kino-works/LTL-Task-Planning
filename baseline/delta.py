@@ -13,6 +13,7 @@ sys.path.append(os.path.join(project_root, "baseline"))
 from data.delta.scene_graph import load_scene_graph, prune_sg_with_item, extract_accessible_items_from_sg
 from data.delta import example
 from data.delta.target import generate_domain_query
+from data.delta.target import TASK_DEFINITIONS
 from datetime import datetime
 import util.delta_util.llm as llm
 import util.delta_util.llm_utils as llm_utils
@@ -268,7 +269,6 @@ if __name__ == "__main__":
 
         ###################### Stage 4: Decomposing problem file ######################
         if "all" in args.experiment or "decompose" in args.experiment:
-            # Load domain and problem files for stand-alone experiment
             if domain_tar is None:
                 with open(SRC_DOMAIN_PATH(args.domain), "r") as df:
                     domain_tar = df.read()
@@ -276,7 +276,7 @@ if __name__ == "__main__":
                 with open(SRC_PROBLEM_PATH(args.scene, args.domain), "r") as pf:
                     problem_tar = pf.read()
 
-            accumulate_subgoal = True if args.domain == "office" else False
+            accumulate_subgoal = True
             if "all" in args.experiment or "domain" in args.experiment or \
                     "prune" in args.experiment or "problem" in args.experiment:
                 content_dp, prompt_dp = p.decompose_problem_chain(

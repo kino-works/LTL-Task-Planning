@@ -1,3 +1,4 @@
+import re
 from typing import List, Dict, Any
 
 TASK_DEFINITIONS: Dict[str, Dict] = {
@@ -14,7 +15,7 @@ TASK_DEFINITIONS: Dict[str, Dict] = {
         ],
         "goal": "Make toast and place it on the desk in the living room.", "cost": {"home": 9, "exhome": 9},
         "item_keep": ["bread", "toaster", "desk"], "subgoal": ["Toast the bread", "Move the toast to the desk"],
-        "subgoal_pddl": ["(:goal (and (toasted bread) (item_on bread desk)))"],
+        "subgoal_pddl": ["(:goal (and (toasted bread)))", "(:goal (and (item_on bread desk)))"],
         "env_state": ["toasted(bread): bread is toasted.", "item_on(bread, desk): bread is on the desk."]
     },
     "Boiledwater": {
@@ -30,7 +31,7 @@ TASK_DEFINITIONS: Dict[str, Dict] = {
         ],
         "goal": "Boil water in the kettle and place it on the desk in the living room.", "cost": {"home": 9, "exhome": 9},
         "item_keep": ["kettle", "stove", "desk"], "subgoal": ["Boil the water", "Move the kettle to the desk"],
-        "subgoal_pddl": ["(:goal (and (boiled kettle) (item_on kettle desk)))"],
+        "subgoal_pddl": ["(:goal (and (boiled kettle)))", "(:goal (and (item_on kettle desk)))"],
         "env_state": ["boiled(kettle): kettle contains boiled water.", "item_on(kettle, desk): kettle is on the desk."]
     },
     "Heatedpot": {
@@ -46,7 +47,7 @@ TASK_DEFINITIONS: Dict[str, Dict] = {
         ],
         "goal": "Heat the pot using the induction and place it on the desk in the living room.", "cost": {"home": 9, "exhome": 9},
         "item_keep": ["pot", "induction", "desk"], "subgoal": ["Heat the pot", "Move the pot to the desk"],
-        "subgoal_pddl": ["(:goal (and (heated pot) (item_on pot desk)))"],
+        "subgoal_pddl": ["(:goal (and (heated pot)))", "(:goal (and (item_on pot desk)))"],
         "env_state": ["heated(pot): pot is heated.", "item_on(pot, desk): pot is on the desk."]
     },
     "Washedclothes": {
@@ -62,7 +63,7 @@ TASK_DEFINITIONS: Dict[str, Dict] = {
         ],
         "goal": "Wash the clothes in the washing machine and place them back in the bedroom.", "cost": {"home": 10},
         "item_keep": ["clothes", "washing_machine"], "subgoal": ["Wash the clothes", "Return clothes to the bedroom"],
-        "subgoal_pddl": ["(:goal (and (cloth_clean clothes) (item_at clothes bedroom)))"],
+        "subgoal_pddl": ["(:goal (and (cloth_clean clothes)))", "(:goal (and (item_at clothes bedroom)))"],
         "env_state": ["cloth_clean(clothes): clothes are clean."]
     },
     "Cookedcupramen": {
@@ -77,7 +78,7 @@ TASK_DEFINITIONS: Dict[str, Dict] = {
         ],
         "goal": "Cook cup ramen using the water dispenser and place it on the desk in the living room.", "cost": {"home": 8, "exhome": 8},
         "item_keep": ["cup_ramen", "water_dispenser", "desk"], "subgoal": ["Cook the cup ramen", "Move the ramen to the desk"],
-        "subgoal_pddl": ["(:goal (and (cooked cup_ramen) (item_on cup_ramen desk)))"],
+        "subgoal_pddl": ["(:goal (and (cooked cup_ramen)))", "(:goal (and (item_on cup_ramen desk)))"],
         "env_state": ["cooked(cup_ramen): cup ramen is cooked.", "item_on(cup_ramen, desk): cup ramen is on the desk."]
     },
     "Heatedfood": {
@@ -93,7 +94,7 @@ TASK_DEFINITIONS: Dict[str, Dict] = {
         ],
         "goal": "Heat the food in the microwave and place it on the desk in the living room.", "cost": {"home": 9, "exhome": 9},
         "item_keep": ["food", "microwave", "desk"], "subgoal": ["Heat the food", "Move the food to the desk"],
-        "subgoal_pddl": ["(:goal (and (heated food) (item_on food desk)))"],
+        "subgoal_pddl": ["(:goal (and (heated food)))", "(:goal (and (item_on food desk)))"],
         "env_state": ["heated(food): food is heated.", "item_on(food, desk): food is on the desk."]
     },
     "Chargedphone": {
@@ -109,7 +110,7 @@ TASK_DEFINITIONS: Dict[str, Dict] = {
         ],
         "goal": "Charge the phone in the bedroom and place it on the desk in the living room.", "cost": {"home": 9},
         "item_keep": ["phone", "charger", "desk"], "subgoal": ["Charge the phone", "Move the phone to the desk"],
-        "subgoal_pddl": ["(:goal (and (charged phone) (item_on phone desk)))"],
+        "subgoal_pddl": ["(:goal (and (charged phone)))", "(:goal (and (item_on phone desk)))"],
         "env_state": ["charged(phone): phone is fully charged.", "item_on(phone, desk): phone is on the desk."]
     },
     "Placedwaterbottle": {
@@ -175,12 +176,9 @@ TASK_DEFINITIONS: Dict[str, Dict] = {
 }
 
 
-
-
 def generate_domain_query(task_names: List[str]) -> Dict[str, Dict[str, Any]]:
-    
     selected = [TASK_DEFINITIONS[name] for name in task_names]
-    
+
     scenes: List[str] = []
     for t in selected:
         for s in t.get("scene", []):
@@ -191,16 +189,13 @@ def generate_domain_query(task_names: List[str]) -> Dict[str, Dict[str, Any]]:
     all_add_obj_flat = [obj for sublist in all_add_obj_nested for obj in sublist]
     add_obj = list(dict.fromkeys(all_add_obj_flat)) if all_add_obj_flat else None
 
-    all_add_act_flat = []
+    all_add_act_flat: List[str] = []
     for t in selected:
         if t.get("add_act"):
-            all_add_act_flat.extend(t.get("add_act", []))
-    
+            all_add_act_flat.extend(t["add_act"])
     add_act = list(dict.fromkeys(all_add_act_flat)) if all_add_act_flat else None
 
-    gt_cost: Dict[str, int] = {}
-    for s in scenes:
-        gt_cost[s] = sum(t.get("cost", {}).get(s, 0) for t in selected)
+    gt_cost: Dict[str, int] = {s: sum(t.get("cost", {}).get(s, 0) for t in selected) for s in scenes}
 
     goals = [t.get("goal", "") for t in selected]
     goal = ", ".join(goals)
@@ -212,20 +207,22 @@ def generate_domain_query(task_names: List[str]) -> Dict[str, Dict[str, Any]]:
                 item_keep.append(item)
 
     subgoal: List[str] = []
-    subgoal_pddl: List[str] = []
+    raw_pddls: List[str] = []
     env_state: List[str] = []
     for t in selected:
         subgoal.extend(t.get("subgoal", []))
-        subgoal_pddl.extend(t.get("subgoal_pddl", []))
+        raw_pddls.extend(t.get("subgoal_pddl", []))
         env_state.extend(t.get("env_state", []))
-    
-    if subgoal_pddl:
-        combined_conds = []
-        for goal_str in subgoal_pddl:
-            inner = goal_str[len("(:goal (and "):-len("))")]
-            combined_conds.append(inner)
-        merged = f"(:goal (and {' '.join(combined_conds)}))"
-        subgoal_pddl = [merged]
+
+    formatted_pddls: List[str] = []
+    for goal_str in raw_pddls:
+        inner = goal_str[len(("(:goal (and ")) : -len("))")]
+        conds = re.findall(r'\([^)]+\)', inner)
+        block = "(:goal\n"
+        for c in conds:
+            block += f"    {c}\n"
+        block += ")"
+        formatted_pddls.append(block)
 
     composite = {
         "scene": scenes,
@@ -235,7 +232,7 @@ def generate_domain_query(task_names: List[str]) -> Dict[str, Dict[str, Any]]:
         "goal": goal,
         "item_keep": item_keep,
         "subgoal": subgoal,
-        "subgoal_pddl": subgoal_pddl,
+        "subgoal_pddl": formatted_pddls,
         "env_state": env_state,
     }
 

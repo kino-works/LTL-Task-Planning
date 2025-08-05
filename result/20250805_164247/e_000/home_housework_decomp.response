@@ -1,0 +1,27 @@
+1. Heat the food in the microwave.
+   ```lisp
+   (:goal
+       (heated food)
+   )
+   ```
+
+2. Move the heated food to the living room desk.
+   ```lisp
+   (:goal
+       (item_on food desk)
+   )
+   ```
+
+3. Place the water bottle from the kitchen onto the desk in the living room.
+   ```lisp
+   (:goal
+       (item_on water_bottle desk)
+   )
+   ```
+
+4. Store the eggs in the egg container in the kitchen.
+   ```lisp
+   (:goal
+       (item_in_container eggs egg_container)
+   )
+   ```

@@ -49,9 +49,7 @@
         (is_eggs eggs)
         (is_desk desk)
         (is_egg_container egg_container)
-        
-        (not (heated food))
-        (not (appliance_on microwave))
+
     )
     ; End init
 

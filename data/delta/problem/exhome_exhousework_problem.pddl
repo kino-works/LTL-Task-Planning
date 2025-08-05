@@ -21,7 +21,7 @@
         (item_at bread kitchen)
         (item_at toaster kitchen)
         (item_at kettle kitchen)
-        (item_at stove kitchen) ; Assumed to be in the kitchen as it's required by the goal
+        (item_at stove kitchen) 
         (item_at cup_ramen kitchen)
         (item_at water_dispenser kitchen)
         (item_at desk livingroom)
@@ -45,13 +45,6 @@
         (is_cup_ramen cup_ramen)
         (is_water_dispenser water_dispenser)
         (is_desk desk)
-
-        (not (toasted bread))
-        (not (boiled kettle))
-        (not (cooked cup_ramen))
-        (not (appliance_on toaster))
-        (not (appliance_on stove))
-        (not (appliance_on water_dispenser))
     )
     ; End init
 

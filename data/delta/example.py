@@ -1,4 +1,5 @@
 from .target import generate_domain_query
+from .target import TASK_DEFINITIONS
 
 EXHOUSEWORK = {
     "scene": ["home", "exhome"],
@@ -24,8 +25,37 @@ EXHOUSEWORK = {
         "Boil the water in the kettle", "Move the boiled kettle to the living room desk",
         "Cook cup ramen with the water dispenser", "Move the cooked cup ramen to the living room desk"
     ],
-    "subgoal_pddl": [
-        "(:goal (and (toasted bread) (item_on bread desk) (boiled kettle) (item_on kettle desk) (cooked cup_ramen) (item_on cup_ramen desk)))"
+        "subgoal_pddl": [
+        """
+    (:goal
+        (toasted bread)
+    )
+""",
+        """
+    (:goal
+        (item_on bread desk)
+    )
+""",
+        """
+    (:goal
+        (boiled kettle)
+    )
+""",
+        """
+    (:goal
+        (item_on kettle desk)
+    )
+""",
+        """
+    (:goal
+        (cooked cup_ramen)
+    )
+""",
+        """
+    (:goal
+        (item_on cup_ramen desk)
+    )
+"""
     ],
     "env_state": [
         "toasted(bread): bread is toasted.", "item_on(bread, desk): bread is on the desk.",

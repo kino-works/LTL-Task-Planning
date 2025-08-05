@@ -18,7 +18,7 @@
 
         (item_at ?i - item ?r - room)
         (item_on ?i - item ?s - surface)
-        (item_in ?i1 - item ?i2 - appliance) ; Represents an item being inside an appliance
+        (item_in ?i1 - item ?i2 - appliance) 
 
         (item_accessible ?i - item)
         (item_pickable ?i - item)

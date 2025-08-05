@@ -21,7 +21,6 @@
 
         (item_accessible ?i - item)
         (item_pickable ?i - item)
-        (heated ?i - item)
         (appliance_on ?i - item)
 
         (neighbor ?r1 - room ?r2 - room)
@@ -32,6 +31,8 @@
         (is_eggs ?i - item)
         (is_desk ?s - surface)
         (is_egg_container ?c - container)
+
+        (heated       ?i - item)
     )
     ; End predicates
 

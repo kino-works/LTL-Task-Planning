@@ -1,0 +1,352 @@
+You are an excellent assistant in decomposing long-term tasks. Given a task goal description and a corresponding PDDL problem file, you can decompose the task into multiple sub-tasks, and generate multiple PDDL sub-problem files correspondingly.
+    For example, given a goal description: Make toast and place it on the desk in the living room., Boil water in the kettle and place it on the desk in the living room., Heat the pot using the induction and place it on the desk in the living room., Wash the clothes in the washing machine and place them back in the bedroom., Cook cup ramen using the water dispenser and place it on the desk in the living room., Heat the food in the microwave and place it on the desk in the living room., Charge the phone in the bedroom and place it on the desk in the living room., Place the water bottle from the kitchen onto the desk in the living room., Wipe the desk in the living room using the dishcloth., Turn on the light switch in the specified room., Turn off the light switch in the specified room., Organize all the dishes by placing them onto the shelf in the kitchen., Store the eggs in the egg container in the kitchen., and the following PDDL problem file:
+    ```
+(define (problem exhome_exhousework)
+    (:domain exhousework)
+
+    ; Begin objects
+    (:objects
+        robot - agent
+        kitchen livingroom - room
+        bread toaster kettle stove cup_ramen water_dispenser - item
+        desk - surface
+    )
+
+    ; Begin init
+    (:init
+        ; Connections
+        (neighbor kitchen livingroom)
+        (neighbor livingroom kitchen)
+
+        ; Positions
+        (agent_at robot livingroom)
+        (agent_hand_free robot)
+        (item_at bread kitchen)
+        (item_at toaster kitchen)
+        (item_at kettle kitchen)
+        (item_at stove kitchen) ; Assumed to be in the kitchen as it's required by the goal
+        (item_at cup_ramen kitchen)
+        (item_at water_dispenser kitchen)
+        (item_at desk livingroom)
+
+        ; Attributes
+        (item_accessible bread)
+        (item_pickable bread)
+        (item_accessible toaster)
+        (item_accessible kettle)
+        (item_pickable kettle)
+        (item_accessible stove)
+        (item_accessible cup_ramen)
+        (item_pickable cup_ramen)
+        (item_accessible water_dispenser)
+        (item_accessible desk)
+
+        (is_bread bread)
+        (is_toaster toaster)
+        (is_kettle kettle)
+        (is_stove stove)
+        (is_cup_ramen cup_ramen)
+        (is_water_dispenser water_dispenser)
+        (is_desk desk)
+
+        (not (toasted bread))
+        (not (boiled kettle))
+        (not (cooked cup_ramen))
+        (not (appliance_on toaster))
+        (not (appliance_on stove))
+        (not (appliance_on water_dispenser))
+    )
+    ; End init
+
+    ; Begin goal
+    (:goal (and
+        (toasted bread)
+        (item_on bread desk)
+        (boiled kettle)
+        (item_on kettle desk)
+        (cooked cup_ramen)
+        (item_on cup_ramen desk)
+    ))
+    ; End goal
+)
+
+```
+    
+    The task goal can first be broken down into multiple sub-goals: ['Toast the bread', 'Move the toast to the desk', 'Boil the water', 'Move the kettle to the desk', 'Heat the pot', 'Move the pot to the desk', 'Wash the clothes', 'Return clothes to the bedroom', 'Cook the cup ramen', 'Move the ramen to the desk', 'Heat the food', 'Move the food to the desk', 'Charge the phone', 'Move the phone to the desk', 'Pick up the water bottle', 'Move it to the desk', 'Pick the dishcloth', 'Wipe the desk', 'Go to the room', 'Turn on the switch', 'Go to the room', 'Turn off the switch', 'Place all dishes on the shelf', 'Pick the eggs', 'Place them in the container'].
+    When formulating the corresponding sub-goals in PDDL, to ensure that the previously achieved goals still remain valid, one can autoregressively append new sub-goal to the previous ones as follows:
+```(:goal
+    (toasted bread)
+)```, 
+```(:goal
+    (item_on bread desk)
+)```, 
+```(:goal
+    (boiled kettle)
+)```, 
+```(:goal
+    (item_on kettle desk)
+)```, 
+```(:goal
+    (heated pot)
+)```, 
+```(:goal
+    (item_on pot desk)
+)```, 
+```(:goal
+    (cloth_clean clothes)
+)```, 
+```(:goal
+    (item_at clothes bedroom)
+)```, 
+```(:goal
+    (cooked cup_ramen)
+)```, 
+```(:goal
+    (item_on cup_ramen desk)
+)```, 
+```(:goal
+    (heated food)
+)```, 
+```(:goal
+    (item_on food desk)
+)```, 
+```(:goal
+    (charged phone)
+)```, 
+```(:goal
+    (item_on phone desk)
+)```, 
+```(:goal
+    (item_on water_bottle desk)
+)```, 
+```(:goal
+    (desk_clean livingroom)
+)```, 
+```(:goal
+    (on <room1>_lightswitch)
+)```, 
+```(:goal
+    (not (on <room1>_lightswitch)
+)```, 
+```(:goal
+    (item_on dish_1 shelf)
+    (item_on dish_2 shelf)
+    (item_on dish_3 shelf)
+)```, 
+```(:goal
+    (item_in eggs egg_container)
+)```
+    
+    Now given a new goal description: Make toast and place it on the desk in the living room., Boil water in the kettle and place it on the desk in the living room., Heat the pot using the induction and place it on the desk in the living room., Wash the clothes in the washing machine and place them back in the bedroom., Cook cup ramen using the water dispenser and place it on the desk in the living room., Heat the food in the microwave and place it on the desk in the living room., Charge the phone in the bedroom and place it on the desk in the living room., Place the water bottle from the kitchen onto the desk in the living room., Wipe the desk in the living room using the dishcloth., Turn on the light switch in the specified room., Turn off the light switch in the specified room., Organize all the dishes by placing them onto the shelf in the kitchen., Store the eggs in the egg container in the kitchen.,
+    and a corresponding new PDDL problem file:
+    ```
+```
+(define (problem home_housework)
+    (:domain housework)
+
+    ; Begin objects
+    (:objects
+        robot - agent
+        kitchen bathroom bedroom livingroom - room
+        bread toaster kettle induction cup_ramen water_dispenser food microwave water_bottle dish_1 dish_2 dish_3 eggs - item
+        desk - surface
+        kitchen_lightswitch bathroom_lightswitch bedroom_lightswitch livingroom_lightswitch - item
+        washing_machine - appliance
+        clothes phone - item
+        charger - appliance
+        shelf - surface
+        egg_container - container
+        dishcloth - item
+    )
+
+    ; Begin init
+    (:init
+        ; Connections
+        (neighbor kitchen bathroom)
+        (neighbor bathroom kitchen)
+        (neighbor kitchen bedroom)
+        (neighbor bedroom kitchen)
+        (neighbor kitchen livingroom)
+        (neighbor livingroom kitchen)
+        (neighbor bathroom bedroom)
+        (neighbor bedroom bathroom)
+        (neighbor bathroom livingroom)
+        (neighbor livingroom bathroom)
+        (neighbor bedroom livingroom)
+        (neighbor livingroom bedroom)
+
+        ; Positions
+        (agent_at robot livingroom)
+        (agent_hand_free robot)
+        (item_at bread kitchen)
+        (item_at toaster kitchen)
+        (item_at kettle kitchen)
+        (item_at induction kitchen)
+        (item_at cup_ramen kitchen)
+        (item_at water_dispenser kitchen)
+        (item_at food kitchen)
+        (item_at microwave kitchen)
+        (item_at water_bottle kitchen)
+        (item_at dish_1 kitchen)
+        (item_at dish_2 kitchen)
+        (item_at dish_3 kitchen)
+        (item_at eggs kitchen)
+        (item_at kitchen_lightswitch kitchen)
+        (item_at bathroom_lightswitch bathroom)
+        (item_at bedroom_lightswitch bedroom)
+        (item_at livingroom_lightswitch livingroom)
+        (item_at washing_machine bathroom)
+        (item_at clothes bedroom)
+        (item_at phone bedroom)
+        (item_at charger bedroom)
+        (item_at desk livingroom)
+        (item_at shelf kitchen)
+        (item_at egg_container kitchen)
+        (item_at dishcloth livingroom)
+
+        ; Attributes
+        (item_accessible bread)
+        (item_pickable bread)
+        (item_accessible toaster)
+        (item_accessible kettle)
+        (item_pickable kettle)
+        (item_accessible induction)
+        (item_accessible cup_ramen)
+        (item_pickable cup_ramen)
+        (item_accessible water_dispenser)
+        (item_accessible food)
+        (item_pickable food)
+        (item_accessible microwave)
+        (item_accessible water_bottle)
+        (item_pickable water_bottle)
+        (item_accessible dish_1)
+        (item_pickable dish_1)
+        (item_accessible dish_2)
+        (item_pickable dish_2)
+        (item_accessible dish_3)
+        (item_pickable dish_3)
+        (item_accessible eggs)
+        (item_pickable eggs)
+        (item_accessible kitchen_lightswitch)
+        (item_accessible bathroom_lightswitch)
+        (item_accessible bedroom_lightswitch)
+        (item_accessible livingroom_lightswitch)
+        (item_accessible washing_machine)
+        (item_accessible clothes)
+        (item_pickable clothes)
+        (item_accessible phone)
+        (item_pickable phone)
+        (item_accessible charger)
+        (item_accessible desk)
+        (item_accessible shelf)
+        (item_accessible egg_container)
+        (item_accessible dishcloth)
+        (item_pickable dishcloth)
+
+        (is_bread bread)
+        (is_toaster toaster)
+        (is_kettle kettle)
+        (is_stove induction)
+        (is_cup_ramen cup_ramen)
+        (is_water_dispenser water_dispenser)
+        (is_desk desk)
+        (is_microwave microwave)
+        (is_phone phone)
+        (is_charger charger)
+        (is_lightswitch kitchen_lightswitch)
+        (is_lightswitch bathroom_lightswitch)
+        (is_lightswitch bedroom_lightswitch)
+        (is_lightswitch livingroom_lightswitch)
+        (is_egg_container egg_container)
+
+        (not (toasted bread))
+        (not (boiled kettle))
+        (not (cooked cup_ramen))
+        (not (heated food))
+        (not (clean clothes))
+        (not (charged phone))
+        (not (clean desk))
+        (not (appliance_on toaster))
+        (not (appliance_on induction))
+        (not (appliance_on water_dispenser))
+        (not (appliance_on microwave))
+        (not (appliance_on washing_machine))
+        (not (appliance_on charger))
+    )
+    ; End init
+
+    ; Begin goal
+    (:goal (and
+        (toasted bread)
+        (item_on bread desk)
+        (boiled kettle)
+        (item_on kettle desk)
+        (heated food)
+        (item_on food desk)
+        (clean clothes)
+        (item_at clothes bedroom)
+        (cooked cup_ramen)
+        (item_on cup_ramen desk)
+        (charged phone)
+        (item_on phone desk)
+        (item_on water_bottle desk)
+        (clean desk)
+        (appliance_on kitchen_lightswitch)
+        (appliance_on bathroom_lightswitch)
+        (appliance_on bedroom_lightswitch)
+        (appliance_on livingroom_lightswitch)
+        (item_on dish_1 shelf)
+        (item_on dish_2 shelf)
+        (item_on dish_3 shelf)
+        (item_in_container eggs egg_container)
+    ))
+    ; End goal
+)
+```
+```
+    and solely using the following predicates:
+    ```
+    (:predicates
+        (agent_at ?a - agent ?r - room)
+        (agent_hand_free ?a - agent)
+        (agent_has_item ?a - agent ?i - item)
+
+        (item_at ?i - item ?r - room)
+        (item_on ?i - item ?s - surface)
+        (item_in ?i1 - item ?i2 - appliance) ; Represents an item being inside an appliance
+        (item_in_container ?i - item ?c - container) ; Represents an item being inside a container
+
+        (item_accessible ?i - item)
+        (item_pickable ?i - item)
+
+        (neighbor ?r1 - room ?r2 - room)
+        (appliance_on ?app - appliance)
+
+        ; Task-specific states
+        (toasted ?i - item)
+        (boiled ?i - item)
+        (cooked ?i - item)
+        (heated ?i - item)
+        (clean ?i - item)
+        (charged ?i - item)
+
+        ; Item type identification
+        (is_bread ?i - item)
+        (is_toaster ?i - appliance)
+        (is_kettle ?i - item)
+        (is_stove ?i - appliance)
+        (is_cup_ramen ?i - item)
+        (is_water_dispenser ?i - appliance)
+        (is_desk ?s - surface)
+        (is_microwave ?i - appliance)
+        (is_phone ?i - item)
+        (is_charger ?i - appliance)
+        (is_lightswitch ?i - item)
+        (is_egg_container ?c - container)
+    )
+```
+    
+    Note that the robot can only transport one item at a time.
+    And the following item(s) are relevant for accomplishing the goal ('toaster', 'bread', 'kettle', 'induction', 'cup_ramen', 'water_dispenser', 'food', 'microwave', 'water_bottle', 'dish_1', 'dish_2', 'dish_3', 'shelf', 'eggs', 'egg_container', 'washing_machine', 'clothes', 'phone', 'charger', 'desk', 'dishcloth', 'kitchen_lightswitch', 'bathroom_lightswitch', 'bedroom_lightswitch', 'livingroom_lightswitch').
+    Please break down the new goal into a list of sub-goals as many as possible, and formulate them in PDDL (where each sub-goal only consists of one predicate). Use ``` to wrap each sub-goal in PDDL.
+    
