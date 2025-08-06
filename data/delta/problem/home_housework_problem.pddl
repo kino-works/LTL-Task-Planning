@@ -5,9 +5,9 @@
     (:objects
         robot - agent
         kitchen bathroom bedroom livingroom - room
-        food microwave water_bottle eggs - item
-        desk - surface
-        egg_container - container
+        food water_bottle eggs - item
+        egg_container microwave - appliance
+        desk - desk
     )
     ; End objects
 
@@ -18,13 +18,12 @@
         (neighbor livingroom kitchen)
         (neighbor bedroom livingroom)
         (neighbor livingroom bedroom)
-        (neighbor bathroom kitchen)
-        (neighbor kitchen bathroom)
-
+        (neighbor bathroom livingroom)
+        (neighbor livingroom bathroom)
 
         ; Position
         (agent_at robot livingroom)
-        (not (agent_loaded robot))
+        (agent_hand_free robot)
         (item_at food kitchen)
         (item_at microwave kitchen)
         (item_at water_bottle kitchen)

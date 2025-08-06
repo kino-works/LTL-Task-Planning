@@ -5,8 +5,9 @@
     (:objects
         robot - agent
         kitchen livingroom - room
-        bread toaster kettle stove cup_ramen water_dispenser - item
-        desk - surface
+        bread kettle cup_ramen - item
+        toaster stove water_dispenser - appliance
+        desk - desk
     )
 
     ; Begin init

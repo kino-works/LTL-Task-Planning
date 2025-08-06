@@ -197,6 +197,7 @@ def query_pddlgym_decompose(domain: str, subgoal_pddl_list: list, save_path: str
                 state, reward, done, truncated, info = env.step(act)
             final_state_list = sorted(
                 [lit.pddl_str() for lit in state.literals if not lit.is_negative])
+            print("final:", final_state_list)
             completed_sp += 1
             exit_code = 1
         except Exception as err:
@@ -227,11 +228,13 @@ def query_pddlgym_decompose(domain: str, subgoal_pddl_list: list, save_path: str
 def validate(domain_file: str, problem_file: str, plan_file: str):
     command = "Validate -v " + domain_file + \
         " " + problem_file + " " + plan_file
+    #print("command:", command)
     p = subprocess.Popen(command, stdout=subprocess.PIPE,
                          stderr=subprocess.PIPE, shell=True)
     (output, err) = p.communicate()
     p.wait()
 
+    print(err)
     if "Plan valid" in str(output):
         print("VAL: Plan valid!")
         return True, "Plan succeeded."
