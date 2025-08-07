@@ -23,6 +23,7 @@
         (item_pickable ?i - item)
 
         (appliance_on ?ap - appliance)
+        (appliance_at ?ap - appliance ?r - room)
 
         (neighbor ?r1 - room ?r2 - room)
 
@@ -67,12 +68,13 @@
     )
 
     (:action pick_from_appliance
-        :parameters (?a - agent ?i - item ?ap appliance ?r - room)
+        :parameters (?a - agent ?i - item ?ap - appliance ?r - room)
         :precondition (and
             (agent_at ?a ?r)
             (agent_hand_free ?a)
             (item_at ?i ?r)
             (item_in ?i ?ap)
+            (appliance_at ?ap ?r)
             (item_accessible ?i)
             (item_pickable ?i)
         )
@@ -103,6 +105,7 @@
         :precondition (and
             (agent_at ?a ?r)
             (item_at ?i ?r)
+            (appliance_at ?ap ?r)
             (not (item_in ?i ?ap))
             (agent_has_item ?a ?i)
         )
@@ -117,20 +120,24 @@
         :parameters (?a - agent ?ap - appliance ?r - room)
         :precondition (and
             (agent_at ?a ?r)
-            (item_at ?i ?r)
+            (appliance_at ?ap ?r)
             (not (appliance_on ?ap))
         )
-        :effect (appliance_on ?ap)
+        :effect (and
+            (appliance_on ?ap)
+        )
     )
 
     (:action turn_off_appliance
         :parameters (?a - agent ?ap - appliance ?r - room)
         :precondition (and
             (agent_at ?a ?r)
-            (item_at ?ap ?r)
+            (appliance_at ?ap ?r)
             (appliance_on ?ap)
         )
-        :effect (not (appliance_on ?ap))
+        :effect (and
+            (not (appliance_on ?ap))
+        )
     )
 
     (:action wait_heat_food
@@ -138,11 +145,14 @@
         :precondition (and
             (agent_at ?a ?r)
             (item_in ?i ?ap)
+            (appliance_at ?ap ?r)
             (is_microwave ?ap)
             (appliance_on ?ap)
             (not (heated ?i))
         )
-        :effect (heated ?i)
+        :effect (and
+            (heated ?i)
+        )
     )
 
     (:action store_item
@@ -150,6 +160,7 @@
         :precondition (and
             (agent_at ?a ?r)
             (item_at ?i ?r)
+            (appliance_at ?ap ?r)
             (is_egg_container ?ap)
             (agent_has_item ?a ?i)
         )

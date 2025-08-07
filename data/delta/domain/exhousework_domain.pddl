@@ -24,6 +24,7 @@
         (item_pickable ?i - item)
 
         (appliance_on ?ap - appliance)
+        (appliance_at ?ap - appliance ?r - room)
 
         (neighbor ?r1 - room ?r2 - room)
 
@@ -71,12 +72,13 @@
     )
 
     (:action pick_from_appliance
-        :parameters (?a - agent ?i - item ?ap appliance ?r - room)
+        :parameters (?a - agent ?i - item ?ap - appliance ?r - room)
         :precondition (and
             (agent_at ?a ?r)
             (agent_hand_free ?a)
             (item_at ?i ?r)
             (item_in ?i ?ap)
+            (appliance_at ?ap ?r)
             (item_accessible ?i)
             (item_pickable ?i)
         )
@@ -109,6 +111,7 @@
             (item_at ?i ?r)
             (not (item_in ?i ?ap))
             (appliance_at ?ap ?r)
+            (appliance_at ?ap ?r)
             (agent_has_item ?a ?i)
         )
         :effect (and
@@ -122,20 +125,24 @@
         :parameters (?a - agent ?ap - appliance ?r - room)
         :precondition (and
             (agent_at ?a ?r)
-            (item_at ?i ?r)
+            (appliance_at ?ap ?r)
             (not (appliance_on ?ap))
         )
-        :effect (appliance_on ?ap)
+        :effect (and
+            (appliance_on ?ap)
+        )
     )
 
     (:action turn_off_appliance
         :parameters (?a - agent ?ap - appliance ?r - room)
         :precondition (and
             (agent_at ?a ?r)
-            (item_at ?ap ?r)
+            (appliance_at ?ap ?r)
             (appliance_on ?ap)
         )
-        :effect (not (appliance_on ?ap))
+        :effect (and
+            (not (appliance_on ?ap)
+        )
     )
 
     (:action wait_cook_bread
@@ -143,12 +150,15 @@
         :precondition (and
             (agent_at ?a ?r)
             (item_at ?i ?r)
+            (appliance_at ?ap ?r)
             (is_toaster ?ap)
             (item_in ?i ?ap)
             (appliance_on ?ap)
             (not (toasted ?i))
         )
-        :effect (toasted ?i)
+        :effect (and
+            (toasted ?i)
+        )
     )
 
     (:action wait_boil_water
@@ -156,12 +166,15 @@
         :precondition (and
             (agent_at ?a ?r)
             (item_at ?i ?r)
+            (appliance_at ?ap ?r)
             (is_stove ?ap)
             (item_in ?i ?ap)
             (appliance_on ?ap)
             (not (boiled ?i))
         )
-        :effect (boiled ?i)
+        :effect (and
+            (boiled ?i)
+        )
     )
 
     (:action wait_cook_ramen
@@ -169,12 +182,15 @@
         :precondition (and
             (agent_at ?a ?r)
             (item_at ?i ?r)
+            (appliance_at ?ap ?r)
             (is_water_dispenser ?ap)
             (item_in ?i ?ap)
             (appliance_on ?ap)
             (not (cooked ?i))
         )
-        :effect (cooked ?i)
+        :effect (and
+            (cooked ?i)
+        )
     )
     ; End actions
 )

@@ -20,12 +20,12 @@
         (agent_at robot livingroom)
         (agent_hand_free robot)
         (item_at bread kitchen)
-        (item_at toaster kitchen)
         (item_at kettle kitchen)
-        (item_at stove kitchen) 
         (item_at cup_ramen kitchen)
-        (item_at water_dispenser kitchen)
         (item_at desk livingroom)
+        (appliance_at toaster kitchen)
+        (appliance_at stove kitchen)
+        (appliance_at water_dispenser kitchen)
 
         ; Attributes
         (item_accessible bread)

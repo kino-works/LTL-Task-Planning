@@ -17,6 +17,11 @@ actions = """
 sg_example = {
     "kitchen": {
         "items": {
+            "kitchen_lightswitch": {
+                "accessible": True,
+                "affordance": ["turn_on_switch", "turn_off_switch"],
+                "state": "off"
+            },
             "toaster": {
                 "accessible": True,
                 "affordance": ["pick_from_appliance", "pick_from_room", "place_in_appliance", "turn_on_appliance", "turn_off_appliance"],
