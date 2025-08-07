@@ -31,7 +31,7 @@ DEFAULT_LLM = "gpt-4o"
 TEMPERATURE = 0.0
 TOP_P = 1.0
 EPISODE = 2
-MAX_TIME = 60
+MAX_TIME = 120
 
 # Examples (prompt 예시용으로 EXHOME 사용)
 DOMAIN_EXAMPLE = "exhousework"

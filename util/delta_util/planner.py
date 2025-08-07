@@ -135,8 +135,7 @@ def query_pddlgym(domain: str, p_idx: int = 0, max_time: float = 120):
             exit_code = 5
         else:
             exit_code = 2
-        print("Could not find solution!", err_msg if len(
-            err_msg) <= MAX_ERR_MSG_LEN else "")
+        print("Could not find solution!", err_msg)
 
     return [p.pddl_str() for p in plan] if exit_code == 1 else None, time, node, cost, exit_code
 
@@ -211,8 +210,7 @@ def query_pddlgym_decompose(domain: str, subgoal_pddl_list: list, save_path: str
                 exit_code = 5
             else:
                 exit_code = 2
-            print("Could not find solution!", err_msg if len(
-                err_msg) <= MAX_ERR_MSG_LEN else "")
+            print("Could not find solution!", err_msg)
             break
         plans.append([p.pddl_str() for p in plan] if plan is not None else "")
         times.append(statistic["total_time"] if statistic is not None else 0.)

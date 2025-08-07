@@ -72,7 +72,6 @@
         :precondition (and
             (agent_at ?a ?r)
             (agent_hand_free ?a)
-            (item_at ?i ?r)
             (item_in ?i ?ap)
             (appliance_at ?ap ?r)
             (item_accessible ?i)
@@ -89,7 +88,6 @@
         :parameters (?a - agent ?i - item ?d - desk ?r - room)
         :precondition (and
             (agent_at ?a ?r)
-            (item_at ?i ?r)
             (not (item_on ?i ?d))
             (agent_has_item ?a ?i)
         )
@@ -104,7 +102,6 @@
         :parameters (?a - agent ?i - item ?ap - appliance ?r - room)
         :precondition (and
             (agent_at ?a ?r)
-            (item_at ?i ?r)
             (appliance_at ?ap ?r)
             (not (item_in ?i ?ap))
             (agent_has_item ?a ?i)
@@ -159,7 +156,6 @@
         :parameters (?a - agent ?i - item ?ap - appliance ?r - room)
         :precondition (and
             (agent_at ?a ?r)
-            (item_at ?i ?r)
             (appliance_at ?ap ?r)
             (is_egg_container ?ap)
             (agent_has_item ?a ?i)

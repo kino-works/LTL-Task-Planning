@@ -76,7 +76,6 @@
         :precondition (and
             (agent_at ?a ?r)
             (agent_hand_free ?a)
-            (item_at ?i ?r)
             (item_in ?i ?ap)
             (appliance_at ?ap ?r)
             (item_accessible ?i)
@@ -93,7 +92,6 @@
         :parameters (?a - agent ?i - item ?d - desk ?r - room)
         :precondition (and
             (agent_at ?a ?r)
-            (item_at ?i ?r)
             (not (item_on ?i ?d))
             (agent_has_item ?a ?i)
         )
@@ -108,9 +106,7 @@
         :parameters (?a - agent ?i - item ?ap - appliance ?r - room)
         :precondition (and
             (agent_at ?a ?r)
-            (item_at ?i ?r)
             (not (item_in ?i ?ap))
-            (appliance_at ?ap ?r)
             (appliance_at ?ap ?r)
             (agent_has_item ?a ?i)
         )
@@ -141,7 +137,7 @@
             (appliance_on ?ap)
         )
         :effect (and
-            (not (appliance_on ?ap)
+            (not (appliance_on ?ap))
         )
     )
 
@@ -149,10 +145,9 @@
         :parameters (?a - agent ?i - item ?ap - appliance ?r - room)
         :precondition (and
             (agent_at ?a ?r)
-            (item_at ?i ?r)
+            (item_in ?i ?ap)
             (appliance_at ?ap ?r)
             (is_toaster ?ap)
-            (item_in ?i ?ap)
             (appliance_on ?ap)
             (not (toasted ?i))
         )
@@ -165,10 +160,9 @@
         :parameters (?a - agent ?i - item ?ap - appliance ?r - room)
         :precondition (and
             (agent_at ?a ?r)
-            (item_at ?i ?r)
+            (item_in ?i ?ap)
             (appliance_at ?ap ?r)
             (is_stove ?ap)
-            (item_in ?i ?ap)
             (appliance_on ?ap)
             (not (boiled ?i))
         )
@@ -181,10 +175,9 @@
         :parameters (?a - agent ?i - item ?ap - appliance ?r - room)
         :precondition (and
             (agent_at ?a ?r)
-            (item_at ?i ?r)
+            (item_in ?i ?ap)
             (appliance_at ?ap ?r)
             (is_water_dispenser ?ap)
-            (item_in ?i ?ap)
             (appliance_on ?ap)
             (not (cooked ?i))
         )
