@@ -1,96 +1,99 @@
 Question:
 Initial state:
-(at robot1 bedroom)
-(at bread)
+(agent_at robot1 bedroom)
+(agent_hand_free robot1)
+(at bread kitchen)
 (at cup_ramen kitchen)
 (at kettle kitchen)
-(at toaster kitchen)
-(at stove kitchen)
-(at water_dispenser kitchen)
 (at desk livingroom)
+(ap_at toaster kitchen)
+(ap_at stove kitchen)
+(ap_at water_dispenser kitchen)
 (not (on toaster))
 (not (on stove))
 (not (on water_dispenser))
 
 Goal state:
 (cooked bread)
-(boiled kettle)
-(cooked cup_ramen)
 (at bread desk)
+(boiled kettle)
 (at kettle desk)
+(cooked cup_ramen)
 (at cup_ramen desk)
 
 Examined action sequence:
-(goto kitchen)
-(pick bread)
-(place bread toaster)
-(turnOn toaster)
-(wait 3)
-(turnOff toaster)
-(pick bread toaster)
-(goto livingroom)
-(place bread desk)
-(goto kitchen)
-(pick kettle)
-(place kettle stove)
-(turnOn stove)
-(wait 5)
-(turnOff stove)
-(pick kettle stove)
-(goto livingroom)
-(place kettle desk)
-(goto kitchen)
-(pick cup_ramen)
-(place cup_ramen water_dispenser)
-(turnOn water_dispenser)
-(wait 3)
-(turnOff water_dispenser)
-(pick cup_ramen water_dispenser)
-(goto livingroom)
-(place cup_ramen desk)
+(goto robot1 bedroom kitchen)
+(pick robot1 bread kitchen)
+(place robot1 bread toaster)
+(turn_on robot1 toaster kitchen)
+(wait_cook_bread robot1 bread toaster kitchen)
+(turn_off robot1 toaster kitchen)
+(pick robot1 bread toaster)
+(goto robot1 kitchen livingroom)
+(place robot1 bread desk)
+(goto robot1 livingroom kitchen)
+(pick robot1 kettle kitchen)
+(place robot1 kettle stove)
+(turn_on robot1 stove kitchen)
+(wait_boil_water robot1 kettle stove kitchen)
+(turn_off robot1 stove kitchen)
+(pick robot1 kettle stove)
+(goto robot1 kitchen livingroom)
+(place robot1 kettle desk)
+(goto robot1 livingroom kitchen)
+(pick robot1 cup_ramen kitchen)
+(place robot1 cup_ramen water_dispenser)
+(turn_on robot1 water_dispenser kitchen)
+(wait_cook_ramen robot1 cup_ramen water_dispenser kitchen)
+(turn_off robot1 water_dispenser kitchen)
+(pick robot1 cup_ramen water_dispenser)
+(goto robot1 kitchen livingroom)
+(place robot1 cup_ramen desk)
 
 Answer:
 Analysis:
 Initial state:
-(at robot1 bedroom),
-(at bread),
+(agent_at robot1 bedroom),
+(agent_hand_free robot1),
+(at bread kitchen),
 (at cup_ramen kitchen),
 (at kettle kitchen),
-(at toaster kitchen),
-(at stove kitchen),
-(at water_dispenser kitchen),
 (at desk livingroom),
+(ap_at toaster kitchen),
+(ap_at stove kitchen),
+(ap_at water_dispenser kitchen),
 (not (on toaster)),
 (not (on stove)),
 (not (on water_dispenser))
 
-(goto kitchen): robot1 is now in kitchen
-(pick bread): bread in robot1's hand
-(place bread toaster): bread on toaster
-(turnOn toaster): toaster is on
-(wait 3): bread becomes cooked → (cooked bread)
-(turnOff toaster): toaster is off
-(pick bread toaster): bread in hand
-(goto livingroom): robot1 in livingroom
-(place bread desk): bread placed → (at bread desk)
-(goto kitchen): robot1 in kitchen
-(pick kettle): kettle in hand
-(place kettle stove): kettle on stove
-(turnOn stove): stove is on
-(wait 5): kettle is boiled → (boiled kettle)
-(turnOff stove): stove is off
-(pick kettle stove): kettle in hand
-(goto livingroom): robot1 in livingroom
-(place kettle desk): kettle placed → (at kettle desk)
-(goto kitchen): robot1 in kitchen
-(pick cup_ramen): cup_ramen in hand
-(place cup_ramen water_dispenser): cup_ramen on water dispenser
-(turnOn water_dispenser): water_dispenser is on
-(wait 3): cup_ramen cooked → (cooked cup_ramen)
-(turnOff water_dispenser) : water_dispenser is off
-(pick cup_ramen water_dispenser): cup_ramen in hand
-(goto livingroom): robot1 in livingroom
-(place cup_ramen desk): cup_ramen placed → (at cup_ramen desk)
+(goto robot1 bedroom kitchen): robot1 is now in kitchen
+(pick robot1 bread kitchen): bread in robot1's hand
+(place robot1 bread toaster): bread on toaster
+(turn_on robot1 toaster kitchen): toaster is on
+(wait_cook_bread robot1 bread toaster kitchen): bread becomes cooked → (cooked bread)
+(turn_off robot1 toaster kitchen): toaster is off
+(pick robot1 bread toaster): bread in hand
+(goto robot1 kitchen livingroom): robot1 in livingroom
+(place robot1 bread desk): bread placed → (at bread desk)
+(goto robot1 livingroom kitchen): robot1 in kitchen
+(pick robot1 kettle kitchen): kettle in hand
+(place robot1 kettle stove): kettle on stove
+(turn_on robot1 stove kitchen): stove is on
+(wait_boil_water robot1 kettle stove kitchen): kettle is boiled → (boiled kettle)
+(turn_off robot1 stove kitchen): stove is off
+(pick robot1 kettle stove): kettle in hand
+(goto robot1 kitchen livingroom): robot1 in livingroom
+(place robot1 kettle desk): kettle placed → (at kettle desk)
+(goto robot1 livingroom kitchen): robot1 in kitchen
+(pick robot1 cup_ramen kitchen): cup_ramen in hand
+(place robot1 cup_ramen water_dispenser): cup_ramen on water dispenser
+(turn_on robot1 water_dispenser kitchen): water_dispenser is on
+(wait_cook_ramen robot1 cup_ramen water_dispenser kitchen): cup_ramen cooked → (cooked cup_ramen)
+(turn_off robot1 water_dispenser kitchen): water_dispenser is off
+(pick robot1 cup_ramen water_dispenser): cup_ramen in hand
+(goto robot1 kitchen livingroom): robot1 in livingroom
+(place robot1 cup_ramen desk): cup_ramen placed → (at cup_ramen desk)
+
 All required goal predicates are satisfied: cooked bread, boiled kettle, cooked cup_ramen, bread, kettle, cup_ramen at desk
 
 Final answer:

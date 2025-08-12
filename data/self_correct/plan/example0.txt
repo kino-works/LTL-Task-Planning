@@ -1,43 +1,108 @@
 Domain file:
 (define (domain housework)
-    (:requirements :strips :typing :durative-actions)
-    (:types robot room object appliance)
+    (:requirements :strips :typing)
+    (:types agent room item appliance desk)
     (:predicates
-        (at ?r - robot ?rm - room)
-        (at ?o - object ?loc - (either room appliance desk))
-        (on ?a - appliance)
-        (cooked ?o - object)
-        (boiled ?o - object)
+        (agent_at ?a - agent ?r - room)
+        (agent_hand_free ?a - agent)
+        (agent_has_item ?a - agent ?i - item)
+
+        (at ?i - item ?loc - (either room appliance desk))
+
+        (ap_at ?ap - appliance ?r - room)
+        (on ?ap - appliance)
+
+        (cooked ?i - item)
+        (boiled ?i - item)
     )
     (:action goto
-        :parameters (?r - robot ?from ?to - room)
-        :precondition (at ?r ?from)
-        :effect (and (not (at ?r ?from)) (at ?r ?to))
+        :parameters (?a - agent ?from - room ?to - room)
+        :precondition (agent_at ?a ?from)
+        :effect (and
+            (not (agent_at ?a ?from))
+            (agent_at ?a ?to)
+        )
     )
     (:action pick
-        :parameters (?r - robot ?o - object ?loc - (either room appliance desk))
-        :precondition (and (at ?r ?loc) (at ?o ?loc))
-        :effect (and (not (at ?o ?loc)))
+        :parameters (?a - agent ?i - item ?loc - (either room appliance desk))
+        :precondition (and
+            (agent_hand_free ?a)
+            (at ?i ?loc)
+        )
+        :effect (and
+            (not (at ?i ?loc))
+            (not (agent_hand_free ?a))
+            (agent_has_item ?a ?i)
+        )
     )
     (:action place
-        :parameters (?r - robot ?o - object ?loc - (either room appliance desk))
-        :precondition (and (at ?r ?loc))
-        :effect (at ?o ?loc)
+        :parameters (?a - agent ?i - item ?loc - (either room appliance desk))
+        :precondition (and
+            (agent_has_item ?a ?i)
+            (not (at ?i ?loc))
+        )
+        :effect (and
+            (at ?i ?loc)
+            (agent_hand_free ?a)
+            (not (agent_has_item ?a ?i))
+        )
     )
-    (:action turnOn
-        :parameters (?r - robot ?a - appliance ?rm - room)
-        :precondition (and (at ?r ?rm) (at ?a ?rm))
-        :effect (on ?a)
+    (:action turn_on
+        :parameters (?a - agent ?ap - appliance ?r - room)
+        :precondition (and
+            (agent_at ?a ?r)
+            (ap_at ?ap ?r)
+            (not (on ?ap))
+        )
+        :effect (on ?ap)
     )
-    (:action turnOff
-        :parameters (?r - robot ?a - appliance ?rm - room)
-        :precondition (and (at ?r ?rm) (at ?a ?rm) (on ?a))
-        :effect (not (on ?a))
+    (:action turn_off
+        :parameters (?a - agent ?ap - appliance ?r - room)
+        :precondition (and
+            (agent_at ?a ?r)
+            (ap_at ?ap ?r)
+            (on ?ap)
+        )
+        :effect (not (on ?ap))
     )
-    (:durative-action wait
-        :parameters (?r - robot ?o - object ?a - appliance ?loc - room)
-        :condition (and (over all (at ?r ?loc)) (over all (at ?o ?loc)) (over all (on ?a)))
-        :effect (and (at end (or (when (= ?o kettle) (boiled ?o)) (when (or (= ?o bread) (= ?o cup_ramen)) (cooked ?o)))))
+    (:action wait_cook_bread
+        :parameters (?a - agent ?i - item ?ap - appliance ?r - room)
+        :precondition (and
+            (agent_at ?a ?r)
+            (ap_at ?ap ?r)
+            (at ?i ?ap)
+            (on ?ap)
+            (not (toasted ?i))
+        )
+        :effect (and
+            (toasted ?i)
+        )
+    )
+    (:action wait_boil_water
+        :parameters (?a - agent ?i - item ?ap - appliance ?r - room)
+        :precondition (and
+            (agent_at ?a ?r)
+            (ap_at ?ap ?r)
+            (at ?i ?ap)
+            (on ?ap)
+            (not (boiled ?i))
+        )
+        :effect (and
+            (boiled ?i)
+        )
+    )
+    (:action wait_cook_ramen
+        :parameters (?a - agent ?i - item ?ap - appliance ?r - room)
+        :precondition (and
+            (agent_at ?a ?r)
+            (ap_at ?ap ?r)
+            (at ?i ?ap)
+            (on ?ap)
+            (not (cooked ?i))
+        )
+        :effect (and
+            (cooked ?i)
+        )
     )
 )
 
@@ -45,33 +110,39 @@ Problem file:
 (define (problem doing_housework)
     (:domain housework)
     (:objects
-        robot1 - robot
+        robot1 - agent
         kitchen bathroom bedroom livingroom - room
-        toaster stove water_dispenser desk - appliance
-        bread cup_ramen kettle - object
+        toaster stove water_dispenser - appliance
+        bread cup_ramen kettle - item
+        desk - desk
     )
     (:init
-        (at robot1 bedroom)
-        (at bread)
+        (agent_at robot1 bedroom)
+        (agent_hand_free robot1)
+
+        (at bread kitchen)
         (at cup_ramen kitchen)
         (at kettle kitchen)
-        (at toaster kitchen)
-        (at stove kitchen)
-        (at water_dispenser kitchen)
         (at desk livingroom)
+
+        (ap_at toaster kitchen)
+        (ap_at stove kitchen)
+        (ap_at water_dispenser kitchen)
+
         (not (on toaster))
         (not (on stove))
         (not (on water_dispenser))
     )
     (:goal (and
         (cooked bread)
-        (boiled kettle)
-        (cooked cup_ramen)
         (at bread desk)
+        (boiled kettle)
         (at kettle desk)
+        (cooked cup_ramen)
         (at cup_ramen desk)
     ))
 )
+
 
 Action Sequence :
 Step 1:
@@ -82,15 +153,15 @@ robot1 is now in the bedroom.
 bread is unsatisfied, kettle is unsatisfied, cup_ramen is unsatisfied.
 bread is in the same room with robot1 and is unsatisfied.
 Go to complete bread
-(goto kitchen)
-(pick bread)
-(place bread toaster)
-(turnOn toaster)
-(wait 3)
-(turnOff toaster)
-(pick bread toaster)
-(goto livingroom)
-(place bread desk)
+(goto robot1 bedroom kitchen)
+(pick robot1 bread kitchen)
+(place robot1 bread toaster)
+(turn_on robot1 toaster kitchen)
+(wait_cook_bread robot1 bread toaster kitchen)
+(turn_off robot1 toaster kitchen)
+(pick robot1 bread toaster)
+(goto robot1 kitchen livingroom)
+(place robot1 bread desk)
 
 Step 2:
 robot1 is now in the livingroom.
@@ -100,15 +171,15 @@ robot1 is now in the livingroom.
 bread is satisfied, kettle is unsatisfied, cup_ramen is unsatisfied.
 All objects in the same room with robot1 are satisfied.
 Go to complete next unsatisfied object: kettle
-(goto kitchen)
-(pick kettle)
-(place kettle stove)
-(turnOn stove)
-(wait 5)
-(turnOff stove)
-(pick kettle stove)
-(goto livingroom)
-(place kettle desk)
+(goto robot1 livingroom kitchen)
+(pick robot1 kettle kitchen)
+(place robot1 kettle stove)
+(turn_on robot1 stove kitchen)
+(wait_boil_water robot1 kettle stove kitchen)
+(turn_off robot1 stove kitchen)
+(pick robot1 kettle stove)
+(goto robot1 kitchen livingroom)
+(place robot1 kettle desk)
 
 Step 3:
 robot1 is now in the livingroom.
@@ -118,15 +189,15 @@ robot1 is now in the livingroom.
 bread is satisfied, kettle is satisfied, cup_ramen is unsatisfied.
 All objects in the same room with robot1 are satisfied.
 Go to complete next unsatisfied object: cup_ramen
-(goto kitchen)
-(pick cup_ramen)
-(place cup_ramen water_dispenser)
-(turnOn water_dispenser)
-(wait 3)
-(turnOff water_dispenser)
-(pick cup_ramen water_dispenser)
-(goto livingroom)
-(place cup_ramen desk)
+(goto robot1 livingroom kitchen)
+(pick robot1 cup_ramen kitchen)
+(place robot1 cup_ramen water_dispenser)
+(turn_on robot1 water_dispenser kitchen)
+(wait_cook_ramen robot1 cup_ramen water_dispenser kitchen)
+(turn_off robot1 water_dispenser kitchen)
+(pick robot1 cup_ramen water_dispenser)
+(goto robot1 kitchen livingroom)
+(place robot1 cup_ramen desk)
 
 Step 4:
 robot1 is now in the livingroom.

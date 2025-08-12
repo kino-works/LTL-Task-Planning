@@ -4,31 +4,40 @@ Initial state:
 (at bread kitchen)
 (at kettle kitchen)
 (at eggs kitchen)
-(at egg_container kitchen)
-(at toaster kitchen)
-(at induction kitchen)
+(ap_at egg_container kitchen)
+(ap_at toaster kitchen)
+(ap_at induction kitchen)
+(not (on egg_container))
 (not (on toaster))
 (not (on induction))
 
 Goal state:
 (toasted bread)
 (boiled kettle)
-(stored eggs)
+(at eggs egg_container)
 
 Examined action sequence:
-(goto kitchen)
-(pick bread)
-(place bread toaster)
-(turnOn toaster)
-(wait 3)
-(turnOff toaster)
-(pick kettle)
-(place kettle induction)
-(turnOn induction)
-(wait 5)
-(turnOff induction)
-(pick eggs)
-(place eggs toaster)
+(goto robot1 bedroom kitchen)
+(pick robot1 bread kitchen)
+(place robot1 bread toaster)
+(turn_on robot1 toaster kitchen)
+(wait_cook_bread robot1 bread toaster kitchen)
+(turn_off robot1 toaster kitchen)
+(pick robot1 bread toaster)
+(goto robot1 kitchen livingroom)
+(place robot1 bread desk)
+(goto robot1 livingroom kitchen)
+(pick robot1 kettle kitchen)
+(place robot1 kettle stove)
+(turn_on robot1 stove kitchen)
+(wait_boil_water robot1 kettle stove kitchen)
+(turn_off robot1 stove kitchen)
+(pick robot1 kettle stove)
+(goto robot1 kitchen livingroom)
+(place robot1 kettle desk)
+(goto robot1 livingroom kitchen)
+(pick robot1 eggs kitchen)
+(place robot1 eggs toaster)
 
 Answer:
 Analysis:
@@ -37,26 +46,36 @@ Initial state:
 (at bread kitchen),
 (at kettle kitchen),
 (at eggs kitchen),
-(at egg_container kitchen),
-(at toaster kitchen),
-(at induction kitchen),
+(ap_at egg_container kitchen),
+(ap_at toaster kitchen),
+(ap_at induction kitchen),
+(not (on egg_container)),
 (not (on toaster)),
 (not (on induction))
 
-(goto kitchen): robot1 moves from bedroom to kitchen  
-(pick bread): bread picked from kitchen, now in robot's hand  
-(place bread toaster): bread placed into toaster  
-(turnOn toaster): toaster turned on  
-(wait 3): waited 3 minutes  
-(turnOff toaster): toaster turned off → bread is now toasted  
-(pick kettle): kettle picked up  
-(place kettle induction): kettle placed on induction  
-(turnOn induction): induction turned on  
-(wait 5): waited 5 minutes  
-(turnOff induction): induction turned off → kettle is now boiled  
-(pick eggs): picked eggs from kitchen  
-(place eggs toaster): toaster is not a valid container for eggs.
-goal was (stored eggs), but eggs were placed in toaster instead of egg_container.
+(goto robot1 bedroom kitchen): robot1 moves from bedroom to kitchen  
+(pick robot1 bread kitchen): bread picked from kitchen, now in robot's hand  
+(place robot1 bread toaster): bread placed into toaster  
+(turn_on robot1 toaster kitchen): toaster turned on 
+(wait_cook_bread robot1 bread toaster kitchen): bread becomes cooked → (cooked bread)
+(turn_off robot1 toaster kitchen): toaster is off
+(pick robot1 bread toaster): bread in hand
+(goto robot1 kitchen livingroom): robot1 in livingroom
+(place robot1 bread desk): bread placed → (at bread desk)
+(goto robot1 livingroom kitchen): robot1 in kitchen
+(pick robot1 kettle kitchen): kettle in hand
+(place robot1 kettle stove): kettle on stove
+(turn_on robot1 stove kitchen): stove is on
+(wait_boil_water robot1 kettle stove kitchen): kettle is boiled → (boiled kettle)
+(turn_off robot1 stove kitchen): stove is off
+(pick robot1 kettle stove): kettle in hand
+(goto robot1 kitchen livingroom): robot1 in livingroom
+(place robot1 kettle desk): kettle placed → (at kettle desk)
+(goto robot1 livingroom kitchen): robot1 in kitchen
+(pick robot1 eggs kitchen): picked eggs from kitchen  
+(place robot1 eggs toaster): toaster is not a valid container for eggs.
+
+goal was (at eggs egg_container), but eggs were placed in toaster instead of egg_container.
 analysis stops due to logical error
 
 Final answer:

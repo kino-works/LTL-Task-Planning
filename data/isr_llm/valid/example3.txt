@@ -1,6 +1,7 @@
 Question:
 Initial state:
-(at robot1 bedroom)
+(agent_at robot1 bedroom)
+(agent_hand_free robot1)
 (at kitchen_lightswitch kitchen)
 (at dish_1 kitchen)
 (at dish_2 kitchen)
@@ -9,12 +10,14 @@ Initial state:
 (at pot kitchen)
 (at shelf kitchen)
 (at desk livingroom)
+(ap_at induction kitchen)
+(ap_at stove kitchen)
 (not (on kitchen_lightswitch))
 (not (on stove))
 (not (on induction))
 
 Goal state:
-(turnOn kitchen_lightswitch)
+(on kitchen_lightswitch)
 (at dish_1 shelf)
 (at dish_2 shelf)
 (at dish_3 shelf)
@@ -22,39 +25,42 @@ Goal state:
 (at kettle desk)
 (heated pot)
 (at pot desk)
-(turnOff kitchen_lightswitch)
+(not (on kitchen_lightswitch))
 
 Examined action sequence:
-(goto kitchen)
-(turnOn kitchen_lightswitch)
-(pick dish_1)
-(place dish_1 shelf)
-(pick dish_2)
-(place dish_2 shelf)
-(pick dish_3)
-(place dish_3 shelf)
-(pick kettle)
-(place kettle stove)
-(turnOn stove)
-(wait 5)
-(turnOff stove)
-(pick kettle stove)
-(goto livingroom)
-(place kettle desk)
-(goto kitchen)
-(pick pot)
-(place pot induction)
-(turnOn induction)
-(wait 3)
-(turnOff induction)
-(pick pot induction)
-(goto livingroom)
-(place pot desk)
+(goto robot1 bedroom kitchen)
+(turn_on_switch robot1 kitchen_lightswitch kitchen)
+(pick robot1 dish_1 kitchen)
+(place robot1 dish_1 shelf)
+(pick robot1 dish_2 kitchen)
+(place robot1 dish_2 shelf)
+(pick robot1 dish_3 kitchen)
+(place robot1 dish_3 shelf)
+(pick robot1 kettle kitchen)
+(place robot1 kettle stove)
+(turn_on robot1 stove kitchen)
+(wait_boil_water robot1 kettle stove kitchen)
+(turn_off robot1 stove kitchen)
+(pick robot1 kettle stove)
+(goto robot1 kitchen livingroom)
+(place robot1 kettle desk)
+(goto robot1 livingroom kitchen)
+(pick robot1 pot kitchen)
+(place robot1 pot induction)
+(turn_on robot1 induction kitchen)
+(wait_heat_pot robot1 pot induction kitchen)
+(turn_off robot1 induction kitchen)
+(pick robot1 pot induction)
+(goto robot1 kitchen livingroom)
+(place robot1 pot desk)
+(goto robot1 livingroom kitchen)
+(turn_off_switch robot1 kitchen_lightswitch kitchen)
 
 Answer:
 Analysis:
 Initial state:
-(at robot1 bedroom),
+(agent_at robot1 bedroom),
+(agent_hand_free robot1),
 (at kitchen_lightswitch kitchen),
 (at dish_1 kitchen),
 (at dish_2 kitchen),
@@ -63,37 +69,40 @@ Initial state:
 (at pot kitchen),
 (at shelf kitchen),
 (at desk livingroom),
+(ap_at induction kitchen),
+(ap_at stove kitchen),
 (not (on kitchen_lightswitch)),
 (not (on stove)),
 (not (on induction))
 
-(goto kitchen): robot1 is now in kitchen  
-(turnOn kitchen_lightswitch): switch is now on  
-(pick dish_1): dish_1 picked
-(place dish_1 shelf): dish_1 placed on shelf → dish_1 organized successfully  
-(pick dish_2): dish_2 picked
-(place dish_2 shelf): dish_2 placed on shelf → dish_2 organized successfully  
-(pick dish_3): dish_3 picked
-(place dish_3 shelf): dish_3 placed on shelf → dish_3 organized successfully  
-(pick kettle): kettle picked
-(place kettle stove): kettle placed on stove
-(turnOn stove): stove turned on
-(wait 5): kettle boiled → (boiled kettle)
-(turnOff stove): stove turned off
-(pick kettle stove): kettle picked up
-(goto livingroom): robot1 moves to livingroom
-(place kettle desk): kettle placed on desk
-(goto kitchen): robot1 moves to kitchen
-(pick pot): pot picked
-(place pot induction): pot placed on induction
-(turnOn induction): stove turned on
-(wait 3): kettle heated → (heated pot)
-(turnOff induction): stove turned off
-(pick pot induction): pot picked up
-(goto livingroom): robot1 moves to livingroom
-(place pot desk): pot placed on desk
-(turnOff  kitchen_lightswitch) was not executed.
-Goal state requires (turnOff kitchen_lightswitch), but kitchen_lightswitch is still on.  
+(goto robot1 bedroom kitchen): robot1 is now in kitchen  
+(turn_on_switch robot1 kitchen_lightswitch kitchen): switch is now on 
+(pick robot1 dish_1 kitchen): dish_1 picked
+(place robot1 dish_1 shelf): dish_1 placed on shelf → dish_1 organized successfully  
+(pick robot1 dish_2 kitchen): dish_2 picked
+(place robot1 dish_2 shelf): dish_2 placed on shelf → dish_1 organized successfully
+(pick robot1 dish_3 kitchen): dish_3 picked
+(place robot1 dish_3 shelf): dish_3 placed on shelf → dish_1 organized successfully
+(pick robot1 kettle kitchen): kettle picked
+(place robot1 kettle stove): kettle placed on stove
+(turn_on robot1 stove kitchen): stove turned on
+(wait_boil_water robot1 kettle stove kitchen): kettle boiled → (boiled kettle)
+(turn_off robot1 stove kitchen): stove turned off
+(pick robot1 kettle stove): kettle picked up
+(goto robot1 kitchen livingroom): robot1 moves to livingroom
+(place robot1 kettle desk): kettle placed on desk
+(goto robot1 livingroom kitchen): robot1 moves to kitchen
+(pick robot1 pot kitchen): pot picked
+(place robot1 pot induction): pot placed on induction
+(turn_on robot1 induction kitchen): stove turned on
+(wait_heat_pot robot1 pot induction kitchen): kettle heated → (heated pot)
+(turn_off robot1 induction kitchen): stove turned off
+(pick robot1 pot induction): pot picked up
+(goto robot1 kitchen livingroom): robot1 moves to livingroom
+(place robot1 pot desk): pot placed on desk
+
+(not (on kitchen_lightswitch)) was not executed.
+Goal state requires (not (on kitchen_lightswitch)), but kitchen_lightswitch is still on.  
 Final condition not satisfied.
 
 Final answer:  

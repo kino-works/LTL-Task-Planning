@@ -1,66 +1,71 @@
 Question:
 Initial state:
-(at robot1 bedroom)
+(agent_at robot1 bedroom)
+(agent_hand_free robot1)
 (at food kitchen)
 (at water_bottle kitchen)
 (at eggs kitchen)
-(at egg_container kitchen)
-(at microwave kitchen)
 (at desk livingroom)
+(ap_at egg_container kitchen)
+(ap_at microwave kitchen)
 (not (on microwave))
+(not (on egg_container))
 
 Goal state:
 (heated food)
 (at food desk)
 (at water_bottle desk)
-(stored eggs)
+(at eggs egg_container)
 
 Examined action sequence:
-(goto kitchen)
-(pick food)
-(place food microwave)
-(turnOn microwave)
-(wait 3)
-(turnOff microwave)
-(pick food microwave)
-(goto livingroom)
-(place food desk)
-(goto kitchen)
-(pick water_bottle)
-(goto livingroom)
-(place water_bottle desk)
-(goto kitchen)
-(pick eggs)
-(place eggs egg_container)
+(goto robot1 bedroom kitchen)
+(pick robot1 food kitchen)
+(place robot1 food microwave)
+(turn_on robot1 microwave kitchen)
+(wait_heat_food robot1 food microwave kitchen)
+(turn_off robot1 microwave kitchen)
+(pick robot1 food microwave)
+(goto robot1 kitchen livingroom)
+(place robot1 food desk)
+(goto livingroom kitchen)
+(pick robot1 water_bottle kitchen)
+(goto robot1 kitchen livingroom)
+(place robot1 water_bottle desk)
+(goto robot1 livingroom kitchen)
+(pick robot1 eggs kitchen)
+(place robot1 eggs egg_container)
 
 Answer:
 Analysis:
 Initial state:
-(at robot1 bedroom),
+(agent_at robot1 bedroom),
+(agent_hand_free robot1),
 (at food kitchen),
 (at water_bottle kitchen),
 (at eggs kitchen),
-(at egg_container kitchen),
-(at microwave kitchen),
 (at desk livingroom),
-(not (on microwave))
+(ap_at egg_container kitchen),
+(ap_at microwave kitchen),
+(not (on microwave)),
+(not (on egg_container)),
 
-(goto kitchen): robot1 moves to kitchen
-(pick food): robot1 picks up the food
-(place food microwave): food placed into microwave
-(turnOn microwave): microwave turned on
-(wait 3): food is heated → (heated food)
-(turnOff microwave): microwave turned off
-(pick food microwave): food picked again
-(goto livingroom): robot1 moves to livingroom
-(place food desk): food placed on desk → (at food desk)
-(goto kitchen): robot1 moves back to kitchen
-(pick water_bottle): robot1 picks up water bottle
-(goto livingroom): robot1 moves to livingroom
-(place water_bottle desk): water bottle placed on desk → (at water_bottle desk)
-(goto kitchen): robot1 moves back to kitchen
-(pick eggs): robot1 picks up eggs
-(place eggs egg_container): eggs placed into container → (stored eggs)
+(goto robot1 bedroom kitchen): robot1 moves to kitchen
+(pick robot1 food kitchen): robot1 picks up the food
+(place robot1 food microwave): food placed into microwave
+(turn_on robot1 microwave kitchen): microwave turned on
+(wait_heat_food robot1 food microwave kitchen): food is heated → (heated food)
+(turn_off robot1 microwave kitchen): microwave turned off
+(pick robot1 food microwave): food picked again
+(goto robot1 kitchen livingroom): robot1 moves to livingroom
+(place robot1 food desk): food placed on desk → (at food desk)
+(goto livingroom kitchen): robot1 moves back to kitchen
+(pick robot1 water_bottle kitchen): robot1 picks up water bottle
+(goto robot1 kitchen livingroom): robot1 moves to livingroom
+(place robot1 water_bottle desk): water bottle placed on desk → (at water_bottle desk)
+(goto robot1 livingroom kitchen): robot1 moves back to kitchen
+(pick robot1 eggs kitchen): robot1 picks up eggs
+(place robot1 eggs egg_container): eggs placed into container → (at eggs egg_container)
+
 All required goal predicates are satisfied: heated food, at food desk, at water_bottle desk, stored eggs
 
 Final answer:

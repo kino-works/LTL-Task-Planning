@@ -17,58 +17,58 @@ robot1 is now in the bedroom.
 (at pot kitchen) with goal (heated pot & at pot desk)
 kitchen_lightswitch is unsatisfied, dish_1 is unsatisfied, dish_2 is unsatisfied, dish_3 is unsatisfied, kettle is unsatisfied, pot is unsatisfied.
 Go to complete turnOn(kitchen_lightswitch):
-(goto kitchen)
-(turnOn kitchen_lightswitch)
+(goto robot1 bedroom kitchen)
+(turn_on_switch robot1 kitchen_lightswitch kitchen)
 
 Step 2:
 robot1 is now in the kitchen.
 (on kitchen_lightswitch) with goal (on kitchen_lightswitch) – satisfied
 dish_1, dish_2, dish_3 are unsatisfied.
 Go to complete organize(dish_1):
-(pick dish_1)
-(place dish_1 shelf)
+(pick robot1 dish_1 kitchen)
+(place robot1 dish_1 shelf)
 Go to complete organize(dish_2):
-(pick dish_2)
-(place dish_2 shelf)
+(pick robot1 dish_2 kitchen)
+(place robot1 dish_2 shelf)
 Go to complete organize(dish_3):
-(pick dish_3)
-(place dish_3 shelf)
+(pick robot1 dish_3 kitchen)
+(place robot1 dish_3 shelf)
 
 Step 3:
 robot1 is now in the kitchen.
 (dish_1 at shelf), (dish_2 at shelf), (dish_3 at shelf) – satisfied
 kettle and pot are unsatisfied.
 Go to complete boil(kettle):
-(pick kettle)
-(place kettle stove)
-(turnOn stove)
-(wait 5)
-(turnOff stove)
-(pick kettle)
-(goto livingroom)
-(place kettle desk)
+(pick robot1 kettle kitchen)
+(place robot1 kettle stove)
+(turn_on robot1 stove kitchen)
+(wait_boil_water robot1 kettle stove kitchen)
+(turn_off robot1 stove kitchen)
+(pick robot1 kettle stove)
+(goto robot1 kitchen livingroom)
+(place robot1 kettle desk)
 
 Step 4:
 robot1 is now in the livingroom.
 (boiled kettle & at kettle desk) – satisfied
 pot is unsatisfied.
 Go to complete heat(pot):
-(goto kitchen)
-(pick pot)
-(place pot induction)
-(turnOn induction)
-(wait 3)
-(turnOff induction)
-(pick pot)
-(goto livingroom)
-(place pot desk)
+(goto robot1 livingroom kitchen)
+(pick robot1 pot kitchen)
+(place robot1 pot induction)
+(turn_on robot1 induction kitchen)
+(wait_heat_pot robot1 pot induction kitchen)
+(turn_off robot1 induction kitchen)
+(pick robot1 pot induction)
+(goto robot1 kitchen livingroom)
+(place robot1 pot desk)
 
 Step 5:
 robot1 is now in the livingroom.
 (heated pot & at pot desk) – satisfied
 kitchen_lightswitch with goal (off kitchen_lightswitch) – unsatisfied
 Go to complete turnOff(kitchen_lightswitch):
-(goto kitchen)
-(turnOff kitchen_lightswitch)
+(goto robot1 livingroom kitchen)
+(turn_off_switch robot1 kitchen_lightswitch kitchen)
 
 All objects are satisfied.

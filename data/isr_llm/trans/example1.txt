@@ -8,80 +8,114 @@ Storing the eggs means picking them up from the kitchen and placing them into th
 
 Domain file:
 (define (domain housework)
-  (:requirements :strips :typing :durative-actions)
-  (:types robot room object appliance)
-  
-  (:predicates
-    (at ?r - robot ?rm - room)
-    (at ?o - object ?loc - (either room appliance))
-    (on ?a - appliance)
-    (heated ?o - object)
-    (stored ?o - object)
-  )
-  
-  (:action goto
-    :parameters (?r - robot ?from ?to - room)
-    :precondition (at ?r ?from)
-    :effect (and (not (at ?r ?from)) (at ?r ?to))
-  )
-  
-  (:action pick
-    :parameters (?r - robot ?o - object ?loc - (either room appliance))
-    :precondition (and (at ?r ?loc) (at ?o ?loc))
-    :effect (not (at ?o ?loc))
-  )
-  
-  (:action place
-    :parameters (?r - robot ?o - object ?loc - (either room appliance))
-    :precondition (at ?r ?loc)
-    :effect (at ?o ?loc)
-  )
-  
-  (:action turnOn
-    :parameters (?r - robot ?a - appliance ?rm - room)
-    :precondition (and (at ?r ?rm) (at ?a ?rm))
-    :effect (on ?a)
-  )
-  
-  (:action turnOff
-    :parameters (?r - robot ?a - appliance ?rm - room)
-    :precondition (and (at ?r ?rm) (at ?a ?rm) (on ?a))
-    :effect (not (on ?a))
-  )
-  
-  (:durative-action wait
-    :parameters (?r - robot ?o - object ?a - appliance ?loc - room)
-    :condition (and (over all (at ?r ?loc))
-                    (over all (at ?o ?loc))
-                    (over all (on ?a)))
-    :effect (at end (heated ?o))
-  )
+    (:requirements :strips :typing)
+    (:types agent room item appliance desk)
+    (:predicates
+          (agent_at ?a - agent ?r - room)
+          (agent_hand_free ?a - agent)
+          (agent_has_item ?a - agent ?i - item)
+
+          (at ?i - item ?loc - (either room appliance desk))
+
+          (ap_at ?ap - appliance ?r - room)
+          (on ?ap - appliance)
+
+          (heated ?i - item)
+    )
+    (:action goto
+        :parameters (?a - agent ?from - room ?to - room)
+        :precondition (agent_at ?a ?from)
+        :effect (and
+            (not (agent_at ?a ?from))
+            (agent_at ?a ?to)
+        )
+    )
+    (:action pick
+        :parameters (?a - agent ?i - item ?loc - (either room appliance desk))
+        :precondition (and
+            (agent_hand_free ?a)
+            (at ?i ?loc)
+        )
+        :effect (and
+            (not (at ?i ?loc))
+            (not (agent_hand_free ?a))
+            (agent_has_item ?a ?i)
+        )
+    )
+    (:action place
+        :parameters (?a - agent ?i - item ?loc - (either room appliance desk))
+        :precondition (and
+            (agent_has_item ?a ?i)
+            (not (at ?i ?loc))
+        )
+        :effect (and
+            (at ?i ?loc)
+            (agent_hand_free ?a)
+            (not (agent_has_item ?a ?i))
+        )
+    )
+    (:action turn_on
+        :parameters (?a - agent ?ap - appliance ?r - room)
+        :precondition (and
+            (agent_at ?a ?r)
+            (ap_at ?ap ?r)
+            (not (on ?ap))
+        )
+        :effect (on ?ap)
+    )
+    (:action turn_off
+        :parameters (?a - agent ?ap - appliance ?r - room)
+        :precondition (and
+            (agent_at ?a ?r)
+            (ap_at ?ap ?r)
+            (on ?ap)
+        )
+        :effect (not (on ?ap))
+    )
+    (:action wait_heat_food
+        :parameters (?a - agent ?i - item ?ap - appliance ?r - room)
+        :precondition (and
+            (agent_at ?a ?r)
+            (ap_at ?ap ?r)
+            (at ?i ?ap)
+            (on ?ap)
+            (not (heated ?i))
+        )
+        :effect (and
+            (heated ?i)
+        )
+    )
 )
 
 Problem file:
 (define (problem doing_housework)
-  (:domain housework)
-  (:objects
-    robot1 - robot
-    kitchen bedroom livingroom - room
-    microwave - appliance
-    desk - appliance
-    food water_bottle eggs egg_container - object
-  )
-  (:init
-    (at robot1 bedroom)
-    (at food kitchen)
-    (at water_bottle kitchen)
-    (at eggs kitchen)
-    (at egg_container kitchen)
-    (at microwave kitchen)
-    (at desk livingroom)
-    (not (on microwave))
-  )
-  (:goal (and
-    (heated food)
-    (at food desk)
-    (at water_bottle desk)
-    (stored eggs)
-  ))
+    (:domain housework)
+    (:objects
+        robot1 - agent
+        kitchen bathroom bedroom livingroom - room
+        microwave egg_container - appliance
+        food water_bottle eggs - item
+        desk - desk
+    )
+    (:init
+        (agent_at robot1 bedroom)
+        (agent_hand_free robot1)
+
+        (at food kitchen)
+        (at water_bottle kitchen)
+        (at eggs kitchen)
+        (at desk livingroom)
+
+        (ap_at egg_container kitchen)
+        (ap_at microwave kitchen)
+
+        (not (on microwave))
+        (not (on egg_container))
+    )
+    (:goal (and
+        (heated food)
+        (at food desk)
+        (at water_bottle desk)
+        (at eggs egg_container)
+    ))
 )

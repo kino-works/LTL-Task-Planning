@@ -13,15 +13,15 @@ robot1 is now in the bedroom.
 bread is unsatisfied, kettle is unsatisfied, cup_ramen is unsatisfied.
 bread is in the same room with robot1 and is unsatisfied.
 Go to complete bread
-(goto kitchen)
-(pick bread)
-(place bread toaster)
-(turnOn toaster)
-(wait 3)
-(turnOff toaster)
-(pick bread toaster)
-(goto livingroom)
-(place bread desk)
+(goto robot1 bedroom kitchen)
+(pick robot1 bread kitchen)
+(place robot1 bread toaster)
+(turn_on robot1 toaster kitchen)
+(wait_cook_bread robot1 bread toaster kitchen)
+(turn_off robot1 toaster kitchen)
+(pick robot1 bread toaster)
+(goto robot1 kitchen livingroom)
+(place robot1 bread desk)
 
 Step 2:
 robot1 is now in the livingroom.
@@ -31,15 +31,15 @@ robot1 is now in the livingroom.
 bread is satisfied, kettle is unsatisfied, cup_ramen is unsatisfied.
 All objects in the same room with robot1 are satisfied.
 Go to complete next unsatisfied object: kettle
-(goto kitchen)
-(pick kettle)
-(place kettle stove)
-(turnOn stove)
-(wait 5)
-(turnOff stove)
-(pick kettle stove)
-(goto livingroom)
-(place kettle desk)
+(goto robot1 livingroom kitchen)
+(pick robot1 kettle kitchen)
+(place robot1 kettle stove)
+(turn_on robot1 stove kitchen)
+(wait_boil_water robot1 kettle stove kitchen)
+(turn_off robot1 stove kitchen)
+(pick robot1 kettle stove)
+(goto robot1 kitchen livingroom)
+(place robot1 kettle desk)
 
 Step 3:
 robot1 is now in the livingroom.
@@ -49,15 +49,15 @@ robot1 is now in the livingroom.
 bread is satisfied, kettle is satisfied, cup_ramen is unsatisfied.
 All objects in the same room with robot1 are satisfied.
 Go to complete next unsatisfied object: cup_ramen
-(goto kitchen)
-(pick cup_ramen)
-(place cup_ramen water_dispenser)
-(turnOn water_dispenser)
-(wait 3)
-(turnOff water_dispenser)
-(pick cup_ramen water_dispenser)
-(goto livingroom)
-(place cup_ramen desk)
+(goto robot1 livingroom kitchen)
+(pick robot1 cup_ramen kitchen)
+(place robot1 cup_ramen water_dispenser)
+(turn_on robot1 water_dispenser kitchen)
+(wait_cook_ramen robot1 cup_ramen water_dispenser kitchen)
+(turn_off robot1 water_dispenser kitchen)
+(pick robot1 cup_ramen water_dispenser)
+(goto robot1 kitchen livingroom)
+(place robot1 cup_ramen desk)
 
 Step 4:
 robot1 is now in the livingroom.

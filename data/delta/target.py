@@ -71,8 +71,8 @@ TASK_DEFINITIONS: Dict[str, Dict] = {
         "goal": "Wash the clothes in the washing machine and place them back in the bedroom.", "cost": {"home": 10},
         "item_keep": ["clothes", "washing_machine"],
         "subgoal": ["Wash the clothes", "Return clothes to the bedroom"],
-        "subgoal_pddl": ["(:goal (and (clean_cloth clothes)))", "(:goal (and (item_at clothes bedroom)))"],
-        "env_state": ["clean_clothes(clothes): clothes are clean.", "item_at(clothes, bedroom): clothes are at the bedroom"]
+        "subgoal_pddl": ["(:goal (and (clean_cloth clothes)))"],
+        "env_state": ["clean_cloth(clothes): clothes are clean."]
     },
     "Cookedcupramen": {
         "scene": ["home", "exhome"], "add_obj": None,
@@ -151,8 +151,8 @@ TASK_DEFINITIONS: Dict[str, Dict] = {
         "goal": "Wipe the desk in the living room using the dishcloth.", "cost": {"home": 3, "exhome": 3},
         "item_keep": ["dishcloth", "desk"],
         "subgoal": ["Pick the dishcloth", "Wipe the desk"],
-        "subgoal_pddl": ["(:goal (and (clean_desk livingroom)))"],
-        "env_state": ["clean_desk(livingroom): the desk is clean."]
+        "subgoal_pddl": ["(:goal (and (clean_desk desk)))"],
+        "env_state": ["clean_desk(desk): the desk is clean."]
     },
     "Turnonswitch": {
         "scene": ["home", "exhome"], "add_obj": None,

@@ -7,83 +7,116 @@ To place the water bottle, I simply pick it up in the kitchen and carry it to th
 
 Domain file:
 (define (domain housework)
-  (:requirements :strips :typing :durative-actions)
-  (:types robot room object appliance)
-  
-  (:predicates
-    (at ?r - robot ?rm - room)
-    (at ?o - object ?loc - (either room appliance))
-    (on ?a - appliance)
-    (wiped ?loc - room)
-    (charged ?o - object)
-  )
-  
-  (:action goto
-    :parameters (?r - robot ?from ?to - room)
-    :precondition (at ?r ?from)
-    :effect (and (not (at ?r ?from)) (at ?r ?to))
-  )
-  
-  (:action pick
-    :parameters (?r - robot ?o - object ?loc - (either room appliance))
-    :precondition (and (at ?r ?loc) (at ?o ?loc))
-    :effect (not (at ?o ?loc))
-  )
-  
-  (:action place
-    :parameters (?r - robot ?o - object ?loc - (either room appliance))
-    :precondition (at ?r ?loc)
-    :effect (at ?o ?loc)
-  )
-  
-  (:action turnOn
-    :parameters (?r - robot ?a - appliance ?rm - room)
-    :precondition (and (at ?r ?rm) (at ?a ?rm))
-    :effect (on ?a)
-  )
-  
-  (:action turnOff
-    :parameters (?r - robot ?a - appliance ?rm - room)
-    :precondition (and (at ?r ?rm) (at ?a ?rm) (on ?a))
-    :effect (not (on ?a))
-  )
-  
-  (:action wipe
-    :parameters (?r - robot ?w - object ?loc - room)
-    :precondition (and (at ?r ?loc) (at ?w ?loc))
-    :effect (wiped ?loc)
-  )
-  
-  (:durative-action wait
-    :parameters (?r - robot ?o - object ?a - appliance ?loc - room)
-    :condition (and (over all (at ?r ?loc))
-                    (over all (at ?o ?loc))
-                    (over all (on ?a)))
-    :effect (at end (charged ?o))
-  )
+    (:requirements :strips :typing)
+    (:types agent room item appliance desk)
+    (:predicates
+        (agent_at ?a - agent ?r - room)
+        (agent_hand_free ?a - agent)
+        (agent_has_item ?a - agent ?i - item)
+
+        (at ?i - item ?loc - (either room appliance desk))
+
+        (ap_at ?ap - appliance ?r - room)
+        (on ?ap - appliance)
+
+        (clean_desk ?d - desk)
+        (charged ?i - item)
+    )
+    (:action goto
+        :parameters (?a - agent ?from - room ?to - room)
+        :precondition (agent_at ?a ?from)
+        :effect (and
+            (not (agent_at ?a ?from))
+            (agent_at ?a ?to)
+        )
+    )
+    (:action pick
+        :parameters (?a - agent ?i - item ?loc - (either room appliance desk))
+        :precondition (and
+            (agent_hand_free ?a)
+            (at ?i ?loc)
+        )
+        :effect (and
+            (not (at ?i ?loc))
+            (not (agent_hand_free ?a))
+            (agent_has_item ?a ?i)
+        )
+    )
+    (:action place
+        :parameters (?a - agent ?i - item ?loc - (either room appliance desk))
+        :precondition (and
+            (agent_has_item ?a ?i)
+            (not (at ?i ?loc))
+        )
+        :effect (and
+            (at ?i ?loc)
+            (agent_hand_free ?a)
+            (not (agent_has_item ?a ?i))
+        )
+    )
+    (:action turn_on
+        :parameters (?a - agent ?ap - appliance ?r - room)
+        :precondition (and
+            (agent_at ?a ?r)
+            (ap_at ?ap ?r)
+            (not (on ?ap))
+        )
+        :effect (on ?ap)
+    )
+    (:action turn_off
+        :parameters (?a - agent ?ap - appliance ?r - room)
+        :precondition (and
+            (agent_at ?a ?r)
+            (ap_at ?ap ?r)
+            (on ?ap)
+        )
+        :effect (not (on ?ap))
+    )
+    (:action wipe
+      :parameters (?a - agent ?i - item ?r - room ?d - desk)
+      :precondition (and (agent_at ?a ?r) (at ?i ?r))
+      :effect (clean_desk ?d)
+    )
+    (:action wait_charge_phone
+        :parameters (?a - agent ?i - item ?ap - appliance ?r - room)
+        :precondition (and
+            (agent_at ?a ?r)
+            (ap_at ?ap ?r)
+            (at ?i ?ap)
+            (on ?ap)
+            (not (charged ?i))
+        )
+        :effect (and
+            (charged ?i)
+        )
+    )
 )
 
 Problem file:
 (define (problem doing_housework)
-  (:domain housework)
-  (:objects
-    robot1 - robot
-    kitchen bathroom bedroom livingroom - room
-    charger desk - appliance
-    dishcloth phone water_bottle - object
-  )
-  (:init
-    (at robot1 bedroom)
-    (at dishcloth livingroom)
-    (at phone bedroom)
-    (at charger bedroom)
-    (at water_bottle kitchen)
-    (at desk livingroom)
-    (not (on charger))
-  )
-  (:goal (and
-    (wiped desk)
-    (charged phone)
-    (at water_bottle desk)
-  ))
+    (:domain housework)
+    (:objects
+        robot1 - agent
+        kitchen bathroom bedroom livingroom - room
+        charger - appliance
+        dishcloth phone water_bottle - item
+        desk - desk
+    )
+    (:init
+        (agent_at robot1 bedroom)
+        (agent_hand_free robot1)
+
+        (at dishcloth livingroom)
+        (at phone bedroom)
+        (at water_bottle kitchen)
+        (at desk livingroom)
+
+        (ap_at charger bedroom)
+        (not (on charger))
+    )
+    (:goal (and
+        (clean_desk desk)
+        (charged phone)
+        (at water_bottle desk)
+    ))
 )

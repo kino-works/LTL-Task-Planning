@@ -1,81 +1,115 @@
 Domain file:
 (define (domain housework)
-  (:requirements :strips :typing :durative-actions)
-  (:types robot room object appliance)
-  
-  (:predicates
-    (at ?r - robot ?rm - room)
-    (at ?o - object ?loc - (either room appliance))
-    (on ?a - appliance)
-    (heated ?o - object)
-    (stored ?o - object)
-  )
-  
-  (:action goto
-    :parameters (?r - robot ?from ?to - room)
-    :precondition (at ?r ?from)
-    :effect (and (not (at ?r ?from)) (at ?r ?to))
-  )
-  
-  (:action pick
-    :parameters (?r - robot ?o - object ?loc - (either room appliance))
-    :precondition (and (at ?r ?loc) (at ?o ?loc))
-    :effect (not (at ?o ?loc))
-  )
-  
-  (:action place
-    :parameters (?r - robot ?o - object ?loc - (either room appliance))
-    :precondition (at ?r ?loc)
-    :effect (at ?o ?loc)
-  )
-  
-  (:action turnOn
-    :parameters (?r - robot ?a - appliance ?rm - room)
-    :precondition (and (at ?r ?rm) (at ?a ?rm))
-    :effect (on ?a)
-  )
-  
-  (:action turnOff
-    :parameters (?r - robot ?a - appliance ?rm - room)
-    :precondition (and (at ?r ?rm) (at ?a ?rm) (on ?a))
-    :effect (not (on ?a))
-  )
-  
-  (:durative-action wait
-    :parameters (?r - robot ?o - object ?a - appliance ?loc - room)
-    :condition (and (over all (at ?r ?loc))
-                    (over all (at ?o ?loc))
-                    (over all (on ?a)))
-    :effect (at end (heated ?o))
-  )
+    (:requirements :strips :typing)
+    (:types agent room item appliance desk)
+    (:predicates
+          (agent_at ?a - agent ?r - room)
+          (agent_hand_free ?a - agent)
+          (agent_has_item ?a - agent ?i - item)
+
+          (at ?i - item ?loc - (either room appliance desk))
+
+          (ap_at ?ap - appliance ?r - room)
+          (on ?ap - appliance)
+
+          (heated ?i - item)
+    )
+    (:action goto
+        :parameters (?a - agent ?from - room ?to - room)
+        :precondition (agent_at ?a ?from)
+        :effect (and
+            (not (agent_at ?a ?from))
+            (agent_at ?a ?to)
+        )
+    )
+    (:action pick
+        :parameters (?a - agent ?i - item ?loc - (either room appliance desk))
+        :precondition (and
+            (agent_hand_free ?a)
+            (at ?i ?loc)
+        )
+        :effect (and
+            (not (at ?i ?loc))
+            (not (agent_hand_free ?a))
+            (agent_has_item ?a ?i)
+        )
+    )
+    (:action place
+        :parameters (?a - agent ?i - item ?loc - (either room appliance desk))
+        :precondition (and
+            (agent_has_item ?a ?i)
+            (not (at ?i ?loc))
+        )
+        :effect (and
+            (at ?i ?loc)
+            (agent_hand_free ?a)
+            (not (agent_has_item ?a ?i))
+        )
+    )
+    (:action turn_on
+        :parameters (?a - agent ?ap - appliance ?r - room)
+        :precondition (and
+            (agent_at ?a ?r)
+            (ap_at ?ap ?r)
+            (not (on ?ap))
+        )
+        :effect (on ?ap)
+    )
+    (:action turn_off
+        :parameters (?a - agent ?ap - appliance ?r - room)
+        :precondition (and
+            (agent_at ?a ?r)
+            (ap_at ?ap ?r)
+            (on ?ap)
+        )
+        :effect (not (on ?ap))
+    )
+    (:action wait_heat_food
+        :parameters (?a - agent ?i - item ?ap - appliance ?r - room)
+        :precondition (and
+            (agent_at ?a ?r)
+            (ap_at ?ap ?r)
+            (at ?i ?ap)
+            (on ?ap)
+            (not (heated ?i))
+        )
+        :effect (and
+            (heated ?i)
+        )
+    )
 )
 
 Problem file:
 (define (problem doing_housework)
-  (:domain housework)
-  (:objects
-    robot1 - robot
-    kitchen bedroom livingroom - room
-    microwave - appliance
-    desk - appliance
-    food water_bottle eggs egg_container - object
-  )
-  (:init
-    (at robot1 bedroom)
-    (at food kitchen)
-    (at water_bottle kitchen)
-    (at eggs kitchen)
-    (at egg_container kitchen)
-    (at microwave kitchen)
-    (at desk livingroom)
-    (not (on microwave))
-  )
-  (:goal (and
-    (heated food)
-    (at food desk)
-    (at water_bottle desk)
-    (stored eggs)
-  ))
+    (:domain housework)
+    (:objects
+        robot1 - agent
+        kitchen bathroom bedroom livingroom - room
+        microwave egg_container - appliance
+        food water_bottle eggs - item
+        desk - desk
+    )
+    (:init
+        (agent_at robot1 bedroom)
+        (agent_hand_free robot1)
+
+        (at food kitchen)
+        (at water_bottle kitchen)
+        (at eggs kitchen)
+        (at desk livingroom)
+
+        (ap_at egg_container kitchen)
+        (ap_at microwave kitchen)
+
+        (not (on microwave))
+        (not (on egg_container))
+    )
+    (:goal (and
+        (heated food)
+        (at food desk)
+        (at water_bottle desk)
+        (at eggs egg_container)
+    ))
 )
 
 Action Sequence :
@@ -83,46 +117,46 @@ Step 1:
 robot1 is now in the bedroom.
 (at food kitchen) with goal (heated food) and (at food desk)
 (at water_bottle kitchen) with goal (at water_bottle desk)
-(at eggs kitchen) with goal (stored eggs)
+(at eggs kitchen) with goal (at eggs egg_container)
 food is unsatisfied, water_bottle is unsatisfied, eggs is unsatisfied.
 Go to complete food:
-(goto kitchen)
-(pick food)
-(place food microwave)
-(turnOn microwave)
-(wait 3)
-(turnOff microwave)
-(pick food microwave)
-(goto livingroom)
-(place food desk)
+(goto robot1 bedroom kitchen)
+(pick robot1 food kitchen)
+(place robot1 food microwave)
+(turn_on robot1 microwave kitchen)
+(wait_heat_food robot1 food microwave kitchen)
+(turn_off robot1 microwave kitchen)
+(pick robot1 food microwave)
+(goto robot1 kitchen livingroom)
+(place robot1 food desk)
 
 Step 2:
 robot1 is now in the livingroom.
 (at food desk) with goal (at food desk), (heated food) already satisfied
 (at water_bottle kitchen) with goal (at water_bottle desk)
-(at eggs kitchen) with goal (stored eggs)
+(at eggs kitchen) with goal (at eggs egg_container)
 food is satisfied, water_bottle is unsatisfied, eggs is unsatisfied.
 Go to complete water_bottle:
-(goto kitchen)
-(pick water_bottle)
-(goto livingroom)
-(place water_bottle desk)
+(goto livingroom kitchen)
+(pick robot1 water_bottle kitchen)
+(goto robot1 kitchen livingroom)
+(place robot1 water_bottle desk)
 
 Step 3:
 robot1 is now in the livingroom.
 (at food desk) with goal (at food desk)
 (at water_bottle desk) with goal (at water_bottle desk)
-(at eggs kitchen) with goal (stored eggs)
+(at eggs kitchen) with goal (at eggs egg_container)
 food and water_bottle are satisfied, eggs is unsatisfied.
 Go to complete eggs:
-(goto kitchen)
-(pick eggs)
-(place eggs egg_container)
+(goto robot1 livingroom kitchen)
+(pick robot1 eggs kitchen)
+(place robot1 eggs egg_container)
 
 Step 4:
 robot1 is now in the kitchen.
 (at food desk) with goal (at food desk)
 (at water_bottle desk) with goal (at water_bottle desk)
-(at eggs egg_container) with goal (stored eggs)
+(at eggs egg_container) with goal (at eggs egg_container)
 food is satisfied, water_bottle is satisfied, eggs is satisfied.
 All objects are satisfied.

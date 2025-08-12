@@ -11,46 +11,46 @@ Step 1:
 robot1 is now in the bedroom.
 (at food kitchen) with goal (heated food) and (at food desk)
 (at water_bottle kitchen) with goal (at water_bottle desk)
-(at eggs kitchen) with goal (stored eggs)
+(at eggs kitchen) with goal (at eggs egg_container)
 food is unsatisfied, water_bottle is unsatisfied, eggs is unsatisfied.
 Go to complete food:
-(goto kitchen)
-(pick food)
-(place food microwave)
-(turnOn microwave)
-(wait 3)
-(turnOff microwave)
-(pick food microwave)
-(goto livingroom)
-(place food desk)
+(goto robot1 bedroom kitchen)
+(pick robot1 food kitchen)
+(place robot1 food microwave)
+(turn_on robot1 microwave kitchen)
+(wait_heat_food robot1 food microwave kitchen)
+(turn_off robot1 microwave kitchen)
+(pick robot1 food microwave)
+(goto robot1 kitchen livingroom)
+(place robot1 food desk)
 
 Step 2:
 robot1 is now in the livingroom.
 (at food desk) with goal (at food desk), (heated food) already satisfied
 (at water_bottle kitchen) with goal (at water_bottle desk)
-(at eggs kitchen) with goal (stored eggs)
+(at eggs kitchen) with goal (at eggs egg_container)
 food is satisfied, water_bottle is unsatisfied, eggs is unsatisfied.
 Go to complete water_bottle:
-(goto kitchen)
-(pick water_bottle)
-(goto livingroom)
-(place water_bottle desk)
+(goto livingroom kitchen)
+(pick robot1 water_bottle kitchen)
+(goto robot1 kitchen livingroom)
+(place robot1 water_bottle desk)
 
 Step 3:
 robot1 is now in the livingroom.
 (at food desk) with goal (at food desk)
 (at water_bottle desk) with goal (at water_bottle desk)
-(at eggs kitchen) with goal (stored eggs)
+(at eggs kitchen) with goal (at eggs egg_container)
 food and water_bottle are satisfied, eggs is unsatisfied.
 Go to complete eggs:
-(goto kitchen)
-(pick eggs)
-(place eggs egg_container)
+(goto robot1 livingroom kitchen)
+(pick robot1 eggs kitchen)
+(place robot1 eggs egg_container)
 
 Step 4:
 robot1 is now in the kitchen.
 (at food desk) with goal (at food desk)
 (at water_bottle desk) with goal (at water_bottle desk)
-(at eggs egg_container) with goal (stored eggs)
+(at eggs egg_container) with goal (at eggs egg_container)
 food is satisfied, water_bottle is satisfied, eggs is satisfied.
 All objects are satisfied.

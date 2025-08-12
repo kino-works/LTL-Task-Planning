@@ -8,31 +8,31 @@ To place the water bottle, I simply pick it up in the kitchen and carry it to th
 Action Sequence :
 Step 1:
 robot1 is now in the bedroom.
-(at dishcloth livingroom) with goal (wiped desk)
+(at dishcloth livingroom) with goal (clean_desk desk)
 (at phone bedroom)   with goal (charged phone)
 (at water_bottle kitchen) with goal (at water_bottle desk)
 dishcloth is unsatisfied, phone is unsatisfied, water_bottle is unsatisfied.
 Go to complete wipe(desk):
-(goto livingroom)
-(pick dishcloth)
-(wipe dishcloth desk)
+(goto robot1 bedroom livingroom)
+(pick robot1 dishcloth livingroom)
+(wipe robot1 dishcloth livingroom desk)
 
 Step 2:
 robot1 is now in the livingroom.
-(at dishcloth livingroom) with goal (wiped desk)
+(at dishcloth livingroom) with goal (clean_desk desk)
 (at phone bedroom)   with goal (charged phone)
 (at water_bottle kitchen) with goal (at water_bottle desk)
 wipe is satisfied, phone is unsatisfied, water_bottle is unsatisfied.
 Go to complete charge(phone):
-(goto bedroom)
-(pick phone)
-(place phone charger)
-(turnOn charger)
-(wait 10)
-(turnOff charger)
-(pick phone charger)
-(goto livingroom)
-(place phone desk)
+(goto robot1 livingroom bedroom)
+(pick robot1 phone bedroom)
+(place robot1 phone charger)
+(turn_on robot1 charger bedroom)
+(wait_charge_phone robot1 phone charger bedroom)
+(turn_off robot1 charger bedroom)
+(pick robot1 phone charger)
+(goto robot1 bedroom livingroom)
+(place robot1 phone desk)
 
 Step 3:
 robot1 is now in the livingroom.
@@ -40,15 +40,15 @@ robot1 is now in the livingroom.
 (at water_bottle kitchen) with goal (at water_bottle desk)
 charged(phone) is satisfied, water_bottle is unsatisfied.
 Go to complete place(water_bottle, desk):
-(goto kitchen)
-(pick water_bottle)
-(goto livingroom)
-(place water_bottle)
+(goto robot1 livingroom kitchen)
+(pick robot1 water_bottle kitchen)
+(goto robot1 kitchen livingroom)
+(place robot1 water_bottle desk)
 
 Step 4:
 robot1 is now in the livingroom.
-(at dishcloth livingroom) with goal (wiped desk)
+(at dishcloth livingroom) with goal (clean_desk desk)
 (at phone desk) with goal (charged phone)
 (at water_bottle desk) with goal (at water_bottle desk)
-wiped(desk) is satisfied, charged(phone) is satisfied, water_bottle is satisfied.
+(clean_desk desk) is satisfied, charged(phone) is satisfied, water_bottle is satisfied.
 All objects are satisfied.
