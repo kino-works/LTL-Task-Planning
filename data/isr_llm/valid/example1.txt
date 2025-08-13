@@ -47,7 +47,7 @@ Initial state:
 (ap_at egg_container kitchen),
 (ap_at microwave kitchen),
 (not (on microwave)),
-(not (on egg_container)),
+(not (on egg_container))
 
 (goto robot1 bedroom kitchen): robot1 moves to kitchen
 (pick robot1 food kitchen): robot1 picks up the food

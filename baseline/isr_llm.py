@@ -56,22 +56,11 @@ def run_isr_llm(
             f.write(description + "\n")
 
         # 2) Translator → planning problem
-        # response_translator = translator.query(description, is_append=False)
-        # planning_problem = response_translator
-
-        # ▼ Translator.query가 "문자열"을 반환하게 고쳤는지 확인
         resp_txt = translator.query(description, is_append=False)  # resp_txt: str
-
-        # print("----TRANSLATOR OUT BEGIN----")
-        # print(repr(resp_txt[:1000]))   # repr로 특수문자 확인
-        # print("----TRANSLATOR OUT END----", flush=True)
-
         planning_problem = resp_txt
-
         
         # Extract init/goal for validator prompt
         pddl_init_state, pddl_goal_state = extract_state_pddl(planning_problem, domain="household")
-        # print(planning_problem[:800]) 디버깅
 
         # 3) Refinement loop
         for j in range(max_num_refine + 1):

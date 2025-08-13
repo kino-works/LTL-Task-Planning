@@ -110,7 +110,6 @@ def build_goal_predicates(max_goals: int) -> List[str]:
 
     pool = GOAL_POOL_NO_PARAM.copy()
 
-    # switch goals 여러 번 추가
     def switch_goal():
         room = random.choice(ROOMS)
         if random.random() < 0.5:

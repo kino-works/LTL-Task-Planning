@@ -1,248 +1,248 @@
 Question:
 Initial state:
-(at robot1 bedroom)
-(at bread)
+(agent_at robot1 bedroom)
+(agent_hand_free robot1)
+(at bread kitchen)
 (at cup_ramen kitchen)
 (at kettle kitchen)
-(at toaster kitchen)
-(at stove kitchen)
-(at water_dispenser kitchen)
 (at desk livingroom)
+(ap_at toaster kitchen)
+(ap_at stove kitchen)
+(ap_at water_dispenser kitchen)
 (not (on toaster))
 (not (on stove))
 (not (on water_dispenser))
 
 Goal state:
 (cooked bread)
-(boiled kettle)
-(cooked cup_ramen)
 (at bread desk)
+(boiled kettle)
 (at kettle desk)
+(cooked cup_ramen)
 (at cup_ramen desk)
 
 Examined action sequence:
-(goto kitchen)
-(pick bread)
-(place bread toaster)
-(turnOn toaster)
-(wait 3)
-(turnOff toaster)
-(pick bread toaster)
-(goto livingroom)
-(place bread desk)
-(goto kitchen)
-(pick kettle)
-(place kettle stove)
-(turnOn stove)
-(wait 5)
-(turnOff stove)
-(pick kettle stove)
-(goto livingroom)
-(place kettle desk)
-(goto kitchen)
-(pick cup_ramen)
-(place cup_ramen water_dispenser)
-(turnOn water_dispenser)
-(wait 3)
-(turnOff water_dispenser)
-(pick cup_ramen water_dispenser)
-(goto livingroom)
-(place cup_ramen desk)
+(goto robot1 bedroom kitchen)
+(pick robot1 bread kitchen)
+(place robot1 bread toaster)
+(turn_on robot1 toaster kitchen)
+(wait_cook_bread robot1 bread toaster kitchen)
+(turn_off robot1 toaster kitchen)
+(pick robot1 bread toaster)
+(goto robot1 kitchen livingroom)
+(place robot1 bread desk)
+(goto robot1 livingroom kitchen)
+(pick robot1 kettle kitchen)
+(place robot1 kettle stove)
+(turn_on robot1 stove kitchen)
+(wait_boil_water robot1 kettle stove kitchen)
+(turn_off robot1 stove kitchen)
+(pick robot1 kettle stove)
+(goto robot1 kitchen livingroom)
+(place robot1 kettle desk)
+(goto robot1 livingroom kitchen)
+(pick robot1 cup_ramen kitchen)
+(place robot1 cup_ramen water_dispenser)
+(turn_on robot1 water_dispenser kitchen)
+(wait_cook_ramen robot1 cup_ramen water_dispenser kitchen)
+(turn_off robot1 water_dispenser kitchen)
+(pick robot1 cup_ramen water_dispenser)
+(goto robot1 kitchen livingroom)
+(place robot1 cup_ramen desk)
 
 Answer:
 Analysis:
 Initial state:
-(at robot1 bedroom),
-(at bread),
+(agent_at robot1 bedroom),
+(agent_hand_free robot1),
+(at bread kitchen),
 (at cup_ramen kitchen),
 (at kettle kitchen),
-(at toaster kitchen),
-(at stove kitchen),
-(at water_dispenser kitchen),
 (at desk livingroom),
+(ap_at toaster kitchen),
+(ap_at stove kitchen),
+(ap_at water_dispenser kitchen),
 (not (on toaster)),
 (not (on stove)),
 (not (on water_dispenser))
 
-(goto kitchen)
-Resulting state: (at robot1 kitchen), (other objects unchanged)
-Inverse action: (goto bedroom)
-Inversed state: (at robot1 bedroom), (other objects unchanged)
+(goto robot1 bedroom kitchen)
+Resulting state: (agent_at robot1 kitchen), (other objects unchanged)
+Inverse action: (goto robot1 kitchen bedroom)
+Inversed state: (agent_at robot1 bedroom), (other objects unchanged)
 Difference: none
 inversed state is the same as resulting state, action is correct
 
-(pick bread)
-Resulting state: (at robot1 kitchen), (arm-bread), (other objects unchanged)
-Inverse action: (place bread)
-Inversed state: (at robot1 kitchen), (at bread kitchen)
+(pick robot1 bread kitchen)
+Resulting state: (agent_at robot1 kitchen), (agent_has_item robot1 bread), (other objects unchanged)
+Inverse action: (place robot1 bread kitchen)
+Inversed state: (agent_at robot1 kitchen), (at bread kitchen), (agent_hand_free robot1), (other objects unchanged)
 Difference: none
 inversed state is the same as resulting state, action is correct
 
-(place bread toaster)
-Resulting state: (at bread toaster)
-Inverse action: (pick bread toaster)
-Inversed state: (arm-bread), toaster unchanged
+(place robot1 bread toaster)
+Resulting state: (agent_at robot1 kitchen), (at bread toaster), (agent_hand_free robot1), (other objects unchanged)
+Inverse action: (pick robot1 bread toaster)
+Inversed state: (agent_at robot1 kitchen), (agent_has_item robot1 bread), (not (at bread toaster)) (other objects unchanged)
 Difference: none
 inversed state is the same as resulting state, action is correct
 
-(turnOn toaster)
-Resulting state: (on toaster)
-Inverse action: (turnOff toaster)
-Inversed state: (not (on toaster))
+(turn_on robot1 toaster kitchen)
+Resulting state: (agent_at robot1 kitchen), (at bread toaster), (on toaster)
+Inverse action: (turn_off robot1 toaster kitchen)
+Inversed state: (agent_at robot1 kitchen),  (at bread toaster), (not (on toster))
 Difference: none
 inversed state is the same as resulting state, action is correct
 
-(wait 3)
+(wait_cook_bread robot1 bread toaster kitchen)
 effect applied successfully, action is correct
 
-(turnOff toaster)
-Resulting state: (not (on toaster))
-Inverse action: (turnOn toaster)
-Inversed state: (on toaster)
+(turn_off robot1 toaster kitchen)
+Resulting state: (agent_at robot1 kitchen), (at bread toaster), (not (on toster))
+Inverse action: (turn_on robot1 toaster kitchen)
+Inversed state: (agent_at robot1 kitchen), (at bread toaster), (on toaster)
 Difference: none
 inversed state is the same as resulting state, action is correct
 
-(pick bread toaster)
-Resulting state: (arm-bread)
-Note: bread assumed moved back to kitchen after cooking
-Inverse action: (place bread)
-Inversed state: (at bread kitchen)
+(pick robot1 bread toaster)
+Resulting state: (agent_at robot1 kitchen), (agent_has_item robot1 bread), (not (at bread toaster)), (other objects unchanged)
+Inverse action: (place robot1 bread toaster)
+Inversed state: (agent_at robot1 kitchen), (at bread toaster), (agent_hand_free robot1), (other objects unchanged)
 Difference: none
 inversed state is the same as resulting state, action is correct
 
-(goto livingroom)
-Resulting state: (at robot1 livingroom)
-Inverse action: (goto kitchen)
-Inversed state: (at robot1 kitchen)
+(goto robot1 kitchen livingroom)
+Resulting state: (agent_at robot1 livingroom), (agent_has_item robot1 bread), (other objects unchanged)
+Inverse action: (goto robot1 livingroom kitchen)
+Inversed state: (agent_at robot1 kitchen), (agent_has_item robot1 bread), (other objects unchanged)
 Difference: none
 inversed state is the same as resulting state, action is correct
 
-(place bread desk)
-Resulting state: (at bread desk)
-Inverse action: (pick bread desk)
-Inversed state: (arm-bread)
+(place robot1 bread desk)
+Resulting state: (agent_at robot1 livingroom), (agent_hand_free robot1), (at bread desk)
+Inverse action: (pick robot1 bread desk)
+Inversed state: (agent_at robot1 livingroom), (agent_has_item robot1 bread), (not (at bread desk)), (other objects unchanged)
 Difference: none
 inversed state is the same as resulting state, action is correct
 
-(goto kitchen)
-Resulting state: (at robot1 kitchen)
-Inverse action: (goto livingroom)
-Inversed state: (at robot1 livingroom)
+(goto robot1 livingroom kitchen)
+Resulting state: (agent_at robot1 kitchen), (agent_hand_free robot1), (other objects unchanged)
+Inverse action: (goto robot1 kitchen livingroom)
+Inversed state: (agent_at robot1 livingroom), (agent_hand_free robot1), (other objects unchanged)
 Difference: none
 inversed state is the same as resulting state, action is correct
 
-(pick kettle)
-Resulting state: (arm-kettle)
-Inverse action: (place kettle)
-Inversed state: (at kettle kitchen)
+(pick robot1 kettle kitchen)
+Resulting state: (agent_at robot1 kitchen), (agent_has_item robot1 kettle), (other objects unchanged)
+Inverse action: (place robot1 kettle kitchen)
+Inversed state: (agent_at robot1 kitchen), (at kettle kitchen), (agent_hand_free robot1), (other objects unchanged)
 Difference: none
 inversed state is the same as resulting state, action is correct
 
-(place kettle stove)
-Resulting state: (at kettle stove)
-Inverse action: (pick kettle stove)
-Inversed state: (arm-kettle)
+(place robot1 kettle stove)
+Resulting state: (agent_at robot1 kitchen), (at kettle stove), (agent_hand_free robot1), (other objects unchanged)
+Inverse action: (pick robot1 kettle stove)
+Inversed state: (agent_at robot1 kitchen), (agent_has_item robot1 kettle), (not (at kettle stove)) (other objects unchanged)
 Difference: none
 inversed state is the same as resulting state, action is correct
 
-(turnOn stove)
-Resulting state: (on stove)
-Inverse action: (turnOff stove)
-Inversed state: (not (on stove))
+(turn_on robot1 stove kitchen)
+Resulting state: (agent_at robot1 kitchen), (at kettle stove), (on stove)
+Inverse action: (turn_off robot1 stove kitchen)
+Inversed state: (agent_at robot1 kitchen),  (at kettle stove), (not (on toster))
 Difference: none
 inversed state is the same as resulting state, action is correct
 
-(wait 5)
+(wait_boil_water robot1 kettle stove kitchen)
 effect applied successfully, action is correct
 
-(turnOff stove)
-Resulting state: (not (on stove))
-Inverse action: (turnOn stove)
-Inversed state: (on stove)
+(turn_off robot1 stove kitchen)
+Resulting state: (agent_at robot1 kitchen), (at kettle stove), (not (on toster))
+Inverse action: (turn_on robot1 stove kitchen)
+Inversed state: (agent_at robot1 kitchen), (at kettle stove), (on stove)
 Difference: none
 inversed state is the same as resulting state, action is correct
 
-(pick kettle stove)
-Resulting state: (arm-kettle)
-Note: kettle assumed returned to kitchen location from stove
-Inverse action: (place kettle stove)
-Inversed state: (at kettle kitchen)
+(pick robot1 kettle stove)
+Resulting state: (agent_at robot1 kitchen), (agent_has_item robot1 kettle), (not (at kettle stove)), (other objects unchanged)
+Inverse action: (place robot1 kettle stove)
+Inversed state: (agent_at robot1 kitchen), (at kettle stove), (agent_hand_free robot1), (other objects unchanged)
 Difference: none
 inversed state is the same as resulting state, action is correct
 
-(goto livingroom)
-Resulting state: (at robot1 livingroom)
-Inverse action: (goto kitchen)
-Inversed state: (at robot1 kitchen)
+(goto robot1 kitchen livingroom)
+Resulting state: (agent_at robot1 livingroom), (agent_has_item robot1 kettle), (other objects unchanged)
+Inverse action: (goto robot1 livingroom kitchen)
+Inversed state: (agent_at robot1 kitchen), (agent_has_item robot1 kettle), (other objects unchanged)
 Difference: none
 inversed state is the same as resulting state, action is correct
 
-(place kettle desk)
-Resulting state: (at kettle desk)
-Inverse action: (pick kettle desk)
-Inversed state: (arm-kettle)
+(place robot1 kettle desk)
+Resulting state: (agent_at robot1 livingroom), (agent_hand_free robot1), (at kettle desk)
+Inverse action: (pick robot1 kettle desk)
+Inversed state: (agent_at robot1 livingroom), (agent_has_item robot1 kettle), (not (at kettle desk)), (other objects unchanged)
 Difference: none
 inversed state is the same as resulting state, action is correct
 
-(goto kitchen)
-Resulting state: (at robot1 kitchen)
-Inverse action: (goto livingroom)
-Inversed state: (at robot1 livingroom)
+(goto robot1 livingroom kitchen)
+Resulting state: (agent_at robot1 kitchen), (agent_hand_free robot1), (other objects unchanged)
+Inverse action: (goto robot1 kitchen livingroom)
+Inversed state: (agent_at robot1 livingroom), (agent_hand_free robot1), (other objects unchanged)
 Difference: none
 inversed state is the same as resulting state, action is correct
 
-(pick cup_ramen)
-Resulting state: (arm-cup_ramen)
-Inverse action: (place cup_ramen)
-Inversed state: (at cup_ramen kitchen)
+(pick robot1 cup_ramen kitchen)
+Resulting state: (agent_at robot1 kitchen), (agent_has_item robot1 cup_ramen), (other objects unchanged)
+Inverse action: (place robot1 cup_ramen kitchen)
+Inversed state: (agent_at robot1 kitchen), (at cup_ramen kitchen), (agent_hand_free robot1), (other objects unchanged)
 Difference: none
 inversed state is the same as resulting state, action is correct
 
-(place cup_ramen water_dispenser)
-Resulting state: (at cup_ramen water_dispenser)
-Inverse action: (pick cup_ramen water_dispenser)
-Inversed state: (arm-cup_ramen)
+(place robot1 cup_ramen water_dispenser)
+Resulting state: (agent_at robot1 kitchen), (at cup_ramen water_dispenser), (agent_hand_free robot1), (other objects unchanged)
+Inverse action: (pick robot1 cup_ramen water_dispenser)
+Inversed state: (agent_at robot1 kitchen), (agent_has_item robot1 cup_ramen), (not (at cup_ramen water_dispenser)), (other objects unchanged)
 Difference: none
 inversed state is the same as resulting state, action is correct
 
-(turnOn water_dispenser)
-Resulting state: (on water_dispenser)
-Inverse action: (turnOff water_dispenser)
-Inversed state: (not (on water_dispenser))
+(turn_on robot1 water_dispenser kitchen)
+Resulting state: (agent_at robot1 kitchen), (at cup_ramen water_dispenser), (on water_dispenser)
+Inverse action: (turn_off robot1 water_dispenser kitchen)
+Inversed state: (agent_at robot1 kitchen), (at cup_ramen water_dispenser), (not (on water_dispenser))
 Difference: none
 inversed state is the same as resulting state, action is correct
 
-(wait 3)
+(wait_cook_ramen robot1 cup_ramen water_dispenser kitchen)
 effect applied successfully, action is correct
 
-(turnOff water_dispenser)
-Resulting state: (not (on water_dispenser))
-Inverse action: (turnOn water_dispenser)
-Inversed state: (on water_dispenser)
+(turn_off robot1 water_dispenser kitchen)
+Resulting state: (agent_at robot1 kitchen), (at cup_ramen water_dispenser), (not (on water_dispenser))
+Inverse action: (turn_on robot1 water_dispenser kitchen)
+Inversed state: (agent_at robot1 kitchen), (at cup_ramen water_dispenser), (on water_dispenser)
 Difference: none
 inversed state is the same as resulting state, action is correct
 
-(pick cup_ramen water_dispenser)
-Resulting state: (arm-cup_ramen)
-Note: cup_ramen assumed returned to kitchen from water_dispenser
-Inverse action: (place cup_ramen)
-Inversed state: (at cup_ramen kitchen)
+(pick robot1 cup_ramen water_dispenser)
+Resulting state: (agent_at robot1 kitchen), (agent_has_item robot1 cup_ramen), (not (at cup_ramen water_dispenser)), (other objects unchanged)
+Inverse action: (place robot1 cup_ramen water_dispenser)
+Inversed state: (agent_at robot1 kitchen), (at cup_ramen water_dispenser), (agent_hand_free robot1), (other objects unchanged)
 Difference: none
 inversed state is the same as resulting state, action is correct
 
-(goto livingroom)
-Resulting state: (at robot1 livingroom)
-Inverse action: (goto kitchen)
-Inversed state: (at robot1 kitchen)
+(goto robot1 kitchen livingroom)
+Resulting state: (agent_at robot1 livingroom), (agent_has_item robot1 cup_ramen), (other objects unchanged)
+Inverse action: (goto robot1 livingroom kitchen)
+Inversed state: (agent_at robot1 kitchen), (agent_has_item robot1 cup_ramen), (other objects unchanged)
 Difference: none
 inversed state is the same as resulting state, action is correct
 
-(place cup_ramen desk)
-Resulting state: (at cup_ramen desk)
-Inverse action: (pick cup_ramen)
-Inversed state: (arm-cup_ramen)
+(place robot1 cup_ramen desk)
+Resulting state: (agent_at robot1 livingroom), (agent_hand_free robot1), (at cup_ramen desk)
+Inverse action: (pick robot1 cup_ramen desk)
+Inversed state: (agent_at robot1 livingroom), (agent_has_item robot1 cup_ramen), (not (at cup_ramen desk)), (other objects unchanged)
 Difference: none
 inversed state is the same as resulting state, action is correct
+
 
 Final answer:
 Yes, the action sequence is correct, it can accomplish the task.

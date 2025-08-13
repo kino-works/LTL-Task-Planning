@@ -78,14 +78,12 @@ class HouseholdSim(object):
                 return False, "Pick takes one or two parameters."
             loc = self.object_locations.get(obj)
             if container:
-                # container에 들어있는 obj 집기
                 if container not in self.container_defs:
                     return False, f"Unknown container '{container}'."
                 if loc != container:
                     return False, f"{obj} not in container {container}."
                 self.container_contents[container].remove(obj)
             else:
-                # 같은 방에 있는 obj만 집기
                 if loc != self.robot_room:
                     return False, f"{obj} not in room {self.robot_room}."
             self.holding = obj
@@ -107,7 +105,6 @@ class HouseholdSim(object):
             if container:
                 if container not in self.container_defs:
                     return False, f"Unknown container '{container}'."
-                # 컨테이너 위치 확인 (없으면 현재 방)
                 cont_loc = self.object_locations.get(container, self.robot_room)
                 if cont_loc != self.robot_room:
                     return False, f"{container} not in current room {self.robot_room}."
@@ -117,7 +114,6 @@ class HouseholdSim(object):
                 self.container_contents[container].append(obj)
                 self.object_locations[obj] = container
             else:
-                # 바닥/기본 위치에 놓기
                 self.object_locations[obj] = self.robot_room
             self.holding = None
             return True, f"Placed {obj} to {container or self.robot_room}."
@@ -129,7 +125,6 @@ class HouseholdSim(object):
             device = tokens[1]
             if device not in self.device_power:
                 return False, f"Unknown device '{device}'."
-            # device 위치 확인
             dev_loc = self.object_locations.get(device, self.robot_room)
             if dev_loc != self.robot_room:
                 return False, f"{device} not in current room {self.robot_room}."
@@ -148,7 +143,6 @@ class HouseholdSim(object):
                 return False, f"{cloth} not in room {self.robot_room}."
             if surface not in self.cleanliness:
                 return False, f"Unknown surface '{surface}'."
-            # 닦기
             self.cleanliness[surface] = True
             return True, f"Wiped {surface} with {cloth}."
 
@@ -170,7 +164,6 @@ class HouseholdSim(object):
         return True, False, "", ""
 
     def generate_scene_description(self, input_data):
-        # … (기존 그대로 유지) …
         rooms = defaultdict(list)
         robot_room = "unknown"
         devices_on, devices_off = [], []

@@ -6,12 +6,19 @@ import numpy as np
 
 HOUSEHOLD_VALID_ACTIONS = {
     "goto",
-    "wait",
     "pick",
     "place",
-    "turnon",
-    "turnoff",
-    "wipe"
+    "turn_on",
+    "turn_off",
+    "wait_cook_bread",
+    "wait_boil_water",
+    "wait_cook_ramen",
+    "wait_heat_food",
+    "wait_charge_phone",
+    "wait_heat_pot",
+    "turn_on_switch",
+    "turn_off_switch",
+    "wipe",
 }
 
 def load_test_scenarios(args):
