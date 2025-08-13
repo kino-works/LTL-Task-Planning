@@ -1,5 +1,5 @@
 import argparse
-import datetime
+from datetime import datetime
 import os
 import random
 import numpy as np
@@ -184,7 +184,7 @@ def main():
         init_list.append(i_state)
         goal_list.append(g_state)
 
-    ts = datetime.datetime.now().strftime("%Y-%m-%d-%H-%M-%S")
+    ts = datetime.now().strftime("%Y-%m-%d-%H-%M-%S")
     base = f"test_scenarios_household_{ts}"
     csv_path = os.path.join(args.out_dir, base + ".csv")
     npy_i = os.path.join(args.out_dir, base + "_initial_state.npy")

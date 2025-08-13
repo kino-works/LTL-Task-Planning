@@ -157,7 +157,7 @@ if __name__ == "__main__":
     for e in range(args.episode):
         model.reset()
 
-        log_path = os.path.join(LOG_PATH(curr_time), "e_{:03}/".format(e))
+        log_path = os.path.join(LOG_PATH(curr_time), f"test{e}/")
         Path(log_path).mkdir(parents=True, exist_ok=True)
 
         scene_exp = load_scene_graph(args.scene_example)

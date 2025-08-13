@@ -139,6 +139,7 @@ def main():
     parser = argparse.ArgumentParser(
         formatter_class=argparse.ArgumentDefaultsHelpFormatter,
     )
+    parser.add_argument("--logdir", type=str, default=None)
     parser.add_argument('--domain', type=str, default="household")
     parser.add_argument("--num_trans_ex", type=int, default=3)
     parser.add_argument("--num_plan_ex", type=int, default=3)
@@ -156,13 +157,15 @@ def main():
 
     load_dotenv()
     openai.api_key = os.getenv("OPENAI_API_KEY")
-
-    def LOG_PATH(t):
-        return f"run_log/isr-llm/{t}"
-
-    curr_time = datetime.now().strftime("%Y%m%d_%H%M%S/")
-    log_path = os.path.join(LOG_PATH(curr_time), "e_{:03}/".format(e))
-    Path(log_path).mkdir(parents=True, exist_ok=True)
+    
+    # Log dir
+    if args.logdir is None:
+        args.logdir = os.path.join(
+            os.path.dirname(os.path.abspath(__file__)),
+            "run_log",
+            datetime.datetime.now().strftime("%Y-%m-%d-%H-%M-%S"),
+        )
+    os.makedirs(args.logdir, exist_ok=True)
 
     # Init ISR-LLM components
     setattr(args, "prompt_example_root", args.trans_prompt_dir)
@@ -180,7 +183,7 @@ def main():
     num_prompt_examples_dataset = max(args.num_trans_ex, args.num_plan_ex, args.num_valid_ex)
 
     # Prepare log file
-    test_log_file_path = os.path.join(args.log_path, "test_log.txt")
+    test_log_file_path = os.path.join(args.logdir, "test_log.txt")
     with open(test_log_file_path, "w") as f:
         f.write(f"Test log for household (self-feedback).\n")
 
