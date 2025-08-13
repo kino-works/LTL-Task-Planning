@@ -28,11 +28,10 @@ class HouseholdSim(object):
         ]
         self.device_power = {d: False for d in devices}
         self.cleanliness = {'desk': False}
-        self.time_elapsed = 0
-        self.toasted = set()   
+        #self.time_elapsed = 0
+        self.cooked = set()   
         self.boiled = set()   
         self.heated = set()   
-        self.cooked = set()  
         self.charged = set()
 
     def initialize_state(self, initial_locations):
@@ -48,15 +47,14 @@ class HouseholdSim(object):
                 self.object_locations[obj] = loc
             else:
                 raise ValueError(f"Unknown location '{loc}' for object '{obj}'")
-        self.time_elapsed = 0
+        #self.time_elapsed = 0
         for d in self.device_power:
             self.device_power[d] = False
         for s in self.cleanliness:
             self.cleanliness[s] = False
-        self.toasted.clear()
+        self.cooked.clear()
         self.boiled.clear()
         self.heated.clear()
-        self.cooked.clear()
         self.charged.clear()
 
     def apply_action(self, action_str):
@@ -69,7 +67,7 @@ class HouseholdSim(object):
         if head == 'goto':
             if len(tokens) != 4:
                 return False, "Goto requires exactly one room parameter."
-            room = tokens[1]
+            room = tokens[3]
             if room not in self.rooms:
                 return False, f"Unknown room '{room}'."
             self.robot_room = room
@@ -77,57 +75,77 @@ class HouseholdSim(object):
 
         # 2) PICK
         if head == 'pick':
-            if self.holding is None:
-                return False, "Not holding any object."
-            obj, container = self._extract_pick_place_args(tokens[1:])
-            if obj is None:
-                return False, "Place needs an identifiable object."
-            if self.holding != obj:
-                return False, f"Holding {self.holding}, not {obj}."
-            if container:
-                if container not in self.container_defs:
-                    return False, f"Unknown container '{container}'."
-                cont_loc = self.object_locations.get(container, self.robot_room)
-                if cont_loc != self.robot_room:
-                    return False, f"{container} not in current room {self.robot_room}."
-                cap = self.container_defs[container]
-                if cap is not None and len(self.container_contents[container]) >= cap:
-                    return False, f"{container} is full."
-                self.container_contents[container].append(obj)
-                self.object_locations[obj] = container
+            if self.holding is not None:
+                return False, f"Already holding {self.holding}."
+            
+            if len(tokens) == 4:
+                agent, obj, loc = tokens[1], tokens[2], tokens[3]
             else:
-                self.object_locations[obj] = self.robot_room
-            self.holding = None
-            return True, f"Placed {obj} to {container or self.robot_room}."
+                return False, "Pick takes one or two parameters."
+
+            if obj not in self.object_locations:
+                return False, f"Unknown item '{obj}'."
+            
+            if loc in self.rooms:
+                if self.robot_room != loc:
+                    return False, f"Agent not at room {loc}."
+                if self.object_locations.get(obj) != loc:
+                    return False, f"{obj} not in room {loc}."
+            elif loc in self.container_defs:
+                cont_room = self.object_locations.get(loc)
+                if cont_room != self.robot_room:
+                    return False, f"{loc} not in current room {self.robot_room}."
+                if self.object_locations.get(obj) != loc:
+                    return False, f"{obj} not in {loc}."
+                try:
+                    self.container_contents[loc].remove(obj)
+                except (KeyError, ValueError):
+                    pass
+            else:
+                return False, f"Unknown location '{loc}'."
+            self.holding = obj
+            self.object_locations[obj] = 'in_hand'
+            return True, f"Picked up {obj}."
 
         # 3) PLACE
         if head == 'place':
+            if len(tokens) == 4:
+                agent, obj, loc = tokens[1], tokens[2], tokens[3]
+            else:
+                return False, "Place takes one or two parameters."
+            
             if self.holding is None:
                 return False, "Not holding any object."
-            obj, container = self._extract_pick_place_args(tokens[1:])
-            if obj is None:
-                return False, "Place needs an identifiable object."
             if self.holding != obj:
                 return False, f"Holding {self.holding}, not {obj}."
-            if container:
-                if container not in self.container_defs:
-                    return False, f"Unknown container '{container}'."
-                cont_loc = self.object_locations.get(container, self.robot_room)
-                if cont_loc != self.robot_room:
-                    return False, f"{container} not in current room {self.robot_room}."
-                cap = self.container_defs[container]
-                if cap is not None and len(self.container_contents[container]) >= cap:
-                    return False, f"{container} is full."
-                self.container_contents[container].append(obj)
-                self.object_locations[obj] = container
+
+            curr_loc = self.object_locations.get(obj)
+            if curr_loc == loc:
+                return False, f"{obj} already at {loc}."
+            
+            if loc in self.rooms:
+                if self.robot_room != loc:
+                    return False, f"Agent not at room {loc}."
+                self.object_locations[obj] = loc
+            elif loc in self.container_defs:
+                cont_room = self.object_locations.get(loc)
+                if cont_room != self.robot_room:
+                    return False, f"{loc} not in current room {self.robot_room}."
+                cap = self.container_defs[loc]
+                if cap is not None and len(self.container_contents[loc]) >= cap:
+                    return False, f"{loc} is full."
+                if obj in self.container_contents.get(loc, []):
+                    return False, f"{obj} already in {loc}."
+                self.container_contents[loc].append(obj)
+                self.object_locations[obj] = loc
             else:
-                self.object_locations[obj] = self.robot_room
+                return False, f"Unknown location '{loc}'."
             self.holding = None
-            return True, f"Placed {obj} to {container or self.robot_room}."
+            return True, f"Placed {obj} to {loc}."
 
         # 4) TURNON / TURNOFF
         if head in ('turn_on', 'turn_off', 'turn_on_switch', 'turn_off_switch'):
-            device = self._pick_device_from_tokens(tokens[1:])
+            device = tokens[2]
             if not device:
                 return False, "TurnOn/TurnOff needs a valid device."
             if device not in self.device_power:
@@ -143,72 +161,67 @@ class HouseholdSim(object):
 
         # 5) WIPE
         if head == 'wipe':
-            cloth = None
-            surface = None
-            for t in tokens[1:]:
-                if cloth is None and t in self.object_locations and t != 'desk':
-                    cloth = t
-                if t == 'desk':
-                    surface = 'desk'
+            if len(tokens) == 5:
+                agent, item, room, desk_obj = tokens[1], tokens[2], tokens[3], tokens[4]
+            else:
+                return False, "Place takes one or two parameters."
 
-            if cloth is None or surface is None:
-                return False, "Wipe requires a cloth item and a 'desk' surface."
-            if self.holding is not None:
-                return False, "Need free hand to wipe."
-            if self.object_locations.get(cloth) != self.robot_room:
-                return False, f"{cloth} not in room {self.robot_room}."
+            if self.robot_room != room:
+                return False, f"Agent not at room {room}."
+            
+            if self.holding != item:
+                if self.holding is None:
+                    return False, "Need to be holding the wiping item."
+                return False, f"Holding {self.holding}, not {item}."
 
-            self.cleanliness['desk'] = True
-            return True, f"Wiped desk with {cloth}."
+            if 'cleanliness' not in self.__dict__:
+                self.cleanliness = {}
+
+            if desk_obj not in self.cleanliness:
+                self.cleanliness[desk_obj] = False
+
+            self.cleanliness[desk_obj] = True
+            return True, f"Wiped {desk_obj} with {item}."
 
 
         # 6) WAIT_*
         if head.startswith('wait_'):
-            item = None
-            appliance = None
-            for t in tokens[1:]:
-                if item is None and t in self.object_locations and t not in self.container_defs:
-                    item = t
-                if appliance is None and t in self.container_defs:
-                    appliance = t
+            if len(tokens) == 5:
+                agent, item, appliance, room = tokens[1], tokens[2], tokens[3], tokens[4]
+            else:
+                return False, "Place takes one or two parameters."
 
-            if item is None or appliance is None:
-                return False, "wait_* needs item and appliance."
+            if self.robot_room != room:
+                return False, f"Agent not at room {room}."
+
+            ap_room = self.object_locations.get(appliance)
+            if ap_room != room:
+                return False, f"{appliance} not at room {room}."
 
             if self.object_locations.get(item) != appliance:
                 return False, f"{item} not in appliance {appliance}."
+            
             if not self.device_power.get(appliance, False):
                 return False, f"{appliance} is not on."
 
-            durations = {
-                'wait_cook_bread': 3,
-                'wait_cook_ramen': 3,
-                'wait_boil_water': 5,
-                'wait_heat_food': 3,
-                'wait_heat_pot': 5,
-                'wait_charge_phone': 10,
+            mapping = {
+                'wait_cook_bread': ('cooked', self.cooked, "Cooked"),
+                'wait_cook_ramen': ('cooked', self.cooked, "Cooked"),
+                'wait_boil_water': ('boiled', self.boiled, "Boiled"),
+                'wait_heat_food': ('heated', self.heated, "Heated"),
+                'wait_heat_pot': ('heated', self.heated, "Heated"),
+                'wait_charge_phone': ('charged', self.charged, "Charged"),
             }
-            minutes = durations.get(head, 3)
-            self.time_elapsed += minutes
+            if head not in mapping:
+                return False, f"Unknown wait action '{head}'."
 
-            if head == 'wait_cook_bread':
-                self.toasted.add(item)
-                return True, f"Toasted {item}."
-            if head == 'wait_cook_ramen':
-                self.cooked.add(item)
-                return True, f"Cooked {item}."
-            if head == 'wait_boil_water':
-                self.boiled.add(item)
-                return True, f"Boiled {item}."
-            if head in ('wait_heat_food', 'wait_heat_pot'):
-                self.heated.add(item)
-                return True, f"Heated {item}."
-            if head == 'wait_charge_phone':
-                self.charged.add(item)
-                return True, f"Charged {item}."
+            pred_name, pred_set, verb = mapping[head]
 
-            return False, f"Unknown wait action '{head}'."
+            if item in pred_set:
+                return False, f"{item} already {pred_name}."
 
+            pred_set.add(item)
+            return True, f"{verb} {item}."
 
         return False, f"Unknown action '{tokens[0]}'."
 
@@ -224,7 +237,7 @@ class HouseholdSim(object):
                 print("The action sequence is wrong.")
                 return False, True, msg, act 
         print("Simulation completed successfully.")
-        print(f"Time elapsed: {self.time_elapsed} minutes.")
+        #print(f"Time elapsed: {self.time_elapsed} minutes.")
         return True, False, "", ""
 
     def generate_scene_description(self, input_data):
@@ -240,7 +253,7 @@ class HouseholdSim(object):
                 else:
                     pred_list.append(f"(at {obj} {loc})")
         else:
-            pred_list = input_data  # list[str]
+            pred_list = input_data
 
         for p in pred_list:
             p = p.strip()

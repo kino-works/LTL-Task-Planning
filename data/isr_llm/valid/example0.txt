@@ -12,6 +12,9 @@ Initial state:
 (not (on toaster))
 (not (on stove))
 (not (on water_dispenser))
+(not (cooked bread))
+(not (boiled kettle))
+(not (cooked cup_ramen))
 
 Goal state:
 (cooked bread)
@@ -64,7 +67,10 @@ Initial state:
 (ap_at water_dispenser kitchen),
 (not (on toaster)),
 (not (on stove)),
-(not (on water_dispenser))
+(not (on water_dispenser)),
+(not (cooked bread)),
+(not (boiled kettle)),
+(not (cooked cup_ramen))
 
 (goto robot1 bedroom kitchen): robot1 is now in kitchen
 (pick robot1 bread kitchen): bread in robot1's hand

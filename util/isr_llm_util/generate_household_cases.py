@@ -28,7 +28,7 @@ APPLIANCES = {
 }
 
 def g_cooked_bread():
-    return ["(toasted bread)", "(at bread desk)"]
+    return ["(cooked bread)", "(at bread desk)"]
 
 def g_boiled_water():
     return ["(boiled kettle)", "(at kettle desk)"]

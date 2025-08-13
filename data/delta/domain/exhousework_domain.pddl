@@ -28,7 +28,7 @@
 
         (neighbor ?r1 - room ?r2 - room)
 
-        (toasted ?i - item)
+        (cooked ?i - item)
         (boiled ?i - item)
         (cooked ?i - item)
 
@@ -149,10 +149,10 @@
             (appliance_at ?ap ?r)
             (is_toaster ?ap)
             (appliance_on ?ap)
-            (not (toasted ?i))
+            (not (cooked ?i))
         )
         :effect (and
-            (toasted ?i)
+            (cooked ?i)
         )
     )
 

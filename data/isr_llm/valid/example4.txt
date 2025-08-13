@@ -10,10 +10,14 @@ Initial state:
 (not (on egg_container))
 (not (on toaster))
 (not (on induction))
+(not (cooked bread))
+(not (boiled kettle))
 
 Goal state:
-(toasted bread)
+(cooked bread)
+(at bread desk)
 (boiled kettle)
+(at kettle desk)
 (at eggs egg_container)
 
 Examined action sequence:
@@ -51,7 +55,9 @@ Initial state:
 (ap_at induction kitchen),
 (not (on egg_container)),
 (not (on toaster)),
-(not (on induction))
+(not (on induction)),
+(not (cooked bread)),
+(not (boiled kettle))
 
 (goto robot1 bedroom kitchen): robot1 moves from bedroom to kitchen  
 (pick robot1 bread kitchen): bread picked from kitchen, now in robot's hand  

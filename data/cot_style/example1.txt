@@ -1,5 +1,5 @@
 I’m a service robot currently located in the bedroom of a house.
-My goals are to heat the food, place the water bottle on the living room desk, and store the eggs in the egg container.
+My goals are to heat the food, place the water bottle on the living room desk, and place the eggs in the egg container.
 To accomplish each goal, I must first navigate to the room containing the target object.
 Heating food requires using the microwave in the kitchen and waiting 3 minutes.
 After heating, the food should be placed on the desk in the living room.

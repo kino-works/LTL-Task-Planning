@@ -12,13 +12,13 @@ TASK_DEFINITIONS: Dict[str, Dict] = {
             "place_in_appliance(<agent>, <item>, <appliance>, <room>): <agent> places a held <item> into an <appliance> in <room>. The <agent> must be holding the item and located in the same room as the appliance. As a result, the item will be inside the appliance, and the agent's hand will become free.",
             "turn_on_appliance(<agent>, <appliance>, <room>): <agent> turns on an <appliance> at <room>. <appliance> must be accessible, the action must be in the <appliance>'s affordance, both <agent> and <appliance> must be in <room>, <agent> must not be holding an item, and the <appliance> state must be 'off'. As a result, the <appliance> state will change to 'on'.",
             "turn_off_appliance(<agent>, <appliance>, <room>): <agent> turns off an <appliance> at <room>. <appliance> must be accessible, the action must be in the <appliance>'s affordance, both <agent> and <appliance> must be in <room>, <agent> must not be holding an appliance, and the <appliance> state must be 'on'. As a result, the <appliance> state will change to 'off'.",
-            "wait_cook_bread(<agent>, <bread>, <toaster>, <room>): After turning the toaster on and waiting, the bread inside becomes toasted."
+            "wait_cook_bread(<agent>, <bread>, <toaster>, <room>): After turning the toaster on and waiting, the bread inside becomes cooked."
         ],
-        "goal": "Make toast and place it on the desk in the living room.", "cost": {"home": 9, "exhome": 9},
+        "goal": "Make cook(toast) bread and place it on the desk in the living room.", "cost": {"home": 9, "exhome": 9},
         "item_keep": ["bread", "toaster", "desk"],
-        "subgoal": ["Toast the bread", "Move the toast to the desk"],
-        "subgoal_pddl": ["(:goal (and (toasted bread)))", "(:goal (and (item_on bread desk)))"],
-        "env_state": ["toasted(bread): bread is toasted.", "item_on(bread, desk): bread is on the desk."]
+        "subgoal": ["Cook the bread", "Move the bread to the desk"],
+        "subgoal_pddl": ["(:goal (and (cooked bread)))", "(:goal (and (item_on bread desk)))"],
+        "env_state": ["cooked(bread): bread is cooked.", "item_on(bread, desk): bread is on the desk."]
     },
     "Boiledwater": {
         "scene": ["home", "exhome"], "add_obj": None,
@@ -193,7 +193,7 @@ TASK_DEFINITIONS: Dict[str, Dict] = {
             "pick_from_room(<agent>, <item>, <room>): <agent> picks up an <item> that is located in <room>. The <item> must be accessible and pickable, the <agent> must be hand-free and in the same room. As a result, the <agent> will be holding the <item>, and the <item> will no longer be in the room.",
             "place_in_appliance(<agent>, <item>, <appliance>, <room>): <agent> places a held <item> into an <appliance> in <room>. The <agent> must be holding the item and located in the same room as the appliance. As a result, the item will be inside the appliance, and the agent's hand will become free.",
         ],
-        "goal": "Store the eggs in the egg container in the kitchen.", "cost": {"home": 3, "exhome": 3},
+        "goal": "Place the eggs in the egg container in the kitchen.", "cost": {"home": 3, "exhome": 3},
         "item_keep": ["eggs", "egg_container"],
         "subgoal": ["Pick the eggs", "Place them in the container"],
         "subgoal_pddl": ["(:goal (and (item_in eggs egg_container)))"],

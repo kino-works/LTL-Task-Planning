@@ -72,10 +72,10 @@ Domain file:
             (ap_at ?ap ?r)
             (at ?i ?ap)
             (on ?ap)
-            (not (toasted ?i))
+            (not (cooked ?i))
         )
         :effect (and
-            (toasted ?i)
+            (cooked ?i)
         )
     )
     (:action wait_boil_water
@@ -132,6 +132,10 @@ Problem file:
         (not (on toaster))
         (not (on stove))
         (not (on water_dispenser))
+
+        (not (cooked bread))
+        (not (boiled kettle))
+        (not (cooked cup_ramen))
     )
     (:goal (and
         (cooked bread)

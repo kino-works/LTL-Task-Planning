@@ -12,6 +12,7 @@ Initial state:
 Goal state:
 (clean_desk desk)
 (charged phone)
+(at phone desk)
 (at water_bottle desk)
 
 Examined action sequence:

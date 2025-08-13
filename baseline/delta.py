@@ -51,7 +51,7 @@ def SRC_PROBLEM_PATH(s, d):
 
 
 def LOG_PATH(t):
-    return f"result/{t}"
+    return f"run_log/delta/{t}"
 
 
 if __name__ == "__main__":
@@ -98,9 +98,6 @@ if __name__ == "__main__":
     )
     parser.add_argument(
         "--max-time", type=float, dest="max_time", default=MAX_TIME
-    )
-    parser.add_argument(
-        "--logdir", "-l", type=str, dest="logdir", default="result"
     )
     parser.add_argument("-n", "--episode", type=int, dest="episode", default=EPISODE
     )

@@ -8,10 +8,13 @@ Initial state:
 (at desk livingroom)
 (ap_at charger bedroom)
 (not (on charger))
+(not (clean_desk desk))
+(not (charged phone))
 
 Goal state:
 (clean_desk desk)
 (charged phone)
+(at phone desk)
 (at water_bottle desk)
 
 Examined action sequence:
@@ -42,7 +45,9 @@ Initial state:
 (at water_bottle kitchen),
 (at desk livingroom),
 (ap_at charger bedroom),
-(not (on charger))
+(not (on charger)),
+(not (clean_desk desk)),
+(not (charged phone))
 
 (goto robot1 bedroom livingroom): robot1 moves to livingroom
 (pick robot1 dishcloth livingroom): dishcloth picked
@@ -55,7 +60,7 @@ Initial state:
 (turn_off robot1 charger bedroom): charger turned off
 (pick robot1 phone charger): phone picked up
 (goto robot1 bedroom livingroom): robot1 moves to livingroom
-(place robot1 phone desk): phone placed on desk
+(place robot1 phone desk): phone placed on desk → (at phone desk)
 (goto robot1 livingroom kitchen) robot1 moves to kitchen
 (pick robot1 water_bottle kitchen): water bottle picked
 (goto robot1 kitchen livingroom): robot1 moves to livingroom

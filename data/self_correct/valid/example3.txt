@@ -15,6 +15,9 @@ Initial state:
 (not (on kitchen_lightswitch))
 (not (on stove))
 (not (on induction))
+(not (clean_desk desk))
+(not (charged phone))
+(not (heated pot))
 
 Goal state:
 (on kitchen_lightswitch)
@@ -73,7 +76,10 @@ Initial state:
 (ap_at stove kitchen),
 (not (on kitchen_lightswitch)),
 (not (on stove)),
-(not (on induction))
+(not (on induction)),
+(not (clean_desk desk)),
+(not (charged phone)),
+(not (heated pot))
 
 (goto robot1 bedroom kitchen)
 Resulting state: (agent_at robot1 kitchen), (other objects unchanged)
@@ -255,7 +261,6 @@ Inverse action: (turn_on_switch robot1 kitchen_lightswitch kitchen)
 Inversed state: (agent_at robot1 kitchen), (on kitchen_lightswitch)
 Difference: none
 inversed state is the same as resulting state, action is correct
-
 
 Final answer:
 Yes, the action sequence is correct, it can accomplish the task.

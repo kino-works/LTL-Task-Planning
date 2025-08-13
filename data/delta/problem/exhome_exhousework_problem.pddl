@@ -51,7 +51,7 @@
 
     ; Begin goal
     (:goal (and
-        (toasted bread)
+        (cooked bread)
         (item_on bread desk)
         (boiled kettle)
         (item_on kettle desk)

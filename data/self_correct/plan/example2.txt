@@ -67,7 +67,10 @@ Domain file:
     )
     (:action wipe
       :parameters (?a - agent ?i - item ?r - room ?d - desk)
-      :precondition (and (agent_at ?a ?r) (at ?i ?r))
+      :precondition (and
+        (agent_at ?a ?r)
+        (agent_has_item ?a ?i)
+    )
       :effect (clean_desk ?d)
     )
     (:action wait_charge_phone
@@ -106,6 +109,9 @@ Problem file:
 
         (ap_at charger bedroom)
         (not (on charger))
+
+        (not (clean_desk desk))
+        (not (charged phone))
     )
     (:goal (and
         (clean_desk desk)

@@ -1,6 +1,0 @@
-run_log/
-test_scenario/
-.env
-run_all.sh
-VAL
-.gitignore

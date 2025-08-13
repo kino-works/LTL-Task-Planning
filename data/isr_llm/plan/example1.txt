@@ -103,6 +103,8 @@ Problem file:
 
         (not (on microwave))
         (not (on egg_container))
+
+        (not (heated food))
     )
     (:goal (and
         (heated food)

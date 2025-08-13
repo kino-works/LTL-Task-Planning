@@ -10,16 +10,24 @@ HOUSEHOLD_VALID_ACTIONS = {
     "place",
     "turn_on",
     "turn_off",
+    "turn_on_switch",
+    "turn_off_switch",
     "wait_cook_bread",
     "wait_boil_water",
     "wait_cook_ramen",
     "wait_heat_food",
+    "wait_heat_pot",
     "wait_charge_phone",
     "wait_heat_pot",
-    "turn_on_switch",
-    "turn_off_switch",
-    "wipe",
+    "wipe"
 }
+
+ACTION_LINE_RE = re.compile(r"\(([^)]+)\)")
+
+def _norm(s: str) -> str:
+    return re.sub(r"[\W_]+", "", s.lower())
+
+HOUSEHOLD_VALID_ACTIONS_NORM = {_norm(a) for a in HOUSEHOLD_VALID_ACTIONS}
 
 def load_test_scenarios(args):
     project_root = Path(__file__).resolve().parents[2]
@@ -36,7 +44,7 @@ def load_test_scenarios(args):
     init_path = getattr(args, "initial_file", None) or pick_latest("*_initial_state.npy")
     goal_path = getattr(args, "goal_file",   None) or pick_latest("*_goal_state.npy")
 
-    print(f"Loading household scenarios:\n  init: {init_path}\n  goal: {goal_path}")
+    #print(f"Loading household scenarios:\n  init: {init_path}\n  goal: {goal_path}")
 
     initial_state = np.load(init_path, allow_pickle=True)
     goal_state    = np.load(goal_path,  allow_pickle=True)
@@ -88,12 +96,15 @@ def extract_state_pddl(pddl_problem: str, domain: str = "household"):
 
 def extract_action_description(action_sequence: str, domain: str = "household"):
     lines = []
-    for ln in action_sequence.strip().splitlines():
-        ln = ln.strip()
-        if not (ln.startswith("(") and ln.endswith(")")):
+    for raw in action_sequence.strip().splitlines():
+        m = ACTION_LINE_RE.search(raw)
+        if not m:
             continue
-        toks = ln[1:-1].split()
-        head = toks[0].lower().replace("-", "").replace("_", "")
-        if head in HOUSEHOLD_VALID_ACTIONS:
-            lines.append(ln)
+        inner = m.group(1).strip()      
+        head = inner.split()[0]
+        head_norm = _norm(head)
+
+        if (head_norm in HOUSEHOLD_VALID_ACTIONS_NORM) or head_norm.startswith('wait'):
+            lines.append(f"({inner})")
+
     return "\n".join(lines) + ("\n" if lines else "")

@@ -152,7 +152,7 @@
         )
     )
 
-    (:action store_item
+    (:action store_egg
         :parameters (?a - agent ?i - item ?ap - appliance ?r - room)
         :precondition (and
             (agent_at ?a ?r)

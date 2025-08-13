@@ -18,7 +18,7 @@ def sayplan_search_exp(goal: str):
     Memory: []
     Output: {{
         "mode": "search",
-        "chain_of_thought": "The kitchen likely contains the toaster and bread needed to cook toast.",
+        "chain_of_thought": "The kitchen likely contains the toaster and bread needed to cook bread.",
         "reasoning": "I'll expand the kitchen.",
         "command": ("expand", "kitchen")
     }}
@@ -27,7 +27,7 @@ def sayplan_search_exp(goal: str):
 
     Output: {{
         "mode": "search",
-        "chain_of_thought": "I see 'bread' and 'toaster' in the kitchen -> sufficient for cooking toast.",
+        "chain_of_thought": "I see 'bread' and 'toaster' in the kitchen -> sufficient for cooking bread.",
         "reasoning": "No further rooms needed for cooking, but I need the livingroom for the final placement.",
         "command": ("expand", "livingroom")
     }}
@@ -60,7 +60,7 @@ def sayplan_plan_exp():
         "mode": "planning",
         "chain_of_thought": (
             "I have located the bread, toaster and destination desk -> "
-            "will generate step-by-step actions to cook the toast and place it."
+            "will generate step-by-step actions to cook the bread and place it."
         ),
         "reasoning": "Each action is needed to move, operate device, and place the item.",
         "plan": """(goto robot livingroom kitchen)

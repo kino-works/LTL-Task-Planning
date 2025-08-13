@@ -76,7 +76,7 @@ def test_no_trans_household(
                 action_sequence = resp.get("choices")[0]["message"]["content"]
 
             print(f"Attempt {j} sequence:")
-            print(action_sequence)
+            #print(action_sequence)
             with open(test_log_file_path, "a") as f:
                 f.write(action_sequence + "\n")
                 f.write("Analysis:\n")
@@ -126,7 +126,6 @@ def main():
     parser = argparse.ArgumentParser(
         formatter_class=argparse.ArgumentDefaultsHelpFormatter
     )
-    parser.add_argument("--logdir", type=str, default=None, help="Directory to save run logs")
     parser.add_argument("--num_plan_ex", type=int, default=3, help="Prompt examples for planner")
     parser.add_argument("--num_test", type=int, default=2, help="Number of test scenarios to run")
     parser.add_argument("--max_refine", type=int, default=2, help="Maximum refinement attempts")
@@ -142,14 +141,12 @@ def main():
     load_dotenv()
     openai.api_key = os.getenv("OPENAI_API_KEY")
 
-    # setup logdir
-    if args.logdir is None:
-        args.logdir = os.path.join(
-            os.path.dirname(os.path.abspath(__file__)),
-            "run_log",
-            datetime.datetime.now().strftime("%Y-%m-%d-%H-%M-%S"),
-        )
-    os.makedirs(args.logdir, exist_ok=True)
+    def LOG_PATH(t):
+        return f"run_log/cot-style/{t}"
+
+    curr_time = datetime.now().strftime("%Y%m%d_%H%M%S/")
+    log_path = os.path.join(LOG_PATH(curr_time), "e_{:03}/".format(e))
+    Path(log_path).mkdir(parents=True, exist_ok=True)
 
     # init components
     setattr(args, "prompt_example_root", args.plan_prompt_dir)
@@ -160,7 +157,7 @@ def main():
     test_initial_state, test_goal_state = load_test_scenarios(args)
     num_prompt_ex = args.num_plan_ex
 
-    log_path = os.path.join(args.logdir, "test_log.txt")
+    log_path = os.path.join(log_path, "test_log.txt")
     with open(log_path, "w") as f:
         f.write("Test log for household domain (no-trans CoT).\n\n")
 

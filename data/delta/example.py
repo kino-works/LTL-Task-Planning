@@ -12,24 +12,24 @@ EXHOUSEWORK = {
         "place_in_appliance(<agent>, <item>, <appliance>, <room>): <agent> places a held <item> into an <appliance> in <room>. The <agent> must be holding the item and located in the same room as the appliance. As a result, the item will be inside the appliance, and the agent's hand will become free.",
         "turn_on_appliance(<agent>, <appliance>, <room>): <agent> turns on an <appliance> at <room>. <appliance> must be accessible, the action must be in the <appliance>'s affordance, both <agent> and <appliance> must be in <room>, <agent> must not be holding an item, and the <appliance> state must be 'off'. As a result, the <appliance> state will change to 'on'.",
         "turn_off_appliance(<agent>, <appliance>, <room>): <agent> turns off an <appliance> at <room>. <appliance> must be accessible, the action must be in the <appliance>'s affordance, both <agent> and <appliance> must be in <room>, <agent> must not be holding an appliance, and the <appliance> state must be 'on'. As a result, the <appliance> state will change to 'off'.",
-        "wait_cook_bread(<agent>, <bread>, <toaster>, <room>): After turning the toaster on and waiting, the bread inside becomes toasted.",
+        "wait_cook_bread(<agent>, <bread>, <toaster>, <room>): After turning the toaster on and waiting, the bread inside becomes cooked.",
         "wait_boil_water(<agent>, <kettle>, <stove>, <room>): After turning the stove on and waiting, the water inside the kettle on the stove becomes boiled.",
         "wait_cook_ramen(<agent>, <cup_ramen>, <water_dispenser>, <room>): After turning the dispenser on and waiting, the ramen becomes cooked."
     ],
     "gt_cost": { "home": 26, "exhome": 26 },
-    "goal": "Make toast and place it on the desk in the living room, Boil water in the kettle and place it on the desk in the living room, Cook cup ramen using the water dispenser and place it on the desk in the living room.",
+    "goal": "Make cook(toast) bread and place it on the desk in the living room, Boil water in the kettle and place it on the desk in the living room, Cook cup ramen using the water dispenser and place it on the desk in the living room.",
     "item_keep": [
         "bread", "toaster", "desk", "kettle", "stove", "cup_ramen", "water_dispenser"
     ],
     "subgoal": [
-        "Toast the bread in the toaster", "Move the toasted bread to the living room desk",
+        "Cook the bread in the toaster", "Move the cooked bread to the living room desk",
         "Boil the water in the kettle", "Move the boiled kettle to the living room desk",
         "Cook cup ramen with the water dispenser", "Move the cooked cup ramen to the living room desk"
     ],
         "subgoal_pddl": [
         """
     (:goal
-        (toasted bread)
+        (cooked bread)
     )
 """,
         """
@@ -59,7 +59,7 @@ EXHOUSEWORK = {
 """
     ],
     "env_state": [
-        "toasted(bread): bread is toasted.", "item_on(bread, desk): bread is on the desk.",
+        "cooked(bread): bread is cooked.", "item_on(bread, desk): bread is on the desk.",
         "boiled(kettle): kettle contains boiled water.", "item_on(kettle, desk): kettle is on the desk.",
         "cooked(cup_ramen): cup ramen is cooked.", "item_on(cup_ramen, desk): cup ramen is on the desk."
     ]

@@ -10,6 +10,7 @@ Initial state:
 (ap_at microwave kitchen)
 (not (on microwave))
 (not (on egg_container))
+(not (heated food))
 
 Goal state:
 (heated food)
@@ -47,7 +48,8 @@ Initial state:
 (ap_at egg_container kitchen),
 (ap_at microwave kitchen),
 (not (on microwave)),
-(not (on egg_container))
+(not (on egg_container)),
+(not (heated food))
 
 (goto robot1 bedroom kitchen): robot1 moves to kitchen
 (pick robot1 food kitchen): robot1 picks up the food
@@ -55,9 +57,9 @@ Initial state:
 (turn_on robot1 microwave kitchen): microwave turned on
 (wait_heat_food robot1 food microwave kitchen): food is heated → (heated food)
 (turn_off robot1 microwave kitchen): microwave turned off
-(pick robot1 food microwave): food picked again
+(pick robot1 food microwave): heated food picked again
 (goto robot1 kitchen livingroom): robot1 moves to livingroom
-(place robot1 food desk): food placed on desk → (at food desk)
+(place robot1 food desk): heated food placed on desk → (at food desk)
 (goto robot1 livingroom kitchen): robot1 moves back to kitchen
 (pick robot1 water_bottle kitchen): robot1 picks up water bottle
 (goto robot1 kitchen livingroom): robot1 moves to livingroom
@@ -66,7 +68,7 @@ Initial state:
 (pick robot1 eggs kitchen): robot1 picks up eggs
 (place robot1 eggs egg_container): eggs placed into container → (at eggs egg_container)
 
-All required goal predicates are satisfied: heated food, at food desk, at water_bottle desk, stored eggs
+All required goal predicates are satisfied: heated food, at food desk, at water_bottle desk, at eggs egg_container
 
 Final answer:
 Yes, the action sequence is correct, it can accomplish the task.

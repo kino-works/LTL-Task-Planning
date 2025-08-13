@@ -10,6 +10,7 @@ Initial state:
 (ap_at microwave kitchen)
 (not (on microwave))
 (not (on egg_container))
+(not (heated food))
 
 Goal state:
 (heated food)
@@ -47,7 +48,8 @@ Initial state:
 (ap_at egg_container kitchen),
 (ap_at microwave kitchen),
 (not (on microwave)),
-(not (on egg_container))
+(not (on egg_container)),
+(not (heated food))
 
 (goto robot1 bedroom kitchen)
 Resulting state: (agent_at robot1 kitchen), (other objects unchanged)
