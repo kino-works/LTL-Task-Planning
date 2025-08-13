@@ -12,7 +12,7 @@ OBJECTS_BY_ROOM: Dict[str, List[str]] = {
     "kitchen": [
         "kitchen_lightswitch", "toaster", "bread", "kettle", "induction",
         "pot", "cup_ramen", "water_dispenser", "food", "microwave",
-        "water_bottle", "shelf", "eggs", "egg_container",
+        "water_bottle", "shelf", "eggs", "egg_container", "stove",
         "dish_1", "dish_2", "dish_3"
     ],
     "bathroom": ["bathroom_lightswitch", "washing_machine"],
@@ -22,13 +22,13 @@ OBJECTS_BY_ROOM: Dict[str, List[str]] = {
 
 APPLIANCES = {
     "toaster", "microwave", "induction", "water_dispenser",
-    "washing_machine", "charger",
+    "washing_machine", "charger", "stove",
     "kitchen_lightswitch", "bathroom_lightswitch",
     "bedroom_lightswitch", "livingroom_lightswitch"
 }
 
-def g_cooked_toast():
-    return ["(cooked bread)", "(at bread desk)"]
+def g_cooked_bread():
+    return ["(toasted bread)", "(at bread desk)"]
 
 def g_boiled_water():
     return ["(boiled kettle)", "(at kettle desk)"]
@@ -52,7 +52,7 @@ def g_placed_water_bottle():
     return ["(at water_bottle desk)"]
 
 def g_wiped_desk():
-    return ["(wiped desk)"]
+    return ["(clean_desk desk)"]
 
 def g_turn_on(room: str):
     return [f"(on {room}_lightswitch)"]
@@ -71,7 +71,7 @@ def g_stored_eggs():
     return ["(at eggs egg_container)"]
 
 GOAL_POOL_NO_PARAM = [
-    g_cooked_toast,
+    g_cooked_bread,
     g_boiled_water,
     g_heated_pot,
     g_washed_clothes,

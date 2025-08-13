@@ -27,7 +27,7 @@ Examined action sequence:
 (pick robot1 food microwave)
 (goto robot1 kitchen livingroom)
 (place robot1 food desk)
-(goto livingroom kitchen)
+(goto robot1 livingroom kitchen)
 (pick robot1 water_bottle kitchen)
 (goto robot1 kitchen livingroom)
 (place robot1 water_bottle desk)
@@ -108,7 +108,7 @@ Inversed state: (agent_at robot1 livingroom), (agent_has_item robot1 food), (not
 Difference: none
 inversed state is the same as resulting state, action is correct
 
-(goto livingroom kitchen)
+(goto robot1 livingroom kitchen)
 Resulting state: (agent_at robot1 kitchen), (agent_hand_free robot1), (other objects unchanged)
 Inverse action: (goto robot1 kitchen livingroom)
 Inversed state: (agent_at robot1 livingroom), (agent_hand_free robot1), (other objects unchanged)

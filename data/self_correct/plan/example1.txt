@@ -137,7 +137,7 @@ robot1 is now in the livingroom.
 (at eggs kitchen) with goal (at eggs egg_container)
 food is satisfied, water_bottle is unsatisfied, eggs is unsatisfied.
 Go to complete water_bottle:
-(goto livingroom kitchen)
+(goto robot1 livingroom kitchen)
 (pick robot1 water_bottle kitchen)
 (goto robot1 kitchen livingroom)
 (place robot1 water_bottle desk)

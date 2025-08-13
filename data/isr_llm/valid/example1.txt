@@ -27,7 +27,7 @@ Examined action sequence:
 (pick robot1 food microwave)
 (goto robot1 kitchen livingroom)
 (place robot1 food desk)
-(goto livingroom kitchen)
+(goto robot1 livingroom kitchen)
 (pick robot1 water_bottle kitchen)
 (goto robot1 kitchen livingroom)
 (place robot1 water_bottle desk)
@@ -58,7 +58,7 @@ Initial state:
 (pick robot1 food microwave): food picked again
 (goto robot1 kitchen livingroom): robot1 moves to livingroom
 (place robot1 food desk): food placed on desk → (at food desk)
-(goto livingroom kitchen): robot1 moves back to kitchen
+(goto robot1 livingroom kitchen): robot1 moves back to kitchen
 (pick robot1 water_bottle kitchen): robot1 picks up water bottle
 (goto robot1 kitchen livingroom): robot1 moves to livingroom
 (place robot1 water_bottle desk): water bottle placed on desk → (at water_bottle desk)
