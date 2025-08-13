@@ -171,9 +171,9 @@ Inversed state: (agent_at robot1 livingroom), (agent_has_item robot1 kettle), (n
 Difference: none
 inversed state is the same as resulting state, action is correct
 
-(goto robot1 livingroom kitchen)
-Resulting state: (agent_at robot1 kitchen), (agent_hand_free robot1), (other objects unchanged)
-Inverse action: (goto robot1 kitchen livingroom)
+(goto robot1 livingroom bedroom)
+Resulting state: (agent_at robot1 bedroom), (agent_hand_free robot1), (other objects unchanged)
+Inverse action: (goto robot1 bedroom livingroom)
 Inversed state: (agent_at robot1 livingroom), (agent_hand_free robot1), (other objects unchanged)
 Difference: none
 inversed state is the same as resulting state, action is correct
@@ -182,15 +182,8 @@ inversed state is the same as resulting state, action is correct
 Resulting state: (agent_at robot1 kitchen), (agent_has_item robot1 eggs), (other objects unchanged)
 Inverse action: (place robot1 eggs kitchen)
 Inversed state: (agent_at robot1 kitchen), (at eggs kitchen), (agent_hand_free robot1), (other objects unchanged)
-Difference: none
-inversed state is the same as resulting state, action is correct
-
-(place robot1 eggs toaster)
-Resulting state: (agent_at robot1 kitchen), (at eggs toaster), (agent_hand_free robot1), (other objects unchanged)
-Inverse action: (pick robot1 eggs toaster)
-Inversed state: (agent_at robot1 kitchen), (agent_has_item robot1 eggs), (not (at eggs toaster)), (other objects unchanged)
-Difference: none
-inversed state is the same as resulting state, action is correct
+Difference: (at robot1 kitchen) & (at robot1 bedroom)
+The action is wrong because robot1 is in bedroom, not kitchen
 
 Final answer:
 No, the action sequence is wrong, it cannot accomplish the goal.

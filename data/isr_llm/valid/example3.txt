@@ -53,8 +53,6 @@ Examined action sequence:
 (pick robot1 pot induction)
 (goto robot1 kitchen livingroom)
 (place robot1 pot desk)
-(goto robot1 livingroom kitchen)
-(turn_off_switch robot1 kitchen_lightswitch kitchen)
 
 Answer:
 Analysis:
