@@ -1,0 +1,16 @@
+[
+    {
+        "domain":"inner_house",
+        "selected_task":[
+            ["Cookedtoast", "Boiledwater", "Cookedcupramen"],
+            ["Heatedfood", "Placedwaterbottle", "Storedeggs"]
+        ]
+    },
+    {
+        "domain":"single_table",
+        "selected_task":[
+            ["Cookedtoast", "Boiledwater", "Cookedcupramen"],
+            ["Heatedfood", "Placedwaterbottle", "Storedeggs"]
+        ]
+    }
+]

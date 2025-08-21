@@ -115,7 +115,7 @@ sg_exp_str = """
     ```
     Among them, the "accessible" attribute of the toaster is "True", which results in a "item_accessible" predicate (previously defined in the domain file) as follows:
     ```(item_accessible toaster)```
-    and its "affordance" attribute has "pick" and "place", which could result in predicates like the following (previously defined in the domain file):
+    and its "affordance" attribute has "pick" and "place", which  result in predicates like the following (previously defined in the domain file):
     ```
     (item_pickable bread)
     (item_accessible bread)

@@ -32,7 +32,8 @@ TASK_DEFINITIONS: Dict[str, Dict] = {
             "turn_off_appliance(<agent>, <appliance>, <room>): <agent> turns off an <appliance> at <room>. <appliance> must be accessible, the action must be in the <appliance>'s affordance, both <agent> and <appliance> must be in <room>, <agent> must not be holding an appliance, and the <appliance> state must be 'on'. As a result, the <appliance> state will change to 'off'.",
             "wait_boil_water(<agent>, <kettle>, <stove>, <room>): After turning the stove on and waiting, the water inside the kettle on the stove becomes boiled."
         ],
-        "goal": "Boil water in the kettle and place it on the desk in the living room.", "cost": {"home": 9, "exhome": 9},
+        "goal": "Boil water in the kettle and place it on the desk in the living room.",
+        "cost": {"home": 9, "exhome": 9},
         "item_keep": ["kettle", "stove", "desk"],
         "subgoal": ["Boil the water", "Move the kettle to the desk"],
         "subgoal_pddl": ["(:goal (and (boiled kettle)))", "(:goal (and (item_on kettle desk)))"],

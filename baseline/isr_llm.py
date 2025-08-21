@@ -5,6 +5,7 @@ import datetime
 import argparse
 import openai
 import re
+import copy 
 
 # Project paths (adjust if needed)
 project_root = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
@@ -37,12 +38,34 @@ def run_isr_llm(
     max_num_refine: int,
     max_refine_temperature: float,
     num_prompt_examples_dataset: int,
-    test_log_file_path: str,
+    base_logdir: str, 
+    args_obj,  
     wait_seconds: float,
 ):
 
     for i in range(num_test):
         time.sleep(wait_seconds)
+
+        test_dir = os.path.join(base_logdir, f"test{i}")
+        os.makedirs(test_dir, exist_ok=True) 
+
+        test_log_file_path = os.path.join(test_dir, "test_log.txt")     
+        final_plan_file_path = os.path.join(test_dir, "final_plan.plan")
+
+        args_test = copy.copy(args_obj)    
+        args_test.logdir = test_dir      
+
+        setattr(args_test, "prompt_example_root", args_test.trans_prompt_dir)  
+        translator = Translator(args_test, is_log_example=True)                
+
+        setattr(args_test, "prompt_example_root", args_test.plan_prompt_dir)   
+        planner = Planner(args_test, is_log_example=True)                     
+
+        setattr(args_test, "prompt_example_root", args_test.valid_prompt_dir)  
+        validator = Validator(args_test, is_log_example=True)                 
+
+        with open(test_log_file_path, "w") as f:                               
+            f.write(f"[Test {i}] Test log for household (self-feedback).\n")   
 
         idx = i + num_prompt_examples_dataset
         initial_state = test_initial_state[idx, 0]
@@ -56,7 +79,7 @@ def run_isr_llm(
             f.write(description + "\n")
 
         # 2) Translator → planning problem
-        resp_txt = translator.query(description, is_append=False)  # resp_txt: str
+        resp_txt = translator.query(description, is_append=False)
         planning_problem = resp_txt
         
         # Extract init/goal for validator prompt
@@ -82,6 +105,7 @@ def run_isr_llm(
 
             # 4) Self evaluation
             action_description = extract_action_description(action_sequence, domain="household")
+
             validate_question = "Question:\nInitial state: \n" + pddl_init_state + "\nGoal state:\n" + pddl_goal_state + "\nExamined action sequence:\n" + action_description
             print(validate_question)
             with open(test_log_file_path, "a") as f:
@@ -120,6 +144,9 @@ def run_isr_llm(
         with open(test_log_file_path, "a") as f:
             f.write("Actual analysis:\n")
 
+        with open(final_plan_file_path, "w") as f:
+            f.write(action_description)
+        
         raw_actions = action_description
         parsed = re.findall(r"\((.*?)\)", raw_actions, flags=re.S)
         if parsed:
@@ -167,13 +194,6 @@ def main():
         )
     os.makedirs(args.logdir, exist_ok=True)
 
-    # Init ISR-LLM components
-    setattr(args, "prompt_example_root", args.trans_prompt_dir)
-    translator = Translator(args, is_log_example=True)
-    setattr(args, "prompt_example_root", args.plan_prompt_dir)
-    planner = Planner(args, is_log_example=True)
-    setattr(args, "prompt_example_root", args.valid_prompt_dir)
-    validator = Validator(args, is_log_example=True)
     simulator = HouseholdSim()
 
     # Load scenarios
@@ -182,24 +202,20 @@ def main():
     # Compute how many front examples to skip in dataset
     num_prompt_examples_dataset = max(args.num_trans_ex, args.num_plan_ex, args.num_valid_ex)
 
-    # Prepare log file
-    test_log_file_path = os.path.join(args.logdir, "test_log.txt")
-    with open(test_log_file_path, "w") as f:
-        f.write(f"Test log for household (self-feedback).\n")
-
     # Run
     run_isr_llm(
         simulator=simulator,
-        translator=translator,
-        planner=planner,
-        validator=validator,
+        translator=None,
+        planner=None,
+        validator=None,
         test_initial_state=test_initial_state,
         test_goal_state=test_goal_state,
         num_test=args.num_test,
         max_num_refine=args.max_refine,
         max_refine_temperature=args.max_temp,
         num_prompt_examples_dataset=num_prompt_examples_dataset,
-        test_log_file_path=test_log_file_path,
+        base_logdir=args.logdir, 
+        args_obj=args,  
         wait_seconds=args.wait_sec,
     )
 

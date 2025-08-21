@@ -26,18 +26,17 @@ load_dotenv()
 openai.api_key = os.getenv("OPENAI_API_KEY")
 
 
-# Parameters
 DEFAULT_LLM = "gpt-4o"
 TEMPERATURE = 0.0
 TOP_P = 1.0
 EPISODE = 2
 MAX_TIME = 120
 
-# Examples (prompt 예시용으로 EXHOME 사용)
+# Examples
 DOMAIN_EXAMPLE = "exhousework"
 SCENE_EXAMPLE   = "exhome"
 
-# Queries (실제 실행할 HOME 도메인/씬)
+# Queries
 DOMAIN_QUERY    = "housework"
 SCENE_QUERY     = "home"
 
@@ -108,9 +107,7 @@ if __name__ == "__main__":
     if args.scene == args.scene_example:
         raise argparse.ArgumentError(
             "Scene graph example cannot be identical to scene graph query!")
-    print("Using model {}".format(args.model))
 
-    # Loading files
     domain_exp, problem_exp = None, None
     if os.path.isfile(SRC_DOMAIN_PATH(args.domain_example)):
         with open(SRC_DOMAIN_PATH(args.domain_example), "r") as src_d_file:
@@ -127,7 +124,6 @@ if __name__ == "__main__":
     print("Domain example: {} \nScene example: {} \nDomain query: {} \nScene query: {}".format(
         args.domain_example, args.scene_example, args.domain, args.scene))
 
-    # Additional information for prompting
     exp = example.get_example(args.domain_example)
     qry = example.get_example(args.domain)
     if args.scene_example not in exp["scene"]:
@@ -151,7 +147,6 @@ if __name__ == "__main__":
     success_orig = 0
     data_list = []
 
-    # Loading LLM
     model = llm.load_llm(args.model, args.temperature, args.top_p)
 
     for e in range(args.episode):
@@ -169,16 +164,16 @@ if __name__ == "__main__":
         p_tar_file = os.path.join(
             log_path, "{}_{}_problem.pddl".format(args.scene, args.domain))
         plan_file = os.path.join(
-            log_path, "{}_{}.plan".format(args.domain, args.scene))
+            log_path, "final_plan.plan")
         plan_decomp_file = os.path.join(
-            log_path, "{}_{}_decomp.plan".format(args.domain, args.scene))
+            log_path, "final_plan_decomp.plan")
 
         d_time, pr_time, p_time, dp_time = 0., 0., 0., 0.
         subgoal_pddl_list = []
         item_keep = []
         start = time.time()
 
-        ###################### Stage 1: Generating domain file ######################
+        # 1) generate domain file
         if "all" in args.experiment or "domain" in args.experiment:
             content_d, prompt_d = p.nl_2_pddl_domain(
                 domain_exp, args.domain, add_obj_exp, add_obj_qry, add_act_exp, add_act_qry)
@@ -199,7 +194,7 @@ if __name__ == "__main__":
                 "Response time for generating domain file: {:.2f}s".format(d_time))
             model.update_prompt_chain_w_response(domain_tar)
 
-        ###################### Step 2: Pruning scene graph items ######################
+        # 2) pruning scene graph
         if "all" in args.experiment or "prune" in args.experiment:
             items_exp = extract_accessible_items_from_sg(scene_exp)
             items_qry = extract_accessible_items_from_sg(scene_qry)
@@ -232,9 +227,8 @@ if __name__ == "__main__":
             scene_exp = prune_sg_with_item(scene_exp, item_keep_exp)
             scene_qry = prune_sg_with_item(scene_qry, item_keep)
 
-        ###################### Stage 3: Generating problem file ######################
+        # 3) generate problem file
         if "all" in args.experiment or "problem" in args.experiment:
-            # Load ground truth domain file for stand-alone experiment
             if domain_tar is None:
                 with open(SRC_DOMAIN_PATH(args.domain), "r") as df:
                     domain_tar = df.read()
@@ -264,7 +258,7 @@ if __name__ == "__main__":
                 "Response time for generating problem file: {:.2f}s".format(p_time))
             model.update_prompt_chain_w_response(problem_tar)
 
-        ###################### Stage 4: Decomposing problem file ######################
+        # 4) decompose problem file
         if "all" in args.experiment or "decompose" in args.experiment:
             if domain_tar is None:
                 with open(SRC_DOMAIN_PATH(args.domain), "r") as df:
@@ -310,8 +304,7 @@ if __name__ == "__main__":
         if args.no_plan:
             continue
 
-        ##################### Generating task plan(s) ######################
-        # Copy generated domain and (sub-)problem files in pddlgym directory
+        # 5) generate plan
         if not os.path.isfile(d_tar_file):
             d_tar_file = SRC_DOMAIN_PATH(args.domain)
         if not os.path.isfile(p_tar_file):
@@ -321,7 +314,6 @@ if __name__ == "__main__":
             str(len(subgoal_pddl_list))) > 1 else "0", clear_dir=True)
         planner.register_new_pddlgym_env(args.domain)
 
-        # First execute planner with undecomposed problem to get planning time
         plan, plan_time, node, cost, exit_code = planner.query_pddlgym(
             args.domain, max_time=args.max_time)
         if exit_code == 1:
@@ -329,13 +321,12 @@ if __name__ == "__main__":
                 pf.write("\n".join(plan))
             is_valid, val_info = planner.validate(SRC_DOMAIN_PATH(
                 args.domain), SRC_PROBLEM_PATH(args.scene, args.domain), plan_file)
-            # if cost == gt_cost or is_valid:
             if is_valid:
                 success_orig += 1
             else:
                 exit_code = 0
 
-        # Hierarchical planning for sub-problems
+        # planning sub-problems
         if len(subgoal_pddl_list) > 0:
             plans, times, nodes, costs, exit_code_decomp, completed_sp = planner.query_pddlgym_decompose(
                 args.domain, subgoal_pddl_list, save_path=log_path, max_time=args.max_time)
@@ -345,7 +336,6 @@ if __name__ == "__main__":
                         pdf.writelines("\n".join(sp) + "\n\n")
                 is_valid_decomp, val_info_decomp = planner.validate(SRC_DOMAIN_PATH(
                     args.domain), SRC_PROBLEM_PATH(args.scene, args.domain), plan_decomp_file)
-                # if sum(costs) == gt_cost or is_valid_decomp:
                 if is_valid_decomp:
                     success += 1
                 else:

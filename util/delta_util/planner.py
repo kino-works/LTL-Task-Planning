@@ -122,21 +122,10 @@ def query_pddlgym(domain: str, p_idx: int = 0, max_time: float = 120):
         node = statistic["num_node_expansions"]
         for act in plan:
             state, reward, done, truncated, info = env.step(act)
-        print("Found solution in {}s with cost {}".format(time, cost))
         exit_code = 1
     except Exception as err:
-        # TODO: error handling with exit code
         err_msg = str(err)
-        if "Planning timed out" in err_msg:
-            exit_code = 3
-        elif "Argument" in err_msg and "not in params" in err_msg:
-            exit_code = 4
-        elif "Undeclared predicate" in err_msg or ("Predicate" in err_msg and "not defined" in err_msg):
-            exit_code = 5
-        else:
-            exit_code = 2
         print("Could not find solution!", err_msg)
-
     return [p.pddl_str() for p in plan] if exit_code == 1 else None, time, node, cost, exit_code
 
 
@@ -210,7 +199,7 @@ def query_pddlgym_decompose(domain: str, subgoal_pddl_list: list, save_path: str
                 exit_code = 5
             else:
                 exit_code = 2
-            print("Could not find solution!", err_msg)
+            print(" not find solution!", err_msg)
             break
         plans.append([p.pddl_str() for p in plan] if plan is not None else "")
         times.append(statistic["total_time"] if statistic is not None else 0.)
@@ -234,10 +223,10 @@ def validate(domain_file: str, problem_file: str, plan_file: str):
 
     #print(err)
     if "Plan valid" in str(output):
-        print("VAL: Plan valid!")
+        #print("VAL: Plan valid!")
         return True, "Plan succeeded."
     else:
-        print("VAL: Plan invalid!")
+        #print("VAL: Plan invalid!")
         repair_phrase = "Plan Repair Advice:"
         if repair_phrase in str(output):
             out_str = str(output)

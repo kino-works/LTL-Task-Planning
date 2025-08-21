@@ -1,25 +1,27 @@
-#!/usr/bin/env python3
 import os
 import sys
 import time
 import datetime
 import argparse
 import openai
-from dotenv import load_dotenv
 import re
+import copy 
 
-# Project paths
+# Project paths (adjust if needed)
 project_root = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 sys.path.insert(0, project_root)
 sys.path.append(os.path.join(project_root, "util"))
 sys.path.append(os.path.join(project_root, "baseline"))
 
+from dotenv import load_dotenv
+
+# util imports (edit to your actual module names)
 from util.isr_llm_util.Planner import Planner
 from util.isr_llm_util.Household_Sim import HouseholdSim
 from util.isr_llm_util.utils import load_test_scenarios
 
 
-def test_no_trans_household(
+def run_cap(
     simulator: HouseholdSim,
     planner: Planner,
     test_initial_state,
@@ -28,18 +30,32 @@ def test_no_trans_household(
     max_num_refine: int,
     max_refine_temperature: float,
     num_prompt_examples_dataset: int,
-    test_log_file_path: str,
+    base_logdir: str, 
+    args_obj,  
     wait_seconds: float,
 ):
-    """
-    Run LLM-only CoT loop on household domain without translator or validator.
-    Parses planner output to extract valid actions before simulation.
-    """
-    # Define allowed action verbs for filtering
-    allowed_verbs = {"goto", "pick", "place", "turnOn", "turnOff", "wait", "wipe"}
+
+    allowed_verbs = {"goto", "pick", "place", "turn_on", "turn_off", 'turn_on_switch', 'turn_off_switch', "wipe",
+                    "wait_cook_bread", "wait_cook_ramen", "wait_boil_water", "wait_heat_food", "wait_heat_pot", "wait_charge_phone"}
 
     for i in range(num_test):
         time.sleep(wait_seconds)
+
+        test_dir = os.path.join(base_logdir, f"test{i}")
+        os.makedirs(test_dir, exist_ok=True) 
+
+        test_log_file_path = os.path.join(test_dir, "test_log.txt")     
+        final_plan_file_path = os.path.join(test_dir, "final_plan.plan")
+
+        args_test = copy.copy(args_obj)    
+        args_test.logdir = test_dir                   
+
+        setattr(args_test, "prompt_example_root", args_test.plan_prompt_dir)   
+        planner = Planner(args_test, is_log_example=True)                                    
+
+        with open(test_log_file_path, "w") as f:                               
+            f.write(f"[Test {i}] Test log for household (self-feedback).\n")   
+
         idx = i + num_prompt_examples_dataset
         initial_state = test_initial_state[idx, 0]
         goal_state = test_goal_state[idx, 0]
@@ -48,7 +64,6 @@ def test_no_trans_household(
         description = simulator.generate_scene_description(initial_state)
         planning_problem = description
 
-        print(f"Description:")
         print(description.replace("\\n", "\n"))
 
         with open(test_log_file_path, "a") as f:
@@ -77,15 +92,17 @@ def test_no_trans_household(
                 f.write(action_sequence + "\n")
                 f.write("Analysis:\n")
 
-            # Parse and filter actions before simulation
             parsed = re.findall(r"\((.*?)\)", action_sequence, flags=re.S)
             if parsed:
                 actions = [a.strip() for a in parsed]
             else:
                 actions = [line.strip() for line in action_sequence.splitlines() if line.strip()]
-            # Keep only valid action verbs
             actions = [a for a in actions if a.split()[0] in allowed_verbs]
-
+            
+            formatted_plan = "\n".join(f"({a})" for a in actions) + "\n"
+            with open(final_plan_file_path, "w") as f:
+                f.write(formatted_plan)
+            
             # 3) Execute & feedback
             is_satisfied, is_error, error_message, error_action = simulator.simulate_actions(actions, test_log_file_path)
 
@@ -111,34 +128,33 @@ def test_no_trans_household(
             else:
                 # no error: success
                 break
-
-        # reset planner for next case
+        
         planner.init_messages(is_reinitialize=True)
+
         with open(test_log_file_path, "a") as f:
             f.write(f"End of test case {idx}\n\n")
 
 
 def main():
     parser = argparse.ArgumentParser(
-        formatter_class=argparse.ArgumentDefaultsHelpFormatter
+        formatter_class=argparse.ArgumentDefaultsHelpFormatter,
     )
-    parser.add_argument("--logdir", type=str, default=None, help="Directory to save run logs")
-    parser.add_argument("--num_plan_ex", type=int, default=3, help="Prompt examples for planner")
-    parser.add_argument("--num_test", type=int, default=2, help="Number of test scenarios to run")
-    parser.add_argument("--max_refine", type=int, default=2, help="Maximum refinement attempts")
-    parser.add_argument("--max_temp", type=float, default=0.4, help="Max planning temperature")
-    parser.add_argument("--wait_sec", type=float, default=30, help="Wait seconds between API calls")
-    parser.add_argument("--model", type=str, default="gpt-4o", help="OpenAI model")
-    parser.add_argument(
-        "--plan_prompt_dir", type=str, default="data/cot_style", help="Planner prompt dir"
-    )
-    parser.add_argument("--domain", type=str, default="household", help="Task domain (only 'household' supported)")
+    parser.add_argument("--logdir", type=str, default=None)
+    parser.add_argument('--domain', type=str, default="household")
+    parser.add_argument("--num_plan_ex", type=int, default=3)
+    parser.add_argument("--num_test", type=int, default=2)
+    parser.add_argument("--max_refine", type=int, default=10)
+    parser.add_argument("--max_temp", type=float, default=0.4)
+    parser.add_argument("--wait_sec", type=float, default=30)
+    parser.add_argument("--model", type=str, default="gpt-4o")
+    parser.add_argument("--plan_prompt_dir",  default="data/cap")
+
     args = parser.parse_args()
 
     load_dotenv()
     openai.api_key = os.getenv("OPENAI_API_KEY")
-
-    # setup logdir
+    
+    # Log dir
     if args.logdir is None:
         args.logdir = os.path.join(
             os.path.dirname(os.path.abspath(__file__)),
@@ -147,30 +163,26 @@ def main():
         )
     os.makedirs(args.logdir, exist_ok=True)
 
-    # init components
-    setattr(args, "prompt_example_root", args.plan_prompt_dir)
-    planner = Planner(args, is_log_example=True)
     simulator = HouseholdSim()
 
-    # load scenarios
+    # Load scenarios
     test_initial_state, test_goal_state = load_test_scenarios(args)
-    num_prompt_ex = args.num_plan_ex
 
-    log_path = os.path.join(args.logdir, "test_log.txt")
-    with open(log_path, "w") as f:
-        f.write("Test log for household domain (no-trans CoT).\n\n")
+    # Compute how many front examples to skip in dataset
+    num_prompt_examples_dataset = args.num_plan_ex
 
-    # run
-    test_no_trans_household(
+    # Run
+    run_cap(
         simulator=simulator,
-        planner=planner,
+        planner=None,
         test_initial_state=test_initial_state,
         test_goal_state=test_goal_state,
         num_test=args.num_test,
         max_num_refine=args.max_refine,
         max_refine_temperature=args.max_temp,
-        num_prompt_examples_dataset=num_prompt_ex,
-        test_log_file_path=log_path,
+        num_prompt_examples_dataset=num_prompt_examples_dataset,
+        base_logdir=args.logdir, 
+        args_obj=args,  
         wait_seconds=args.wait_sec,
     )
 

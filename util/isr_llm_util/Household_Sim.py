@@ -37,6 +37,19 @@ class HouseholdSim(object):
     def initialize_state(self, initial_locations):
         self.robot_room = initial_locations.get('robot_room')
         self.holding = None
+
+        self.object_locations.clear()
+        self.container_contents = {c: [] for c in self.container_defs}
+
+        for d in self.device_power:
+            self.device_power[d] = False
+        for s in self.cleanliness:
+            self.cleanliness[s] = False
+        self.cooked.clear()
+        self.boiled.clear()
+        self.heated.clear()
+        self.charged.clear()
+
         for obj, loc in initial_locations.items():
             if obj == 'robot_room':
                 continue
@@ -48,14 +61,6 @@ class HouseholdSim(object):
             else:
                 raise ValueError(f"Unknown location '{loc}' for object '{obj}'")
         #self.time_elapsed = 0
-        for d in self.device_power:
-            self.device_power[d] = False
-        for s in self.cleanliness:
-            self.cleanliness[s] = False
-        self.cooked.clear()
-        self.boiled.clear()
-        self.heated.clear()
-        self.charged.clear()
 
     def apply_action(self, action_str):
         tokens = action_str.strip("()").split()
@@ -66,7 +71,7 @@ class HouseholdSim(object):
         # 1) GOTO
         if head == 'goto':
             if len(tokens) != 4:
-                return False, "Goto requires exactly one room parameter."
+                return False, "Goto requires: (goto <agent> <from_room> <to_room>)."
             room = tokens[3]
             if room not in self.rooms:
                 return False, f"Unknown room '{room}'."
@@ -119,14 +124,19 @@ class HouseholdSim(object):
             if self.holding != obj:
                 return False, f"Holding {self.holding}, not {obj}."
 
-            curr_loc = self.object_locations.get(obj)
-            if curr_loc == loc:
-                return False, f"{obj} already at {loc}."
+            for c, lst in self.container_contents.items():
+                if obj in lst:
+                    lst.remove(obj)
+
+            #curr_loc = self.object_locations.get(obj)
+            #if curr_loc == loc and self.holding is None:
+            #    return False, f"{obj} already at {loc}."
             
             if loc in self.rooms:
                 if self.robot_room != loc:
                     return False, f"Agent not at room {loc}."
                 self.object_locations[obj] = loc
+            
             elif loc in self.container_defs:
                 cont_room = self.object_locations.get(loc)
                 if cont_room != self.robot_room:
@@ -157,14 +167,14 @@ class HouseholdSim(object):
             
             turn_on = head in ('turn_on', 'turnon', 'turn_on_switch')
             self.device_power[device] = turn_on
-            return True, f"{'Turned on' if head=='turn_on' else 'Turned off'} {device}."
+            return True, f"{'Turned on' if turn_on else 'Turned off'} {device}."
 
         # 5) WIPE
         if head == 'wipe':
             if len(tokens) == 5:
                 agent, item, room, desk_obj = tokens[1], tokens[2], tokens[3], tokens[4]
             else:
-                return False, "Place takes one or two parameters."
+                return False, "Wipe requires: (wipe <agent> <item> <room> <desk>)."
 
             if self.robot_room != room:
                 return False, f"Agent not at room {room}."
