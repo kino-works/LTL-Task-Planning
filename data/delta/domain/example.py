@@ -1,6 +1,4 @@
-from .target import generate_domain_query
-from .target import TASK_DEFINITIONS
-
+# cook toast, boil water, cook cupramen
 EXHOUSEWORK = {
     "scene": ["home", "exhome"],
     "add_obj": None,
@@ -17,14 +15,14 @@ EXHOUSEWORK = {
         "wait_cook_ramen(<agent>, <cup_ramen>, <water_dispenser>, <room>): After turning the dispenser on and waiting, the ramen becomes cooked."
     ],
     "gt_cost": { "home": 26, "exhome": 26 },
-    "goal": "Make cook(toast) bread and place it on the desk in the living room, Boil water in the kettle and place it on the desk in the living room, Cook cup ramen using the water dispenser and place it on the desk in the living room.",
+    "goal": "Make cook(toast) bread and place it on the desk, Boil water in the kettle and place it on the desk , Cook cup ramen using the water dispenser and place it on the desk ",
     "item_keep": [
         "bread", "toaster", "desk", "kettle", "stove", "cup_ramen", "water_dispenser"
     ],
     "subgoal": [
-        "Cook the bread in the toaster", "Move the cooked bread to the living room desk",
-        "Boil the water in the kettle", "Move the boiled kettle to the living room desk",
-        "Cook cup ramen with the water dispenser", "Move the cooked cup ramen to the living room desk"
+        "Cook the bread in the toaster", "Move the cooked bread to the desk",
+        "Boil the water in the kettle", "Move the boiled kettle to the desk",
+        "Cook cup ramen with the water dispenser", "Move the cooked cup ramen to the desk"
     ],
         "subgoal_pddl": [
         """
@@ -65,11 +63,6 @@ EXHOUSEWORK = {
     ]
 }
 
-
-
-
-selected_tasks = ["Heatedfood", "Placedwaterbottle", "Storedeggs"]
-HOUSEWORK = generate_domain_query(selected_tasks)["HOUSEWORK"]
 
 def get_example(domain: str, scene: str = None):
     return eval(domain.upper())

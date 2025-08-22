@@ -14,7 +14,7 @@ TASK_DEFINITIONS: Dict[str, Dict] = {
             "turn_off_appliance(<agent>, <appliance>, <room>): <agent> turns off an <appliance> at <room>. <appliance> must be accessible, the action must be in the <appliance>'s affordance, both <agent> and <appliance> must be in <room>, <agent> must not be holding an appliance, and the <appliance> state must be 'on'. As a result, the <appliance> state will change to 'off'.",
             "wait_cook_bread(<agent>, <bread>, <toaster>, <room>): After turning the toaster on and waiting, the bread inside becomes cooked."
         ],
-        "goal": "Make cook(toast) bread and place it on the desk in the living room.", "cost": {"home": 9, "exhome": 9},
+        "goal": "Make cook(toast) bread and place it on the desk ", "cost": {"home": 9, "exhome": 9},
         "item_keep": ["bread", "toaster", "desk"],
         "subgoal": ["Cook the bread", "Move the bread to the desk"],
         "subgoal_pddl": ["(:goal (and (cooked bread)))", "(:goal (and (item_on bread desk)))"],
@@ -32,7 +32,7 @@ TASK_DEFINITIONS: Dict[str, Dict] = {
             "turn_off_appliance(<agent>, <appliance>, <room>): <agent> turns off an <appliance> at <room>. <appliance> must be accessible, the action must be in the <appliance>'s affordance, both <agent> and <appliance> must be in <room>, <agent> must not be holding an appliance, and the <appliance> state must be 'on'. As a result, the <appliance> state will change to 'off'.",
             "wait_boil_water(<agent>, <kettle>, <stove>, <room>): After turning the stove on and waiting, the water inside the kettle on the stove becomes boiled."
         ],
-        "goal": "Boil water in the kettle and place it on the desk in the living room.",
+        "goal": "Boil water in the kettle and place it on the desk ",
         "cost": {"home": 9, "exhome": 9},
         "item_keep": ["kettle", "stove", "desk"],
         "subgoal": ["Boil the water", "Move the kettle to the desk"],
@@ -51,7 +51,7 @@ TASK_DEFINITIONS: Dict[str, Dict] = {
             "turn_off_appliance(<agent>, <appliance>, <room>): <agent> turns off an <appliance> at <room>. <appliance> must be accessible, the action must be in the <appliance>'s affordance, both <agent> and <appliance> must be in <room>, <agent> must not be holding an appliance, and the <appliance> state must be 'on'. As a result, the <appliance> state will change to 'off'.",
             "wait_heat_pot(<agent>, <pot>, <induction>, <room>): After turning the induction on and waiting, the pot on it becomes heated."
         ],
-        "goal": "Heat the pot using the induction and place it on the desk in the living room.", "cost": {"home": 9, "exhome": 9},
+        "goal": "Heat the pot using the induction and place it on the desk ", "cost": {"home": 9, "exhome": 9},
         "item_keep": ["pot", "induction", "desk"],
         "subgoal": ["Heat the pot", "Move the pot to the desk"],
         "subgoal_pddl": ["(:goal (and (heated pot)))", "(:goal (and (item_on pot desk)))"],
@@ -87,7 +87,7 @@ TASK_DEFINITIONS: Dict[str, Dict] = {
             "turn_off_appliance(<agent>, <appliance>, <room>): <agent> turns off an <appliance> at <room>. <appliance> must be accessible, the action must be in the <appliance>'s affordance, both <agent> and <appliance> must be in <room>, <agent> must not be holding an appliance, and the <appliance> state must be 'on'. As a result, the <appliance> state will change to 'off'.",
             "wait_cook_ramen(<agent>, <cup_ramen>, <water_dispenser>, <room>): After turning the dispenser on and waiting, the ramen becomes cooked."
         ],
-        "goal": "Cook cup ramen using the water dispenser and place it on the desk in the living room.", "cost": {"home": 8, "exhome": 8},
+        "goal": "Cook cup ramen using the water dispenser and place it on the desk ", "cost": {"home": 8, "exhome": 8},
         "item_keep": ["cup_ramen", "water_dispenser", "desk"],
         "subgoal": ["Cook the cup ramen", "Move the ramen to the desk"],
         "subgoal_pddl": ["(:goal (and (cooked cup_ramen)))", "(:goal (and (item_on cup_ramen desk)))"],
@@ -105,7 +105,7 @@ TASK_DEFINITIONS: Dict[str, Dict] = {
             "turn_off_appliance(<agent>, <appliance>, <room>): <agent> turns off an <appliance> at <room>. <appliance> must be accessible, the action must be in the <appliance>'s affordance, both <agent> and <appliance> must be in <room>, <agent> must not be holding an appliance, and the <appliance> state must be 'on'. As a result, the <appliance> state will change to 'off'.",
             "wait_heat_food(<agent>, <food>, <microwave>, <room>): After turning the microwave on and waiting, the food inside becomes heated."
         ],
-        "goal": "Heat the food in the microwave and place it on the desk in the living room.", "cost": {"home": 9, "exhome": 9},
+        "goal": "Heat the food in the microwave and place it on the desk ", "cost": {"home": 9, "exhome": 9},
         "item_keep": ["food", "microwave", "desk"],
         "subgoal": ["Heat the food", "Move the food to the desk"],
         "subgoal_pddl": ["(:goal (and (heated food)))", "(:goal (and (item_on food desk)))"],
@@ -123,7 +123,7 @@ TASK_DEFINITIONS: Dict[str, Dict] = {
             "turn_off_appliance(<agent>, <appliance>, <room>): <agent> turns off an <appliance> at <room>. <appliance> must be accessible, the action must be in the <appliance>'s affordance, both <agent> and <appliance> must be in <room>, <agent> must not be holding an appliance, and the <appliance> state must be 'on'. As a result, the <appliance> state will change to 'off'.",
             "wait_charge_phone(<agent>, <phone>, <charger>, <room>): After turning the charger on and waiting, the phone becomes charged."
         ],
-        "goal": "Charge the phone in the bedroom and place it on the desk in the living room.", "cost": {"home": 9},
+        "goal": "Charge the phone in the bedroom and place it on the desk ", "cost": {"home": 9},
         "item_keep": ["phone", "charger", "desk"],
         "subgoal": ["Charge the phone", "Move the phone to the desk"],
         "subgoal_pddl": ["(:goal (and (charged phone)))", "(:goal (and (item_on phone desk)))"],
@@ -136,7 +136,7 @@ TASK_DEFINITIONS: Dict[str, Dict] = {
             "pick_from_room(<agent>, <item>, <room>): <agent> picks up an <item> that is located in <room>. The <item> must be accessible and pickable, the <agent> must be hand-free and in the same room. As a result, the <agent> will be holding the <item>, and the <item> will no longer be in the room.",
             "place_on_desk(<agent>, <item>, <desk>, <room>): <agent> places a held <item> onto a <surface> in <room>. The <agent> must be holding the item and located in the same room as the surface. As a result, the item will be placed on the surface, and the agent's hand will become free.",
         ],
-        "goal": "Place the water bottle from the kitchen onto the desk in the living room.", "cost": {"home": 4, "exhome": 4},
+        "goal": "Place the water bottle from the kitchen onto the desk ", "cost": {"home": 4, "exhome": 4},
         "item_keep": ["water_bottle", "desk"],
         "subgoal": ["Pick up the water bottle", "Move it to the desk"],
         "subgoal_pddl": ["(:goal (and (item_on water_bottle desk)))"],
@@ -149,7 +149,7 @@ TASK_DEFINITIONS: Dict[str, Dict] = {
             "pick_from_room(<agent>, <item>, <room>): <agent> picks up an <item> that is located in <room>. The <item> must be accessible and pickable, the <agent> must be hand-free and in the same room. As a result, the <agent> will be holding the <item>, and the <item> will no longer be in the room.",
             "wipe(<agent>, <cloth>, <surface>, <room>): The agent uses the held cloth to wipe a dirty surface, making it clean."
         ],
-        "goal": "Wipe the desk in the living room using the dishcloth.", "cost": {"home": 3, "exhome": 3},
+        "goal": "Wipe the desk using the dishcloth.", "cost": {"home": 3, "exhome": 3},
         "item_keep": ["dishcloth", "desk"],
         "subgoal": ["Pick the dishcloth", "Wipe the desk"],
         "subgoal_pddl": ["(:goal (and (clean_desk desk)))"],
@@ -161,9 +161,9 @@ TASK_DEFINITIONS: Dict[str, Dict] = {
             "turn_on_switch(<agent>, <switch>, <room>): The agent turns on an item like a lightswitch."
         ],
         "goal": "Turn on the light switch in the specified room.", "cost": {"home": 2, "exhome": 2},
-        "item_keep": ["<room>_switch"], "subgoal": ["Go to the room", "Turn on the switch"],
-        "subgoal_pddl": ["(:goal (and (on <room>_switch)))"],
-        "env_state": ["on(<room>_switch): the light switch is on."]
+        "item_keep": ["<room>_lightswitch"], "subgoal": ["Go to the room", "Turn on the switch"],
+        "subgoal_pddl": ["(:goal (and (on <room>_lightswitch)))"],
+        "env_state": ["on(<room>_lightswitch): the light switch is on."]
     },
     "Turnoffswitch": {
         "scene": ["home", "exhome"], "add_obj": None,
@@ -171,9 +171,9 @@ TASK_DEFINITIONS: Dict[str, Dict] = {
             "turn_off_switch(<agent>, <switch>, <room>): The agent turns off an item like a lightswitch."
         ],
         "goal": "Turn off the light switch in the specified room.", "cost": {"home": 2, "exhome": 2},
-        "item_keep": ["<room>_switch"], "subgoal": ["Go to the room", "Turn off the switch"],
-        "subgoal_pddl": ["(:goal (and (not (on <room>_switch))))"],
-        "env_state": ["on(<room>_switch): the light switch is on."]
+        "item_keep": ["<room>_lightswitch"], "subgoal": ["Go to the room", "Turn off the switch"],
+        "subgoal_pddl": ["(:goal (and (not (on <room>_lightswitch))))"],
+        "env_state": ["on(<room>_lightswitch): the light switch is on."]
     },
     "Organizeddishes": {
         "scene": ["home", "exhome"], "add_obj": None,
@@ -264,3 +264,11 @@ def generate_domain_query(task_names: List[str]) -> Dict[str, Dict[str, Any]]:
     }
 
     return {"HOUSEWORK": composite}
+
+
+def get_example(domain: str, scene: str = None):
+    return eval(domain.upper())
+
+
+def get_scenes(domain: str):
+    return eval(domain.upper())["scene"]

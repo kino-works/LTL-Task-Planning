@@ -3,6 +3,268 @@ import copy
 HOME = {
     "name": "home",
     "rooms": {
+        "singledesk_room": {
+            "items": {
+                "singledesk": {
+                    "accessible": True,
+                    "affordance": ["pick_from_appliance", "pick_from_room", "place_in_desk", "wipe"],
+                    "state": "dirty",
+                    "content": []
+                },
+                "singledeskroom_lightswitch": {
+                    "accessible": True,
+                    "affordance": ["turn_on_switch", "turn_off_switch"],
+                    "state": "off"
+                },
+                "toaster": {
+                    "accessible": True,
+                    "affordance": ["pick_from_appliance", "pick_from_room", "place_in_appliance", "turn_on_appliance", "turn_off_appliance"],
+                    "state": "off"
+                },
+                "bread": {
+                    "accessible": True,
+                    "affordance": ["pick_from_appliance", "pick_from_room", "place_in_appliance", "place_on_desk"],
+                    "state": "free"
+                },
+                "kettle": {
+                    "accessible": True,
+                    "affordance": ["pick_from_appliance", "pick_from_room", "place_in_appliance", "place_on_desk"],
+                    "state": "free"
+                },
+                "pot": {
+                    "accessible": True,
+                    "affordance": ["pick_from_appliance", "pick_from_room", "place_in_appliance", "place_on_desk"],
+                    "state": "free"
+                },
+                "stove": {
+                    "accessible": True,
+                    "affordance": ["pick_from_appliance", "pick_from_room", "place_in_appliance", "turn_on_appliance", "turn_off_appliance"],
+                    "state": "off"
+                },
+                "induction": {
+                    "accessible": True,
+                    "affordance": ["pick_from_appliance", "pick_from_room", "place_in_appliance", "turn_on_appliance", "turn_off_appliance"],
+                    "state": "off"
+                },
+                "cup_ramen": {
+                    "accessible": True,
+                    "affordance": ["pick_from_appliance", "pick_from_room", "place_in_appliance", "place_on_desk"],
+                    "state": "free"
+                },
+                "water_dispenser": {
+                    "accessible": True,
+                    "affordance": ["pick_from_appliance", "pick_from_room", "place_in_appliance"],
+                    "state": "off"
+                },
+                "food": {
+                    "accessible": True,
+                    "affordance": ["pick_from_appliance", "pick_from_room", "place_in_appliance", "place_on_desk"],
+                    "state": "free"
+                },
+                "microwave": {
+                    "accessible": True,
+                    "affordance": ["pick_from_appliance", "pick_from_room", "place_in_appliance", "turn_on_appliance", "turn_off_appliance"],
+                    "state": "off"
+                },
+                "water_bottle": {
+                    "accessible": True,
+                    "affordance": ["pick_from_appliance", "pick_from_room", "place_in_appliance", "place_on_desk"],
+                    "state": "free"
+                },
+                "dish_1": {
+                    "accessible": True,
+                    "affordance": ["pick_from_room", "place_in_appliance"],
+                    "state": "free"
+                },
+                "dish_2": {
+                    "accessible": True,
+                    "affordance": ["pick_from_room", "place_in_appliance"],
+                    "state": "free"
+                },
+                "dish_3": {
+                    "accessible": True,
+                    "affordance": ["pick_from_room", "place_in_appliance"],
+                    "state": "free"
+                },
+                "shelf": {
+                    "accessible": True,
+                    "affordance": ["pick_from_appliance", "pick_from_room", "place_in_appliance"],
+                    "state": "empty",
+                    "content": {}
+                },
+                "eggs": {
+                    "accessible": True,
+                    "affordance": ["pick_from_appliance", "pick_from_room", "place_in_appliance"],
+                    "state": "free"
+                },
+                "egg_container": {
+                    "accessible": True,
+                    "affordance": ["pick_from_appliance", "pick_from_room", "place_in_appliance", "turn_on_appliance", "turn_off_appliance"],
+                    "state": "empty",
+                    "content": {}
+                },
+                "clothes": {
+                    "accessible": True,
+                    "affordance": ["pick_from_appliance", "pick_from_room", "place_in_appliance", "place_on_desk"],
+                    "state": "dirty"
+                },
+                "phone": {
+                    "accessible": True,
+                    "affordance": ["pick_from_appliance", "pick_from_room", "place_in_appliance", "place_on_desk"],
+                    "state": "free"
+                },
+                "charger": {
+                    "accessible": True,
+                    "affordance": ["pick_from_appliance", "pick_from_room", "place_in_appliance", "place_on_desk"],
+                    "state": "off"
+                },
+                "dishcloth": {
+                    "accessible": True,
+                    "affordance": ["pick_from_appliance", "pick_from_room", "place_in_desk", "wipe"],
+                    "state": "clean"
+                },
+                "washing_machine": {
+                    "accessible": True,
+                    "affordance": ["pick_from_appliance", "pick_from_room", "place_in_appliance", "turn_on_appliance", "turn_off_appliance"],
+                    "state": "off"
+                }
+            },
+            "neighbor": []
+        },
+        "dualdesk_room": {
+            "items": {
+                "dualdesk_1": {
+                    "accessible": True,
+                    "affordance": ["pick_from_appliance", "pick_from_room", "place_in_desk", "wipe"],
+                    "state": "dirty",
+                    "content": []
+                },
+                "dualdesk_2": {
+                    "accessible": True,
+                    "affordance": ["pick_from_appliance", "pick_from_room", "place_in_desk", "wipe"],
+                    "state": "dirty",
+                    "content": []
+                },
+                "dualdeskroom_lightswitch": {
+                    "accessible": True,
+                    "affordance": ["turn_on_switch", "turn_off_switch"],
+                    "state": "off"
+                },
+                "toaster": {
+                    "accessible": True,
+                    "affordance": ["pick_from_appliance", "pick_from_room", "place_in_appliance", "turn_on_appliance", "turn_off_appliance"],
+                    "state": "off"
+                },
+                "bread": {
+                    "accessible": True,
+                    "affordance": ["pick_from_appliance", "pick_from_room", "place_in_appliance", "place_on_desk"],
+                    "state": "free"
+                },
+                "kettle": {
+                    "accessible": True,
+                    "affordance": ["pick_from_appliance", "pick_from_room", "place_in_appliance", "place_on_desk"],
+                    "state": "free"
+                },
+                "pot": {
+                    "accessible": True,
+                    "affordance": ["pick_from_appliance", "pick_from_room", "place_in_appliance", "place_on_desk"],
+                    "state": "free"
+                },
+                "stove": {
+                    "accessible": True,
+                    "affordance": ["pick_from_appliance", "pick_from_room", "place_in_appliance", "turn_on_appliance", "turn_off_appliance"],
+                    "state": "off"
+                },
+                "induction": {
+                    "accessible": True,
+                    "affordance": ["pick_from_appliance", "pick_from_room", "place_in_appliance", "turn_on_appliance", "turn_off_appliance"],
+                    "state": "off"
+                },
+                "cup_ramen": {
+                    "accessible": True,
+                    "affordance": ["pick_from_appliance", "pick_from_room", "place_in_appliance", "place_on_desk"],
+                    "state": "free"
+                },
+                "water_dispenser": {
+                    "accessible": True,
+                    "affordance": ["pick_from_appliance", "pick_from_room", "place_in_appliance"],
+                    "state": "off"
+                },
+                "food": {
+                    "accessible": True,
+                    "affordance": ["pick_from_appliance", "pick_from_room", "place_in_appliance", "place_on_desk"],
+                    "state": "free"
+                },
+                "microwave": {
+                    "accessible": True,
+                    "affordance": ["pick_from_appliance", "pick_from_room", "place_in_appliance", "turn_on_appliance", "turn_off_appliance"],
+                    "state": "off"
+                },
+                "water_bottle": {
+                    "accessible": True,
+                    "affordance": ["pick_from_appliance", "pick_from_room", "place_in_appliance", "place_on_desk"],
+                    "state": "free"
+                },
+                "dish_1": {
+                    "accessible": True,
+                    "affordance": ["pick_from_room", "place_in_appliance"],
+                    "state": "free"
+                },
+                "dish_2": {
+                    "accessible": True,
+                    "affordance": ["pick_from_room", "place_in_appliance"],
+                    "state": "free"
+                },
+                "dish_3": {
+                    "accessible": True,
+                    "affordance": ["pick_from_room", "place_in_appliance"],
+                    "state": "free"
+                },
+                "shelf": {
+                    "accessible": True,
+                    "affordance": ["pick_from_appliance", "pick_from_room", "place_in_appliance"],
+                    "state": "empty",
+                    "content": {}
+                },
+                "eggs": {
+                    "accessible": True,
+                    "affordance": ["pick_from_appliance", "pick_from_room", "place_in_appliance"],
+                    "state": "free"
+                },
+                "egg_container": {
+                    "accessible": True,
+                    "affordance": ["pick_from_appliance", "pick_from_room", "place_in_appliance", "turn_on_appliance", "turn_off_appliance"],
+                    "state": "empty",
+                    "content": {}
+                },
+                "clothes": {
+                    "accessible": True,
+                    "affordance": ["pick_from_appliance", "pick_from_room", "place_in_appliance", "place_on_desk"],
+                    "state": "dirty"
+                },
+                "phone": {
+                    "accessible": True,
+                    "affordance": ["pick_from_appliance", "pick_from_room", "place_in_appliance", "place_on_desk"],
+                    "state": "free"
+                },
+                "charger": {
+                    "accessible": True,
+                    "affordance": ["pick_from_appliance", "pick_from_room", "place_in_appliance", "place_on_desk"],
+                    "state": "off"
+                },
+                "dishcloth": {
+                    "accessible": True,
+                    "affordance": ["pick_from_appliance", "pick_from_room", "place_in_desk", "wipe"],
+                    "state": "clean"
+                },
+                "washing_machine": {
+                    "accessible": True,
+                    "affordance": ["pick_from_appliance", "pick_from_room", "place_in_appliance", "turn_on_appliance", "turn_off_appliance"],
+                    "state": "off"
+                }
+            },
+            "neighbor": []
+        },
         "kitchen": {
             "items": {
                 "kitchen_lightswitch": {
@@ -24,6 +286,16 @@ HOME = {
                     "accessible": True,
                     "affordance": ["pick_from_appliance", "pick_from_room", "place_in_appliance", "place_on_desk"],
                     "state": "free"
+                },
+                "pot": {
+                    "accessible": True,
+                    "affordance": ["pick_from_appliance", "pick_from_room", "place_in_appliance", "place_on_desk"],
+                    "state": "free"
+                },
+                "stove": {
+                    "accessible": True,
+                    "affordance": ["pick_from_appliance", "pick_from_room", "place_in_appliance", "turn_on_appliance", "turn_off_appliance"],
+                    "state": "off"
                 },
                 "induction": {
                     "accessible": True,
@@ -137,7 +409,7 @@ HOME = {
                     "affordance": ["turn_on_switch", "turn_off_switch"],
                     "state": "off"
                 },
-                "desk": {
+                "livingroom_desk": {
                     "accessible": True,
                     "affordance": ["pick_from_appliance", "pick_from_room", "place_in_desk", "wipe"],
                     "state": "dirty",
@@ -183,6 +455,16 @@ EXHOME = {
                     "accessible": True,
                     "affordance": ["pick_from_appliance", "pick_from_room", "place_in_appliance", "place_on_desk"],
                     "state": "free"
+                },
+                "pot": {
+                    "accessible": True,
+                    "affordance": ["pick_from_appliance", "pick_from_room", "place_in_appliance", "place_on_desk"],
+                    "state": "free"
+                },
+                "stove": {
+                    "accessible": True,
+                    "affordance": ["pick_from_appliance", "pick_from_room", "place_in_appliance", "turn_on_appliance", "turn_off_appliance"],
+                    "state": "off"
                 },
                 "induction": {
                     "accessible": True,
@@ -278,6 +560,33 @@ EXHOME = {
     }
 }
 
+HOME_VAR = {
+    "inner_house": ["kitchen", "bathroom", "bedroom", "livingroom"],
+    "singledesk_room": ["singledesk_room"],
+    "dualdesk_room": ["dualdesk_room"]
+}
+
+def make_home_variant(variant: str) -> dict:
+    key = variant.lower()
+    if key not in HOME_VAR:
+        raise ValueError(f"Unknown home variant: {variant}")
+
+    keep_rooms = set(HOME_VAR[key])
+    sg = copy.deepcopy(HOME)
+    sg["name"] = key
+    sg["rooms"] = {r: data for r, data in sg["rooms"].items() if r in keep_rooms}
+
+    if sg["agent"]["position"] not in sg["rooms"]:
+        first_room = next(iter(sg["rooms"].keys()))
+        sg["agent"]["position"] = first_room
+
+    return sg
+
+def load_query_scene(scene_key: str) -> dict:
+    k = scene_key.lower()
+    if k in HOME_VAR:
+        return make_home_variant(k)
+    return load_scene_graph(scene_key)
 
 def load_scene_graph(scene: str):
     return copy.deepcopy(eval(scene.upper()))

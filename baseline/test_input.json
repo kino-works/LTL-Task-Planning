@@ -1,0 +1,23 @@
+[
+    {
+        "scene":"inner_house",
+        "domain":[
+            ["Cookedtoast", "Boiledwater", "Cookedcupramen"],
+            ["Heatedfood", "Placedwaterbottle", "Storedeggs"]
+        ]
+    },
+    {
+        "scene":"singledesk_room",
+        "domain":[
+            ["Cookedtoast", "Boiledwater", "Cookedcupramen"],
+            ["Heatedfood", "Placedwaterbottle", "Storedeggs"]
+        ]
+    },
+    {
+        "scene":"dualdesk_room",
+        "domain":[
+            ["Cookedtoast", "Boiledwater", "Cookedcupramen"],
+            ["Heatedfood", "Placedwaterbottle", "Storedeggs"]
+        ]
+    }
+]

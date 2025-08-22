@@ -158,7 +158,7 @@ def main():
     if args.logdir is None:
         args.logdir = os.path.join(
             os.path.dirname(os.path.abspath(__file__)),
-            "run_log",
+            "results",
             datetime.datetime.now().strftime("%Y-%m-%d-%H-%M-%S"),
         )
     os.makedirs(args.logdir, exist_ok=True)
