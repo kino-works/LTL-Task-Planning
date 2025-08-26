@@ -7,7 +7,7 @@
         kitchen livingroom - room
         bread kettle cup_ramen - item
         toaster stove water_dispenser - appliance
-        livingroom_desk - surface
+        livingroom_desk - container
     )
 
     ; Begin init
@@ -28,7 +28,7 @@
         (appliance_at stove kitchen)
         (appliance_at water_dispenser kitchen)
 
-        (surface_at livingroom_desk livingroom)
+        (container_at livingroom_desk livingroom)
 
         ; Attributes
         (item_accessible bread)

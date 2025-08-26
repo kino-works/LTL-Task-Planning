@@ -7,7 +7,7 @@
         kitchen bathroom bedroom livingroom - room
         bread kettle pot cup_ramen food water_bottle dish_1 dish_2 dish_3 eggs clothes phone dishcloth - item
         induction egg_container toaster stove water_dispenser microwave kitchen_lightswitch bathroom_lightswitch livingroom_lightswitch bedroom_lightswitch washing_machine charger - appliance
-        livingroom_desk shelf - surface
+        livingroom_desk shelf - container
     )
     ; End objects
 
@@ -52,8 +52,8 @@
         (appliance_at bedroom_lightswitch bedroom)
         (appliance_at bathroom_lightswitch bathroom)
 
-        (surface_at livingroom_desk livingroom)
-        (surface_at shelf livingroom)
+        (container_at livingroom_desk livingroom)
+        (container_at shelf livingroom)
 
         ; Attributes
         (item_accessible food)

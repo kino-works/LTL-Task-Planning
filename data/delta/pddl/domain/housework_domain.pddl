@@ -5,7 +5,7 @@
     ; Begin types
     (:types
         agent room item - object
-        surface appliance - item
+        container appliance - item
     )
     ; End types
 
@@ -16,7 +16,7 @@
         (agent_has_item ?a - agent ?i - item)
 
         (item_at ?i - item ?r - room)
-        (item_on ?i - item ?s - surface)
+        (item_on ?i - item ?c - container)
         (item_in ?i - item ?ap - appliance)
         
         (item_accessible ?i - item)
@@ -25,7 +25,7 @@
         (appliance_on ?ap - appliance)
         (appliance_at ?ap - appliance ?r - room)
         
-        (surface_at ?s - surface ?r - room)
+        (container_at ?c - container ?r - room)
 
         (neighbor ?r1 - room ?r2 - room)
 
@@ -49,8 +49,8 @@
         (is_water_dispenser ?ap - appliance)
         (is_lightswitch ?ap - appliance)
 
-        (is_shelf ?s - surface)
-        (is_desk ?s - surface)
+        (is_shelf ?c - container)
+        (is_desk ?c - container)
 
         (heated ?i - item)
         (cooked ?i - item)
@@ -107,13 +107,12 @@
             (agent_has_item ?a ?i)
         )
     )
-
-    (:action pick_from_surface
-        :parameters (?a - agent ?i - item ?s - surface ?r - room)
+    (:action pick_from_container
+        :parameters (?a - agent ?i - item ?c - container ?r - room)
         :precondition (and
             (agent_at ?a ?r)
             (agent_hand_free ?a)
-            (surface_at ?s ?r)
+            (container_at ?c ?r)
             (item_on ?i ?s)
             (is_desk ?s)
             (item_accessible ?i)
@@ -126,11 +125,11 @@
         )
     )
     
-    (:action place_on_surface
-        :parameters (?a - agent ?i - item ?s - surface ?r - room)
+    (:action place_on_container
+        :parameters (?a - agent ?i - item ?c - container ?r - room)
         :precondition (and
             (agent_at ?a ?r)
-            (surface_at ?s ?r)
+            (container_at ?c ?r)
             (not (item_on ?i ?s))
             (agent_has_item ?a ?i)
         )
@@ -280,10 +279,10 @@
     )
 
     (:action wipe
-      :parameters (?a - agent ?i - item ?s - surface ?r - room)
+      :parameters (?a - agent ?i - item ?c - container ?r - room)
       :precondition (and
             (agent_at ?a ?r)
-            (surface_at ?s ?r)
+            (container_at ?c ?r)
             (agent_has_item ?a ?i)
         )
       :effect (clean_desk ?s)
