@@ -5,8 +5,8 @@
     (:objects
         robot - agent
         singledeskroom - room
-        bread, kettle, pot, cup_ramen, food, water_bottle, dish_1, dish_2, dish_3, eggs, clothes, phone, charger, dishcloth - item
-        egg_container toaster stove water_dispenser microwave singledeskroom_lightswitch washing_machine - appliance
+        bread kettle pot cup_ramen food water_bottle dish_1 dish_2 dish_3 eggs clothes phone dishcloth - item
+        induction egg_container toaster stove water_dispenser microwave singledeskroom_lightswitch washing_machine charger - appliance
         singledesk shelf - surface
     )
     ; End objects

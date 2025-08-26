@@ -6,7 +6,7 @@
     ; Begin types
     (:types
         agent room item - object
-        desk appliance - item
+        surface appliance - item
     )
     ; End types
 
@@ -17,7 +17,7 @@
         (agent_has_item ?a - agent ?i - item)
 
         (item_at ?i - item ?r - room)
-        (item_on ?i - item ?d - desk)
+        (item_on ?i - item ?s - surface)
         (item_in ?i - item ?ap - appliance) 
 
         (item_accessible ?i - item)
@@ -25,6 +25,8 @@
 
         (appliance_on ?ap - appliance)
         (appliance_at ?ap - appliance ?r - room)
+
+        (surface_at ?s - surface)
 
         (neighbor ?r1 - room ?r2 - room)
 
@@ -38,7 +40,7 @@
         (is_stove ?ap - appliance)
         (is_cup_ramen ?i - item)
         (is_water_dispenser ?ap - appliance)
-        (is_desk ?d - desk)
+        (is_desk ?s - surface)
     )
     ; End predicates
 
@@ -88,17 +90,18 @@
         )
     )
 
-    (:action place_on_desk
-        :parameters (?a - agent ?i - item ?d - desk ?r - room)
+    (:action place_on_surface
+        :parameters (?a - agent ?i - item ?s - surface ?r - room)
         :precondition (and
             (agent_at ?a ?r)
-            (not (item_on ?i ?d))
+            (surface_at ?s ?r)
+            (not (item_on ?i ?s))
             (agent_has_item ?a ?i)
         )
         :effect (and
             (not (agent_has_item ?a ?i))
             (agent_hand_free ?a)
-            (item_on ?i ?d)
+            (item_on ?i ?s)
         )
     )
     

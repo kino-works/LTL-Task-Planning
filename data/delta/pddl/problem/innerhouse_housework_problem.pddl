@@ -5,8 +5,8 @@
     (:objects
         robot - agent
         kitchen bathroom bedroom livingroom - room
-        bread, kettle, pot, cup_ramen, food, water_bottle, dish_1, dish_2, dish_3, eggs, clothes, phone, charger, dishcloth - item
-        egg_container toaster stove water_dispenser microwave bathroom_lightswitch livingroom_lightswitch bedroom_lightswitch washing_machine - appliance
+        bread kettle pot cup_ramen food water_bottle dish_1 dish_2 dish_3 eggs clothes phone dishcloth - item
+        induction egg_container toaster stove water_dispenser microwave kitchen_lightswitch bathroom_lightswitch livingroom_lightswitch bedroom_lightswitch washing_machine charger - appliance
         livingroom_desk shelf - surface
     )
     ; End objects
@@ -38,7 +38,6 @@
         (item_at dish_1 kitchen)
         (item_at dish_2 kitchen)
         (item_at dish_3 kitchen)
-        (item_at livingroom_desk livingroom)
 
         (appliance_at microwave kitchen)
         (appliance_at toaster kitchen)
@@ -52,6 +51,9 @@
         (appliance_at livingroom_lightswitch livingroom)
         (appliance_at bedroom_lightswitch bedroom)
         (appliance_at bathroom_lightswitch bathroom)
+
+        (surface_at livingroom_desk livingroom)
+        (surface_at shelf livingroom)
 
         ; Attributes
         (item_accessible food)
@@ -95,7 +97,10 @@
         (item_accessible bathroom_lightswitch)
         (item_accessible livingroom_desk)
 
+        (is_bread bread)
+        (is_kettle kettle)
         (is_food food)
+        (is_cup_ramen cup_ramen)
         (is_water_bottle water_bottle)
         (is_eggs eggs)
         (is_dishcloth dishcloth)
@@ -124,9 +129,24 @@
 
     ; Begin goal
     (:goal (and
+        (cooked bread)
+        (item_on bread livingroom_desk)
+        (boiled kettle)
+        (item_on kettle livingroom_desk)
+        (heated pot)
+        (item_on pot livingroom_desk)
+        (clean_cloth clothes)
+        (cooked cup_ramen)
+        (item_on cup_ramen livingroom_desk)
         (heated food)
         (item_on food livingroom_desk)
+        (charged phone)
+        (item_on phone livingroom_desk)
         (item_on water_bottle livingroom_desk)
+        (clean_desk livingroom_desk)
+        (item_on dish_1 shelf)
+        (item_on dish_2 shelf)
+        (item_on dish_3 shelf)
         (item_in eggs egg_container)
     ))
     ; End goal
