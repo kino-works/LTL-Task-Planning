@@ -26,7 +26,7 @@
         (appliance_on ?ap - appliance)
         (appliance_at ?ap - appliance ?r - room)
 
-        (container_at ?c - container)
+        (container_at ?c - container ?r - room)
 
         (neighbor ?r1 - room ?r2 - room)
 
@@ -95,13 +95,13 @@
         :precondition (and
             (agent_at ?a ?r)
             (container_at ?c ?r)
-            (not (item_on ?i ?s))
+            (not (item_on ?i ?c))
             (agent_has_item ?a ?i)
         )
         :effect (and
             (not (agent_has_item ?a ?i))
             (agent_hand_free ?a)
-            (item_on ?i ?s)
+            (item_on ?i ?c)
         )
     )
     

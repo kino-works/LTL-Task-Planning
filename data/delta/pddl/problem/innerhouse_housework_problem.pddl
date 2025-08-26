@@ -53,7 +53,7 @@
         (appliance_at bathroom_lightswitch bathroom)
 
         (container_at livingroom_desk livingroom)
-        (container_at shelf livingroom)
+        (container_at shelf kitchen)
 
         ; Attributes
         (item_accessible food)
@@ -106,6 +106,9 @@
         (is_dishcloth dishcloth)
         (is_clothes clothes)
         (is_phone phone)
+        (is_dish dish_1)
+        (is_dish dish_2)
+        (is_dish dish_3)
 
         (is_microwave microwave)
         (is_toaster toaster)

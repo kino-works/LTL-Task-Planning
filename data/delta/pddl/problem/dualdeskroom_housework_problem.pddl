@@ -33,9 +33,9 @@
         (item_on clothes leftdesk)
         (item_on phone leftdesk)
         
-
-        (item_at leftdesk leftdeskroom)
-        (item_at rightdesk rightdeskroom)
+        (container_at shelf rightdesk)
+        (container_at leftdesk leftdeskroom)
+        (container_at rightdesk rightdeskroom)
 
         (appliance_at microwave rightdeskroom)
         (appliance_at toaster rightdeskroom)
@@ -116,9 +116,24 @@
 
     ; Begin goal
     (:goal (and
+        (cooked bread)
+        (item_on bread rightdesk)
+        (boiled kettle)
+        (item_on kettle rightdesk)
+        (heated pot)
+        (item_on pot rightdesk)
+        (clean_cloth clothes)
+        (cooked cup_ramen)
+        (item_on cup_ramen rightdesk)
         (heated food)
-        (item_on food livingroom_desk)
-        (item_on water_bottle livingroom_desk)
+        (item_on food rightdesk)
+        (charged phone)
+        (item_on phone leftdesk)
+        (item_on water_bottle leftdesk)
+        (clean_desk rightdesk)
+        (item_on dish_1 rightdesk)
+        (item_on dish_2 rightdesk)
+        (item_on dish_3 rightdesk)
         (item_in eggs egg_container)
     ))
     ; End goal

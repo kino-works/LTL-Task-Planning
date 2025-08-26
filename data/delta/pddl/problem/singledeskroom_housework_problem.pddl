@@ -31,8 +31,6 @@
         (item_on dish_2 singledesk)
         (item_on dish_3 singledesk)
 
-        (item_at singledesk singledeskroom)
-
         (appliance_at microwave singledeskroom)
         (appliance_at toaster singledeskroom)
         (appliance_at induction singledeskroom)
@@ -42,6 +40,9 @@
         (appliance_at washing_machine singledeskroom)
         (appliance_at charger singledeskroom)
         (appliance_at singledeskroom_lightswitch singledeskroom)
+
+        (container_at singledesk singledeskroom)
+        (container_at shelf singledeskroom)
 
         ; Attributes
         (item_accessible food)
@@ -107,9 +108,24 @@
 
     ; Begin goal
     (:goal (and
+        (cooked bread)
+        (item_on bread singledesk)
+        (boiled kettle)
+        (item_on kettle singledesk)
+        (heated pot)
+        (item_on pot singledesk)
+        (clean_cloth clothes)
+        (cooked cup_ramen)
+        (item_on cup_ramen singledesk)
         (heated food)
-        (item_on food livingroom_desk)
-        (item_on water_bottle livingroom_desk)
+        (item_on food singledesk)
+        (charged phone)
+        (item_on phone singledesk)
+        (item_on water_bottle singledesk)
+        (clean_desk singledesk)
+        (item_on dish_1 shelf)
+        (item_on dish_2 shelf)
+        (item_on dish_3 shelf)
         (item_in eggs egg_container)
     ))
     ; End goal

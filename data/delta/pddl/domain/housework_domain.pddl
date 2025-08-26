@@ -38,6 +38,7 @@
         (is_clothes ?i - item)
         (is_dishcloth ?i - item)
         (is_phone ?i - item)
+        (is_dish ?i - item)
 
         (is_microwave ?ap - appliance)
         (is_toaster ?ap - appliance)
@@ -113,13 +114,13 @@
             (agent_at ?a ?r)
             (agent_hand_free ?a)
             (container_at ?c ?r)
-            (item_on ?i ?s)
-            (is_desk ?s)
+            (item_on ?i ?c)
+            (is_desk ?c)
             (item_accessible ?i)
             (item_pickable ?i)
         )
         :effect (and
-            (not (item_on ?i ?s))
+            (not (item_on ?i ?c))
             (not (agent_hand_free ?a))
             (agent_has_item ?a ?i)
         )
@@ -130,13 +131,13 @@
         :precondition (and
             (agent_at ?a ?r)
             (container_at ?c ?r)
-            (not (item_on ?i ?s))
+            (not (item_on ?i ?c))
             (agent_has_item ?a ?i)
         )
         :effect (and
             (not (agent_has_item ?a ?i))
             (agent_hand_free ?a)
-            (item_on ?i ?s)
+            (item_on ?i ?c)
         )
     )
     
@@ -285,7 +286,7 @@
             (container_at ?c ?r)
             (agent_has_item ?a ?i)
         )
-      :effect (clean_desk ?s)
+      :effect (clean_desk ?c)
     )
     ; End actions
 )
