@@ -84,6 +84,8 @@
             (item_accessible ?i)
             (item_pickable ?i)
             (agent_hand_free ?a)
+            (forall (?c - container) (not (item_on ?i ?c)))
+            (forall (?ap - appliance) (not (item_in ?i ?ap)))
         )
         :effect (and
             (not (item_at ?i ?r))
@@ -187,6 +189,8 @@
             (appliance_at ?ap ?r)
             (item_in ?i ?ap)
             (appliance_on ?ap)
+            (is_bread ?i)
+            (is_toaster ?ap)
             (not (cooked ?i))
         )
         :effect (and
@@ -200,6 +204,8 @@
             (appliance_at ?ap ?r)
             (item_in ?i ?ap)
             (appliance_on ?ap)
+            (is_kettle ?i)
+            (is_stove ?ap)
             (not (boiled ?i))
         )
         :effect (and
@@ -214,6 +220,8 @@
             (appliance_at ?ap ?r)
             (item_in ?i ?ap)
             (appliance_on ?ap)
+            (is_pot ?i)
+            (is_induction ?ap)
             (not (heated ?i))
         )
         :effect (and
@@ -229,6 +237,8 @@
             (is_washing_machine ?ap)
             (appliance_at ?ap ?r)
             (appliance_on ?ap)
+            (is_clothes ?i)
+            (is_washing_machine ?ap)
             (not (clean_cloth ?i))
         )
         :effect (and
@@ -243,6 +253,8 @@
             (appliance_at ?ap ?r)
             (item_in ?i ?ap)
             (appliance_on ?ap)
+            (is_cup_ramen ?i)
+            (is_water_dispenser ?ap)
             (not (cooked ?i))
         )
         :effect (and
@@ -258,6 +270,8 @@
             (appliance_at ?ap ?r)
             (is_microwave ?ap)
             (appliance_on ?ap)
+            (is_food ?i)
+            (is_microwave ?ap)
             (not (heated ?i))
         )
         :effect (and
@@ -272,6 +286,8 @@
             (appliance_at ?ap ?r)
             (item_in ?i ?ap)
             (appliance_on ?ap)
+            (is_phone ?i)
+            (is_charger ?ap)
             (not (charged ?i))
         )
         :effect (and
@@ -285,8 +301,10 @@
             (agent_at ?a ?r)
             (container_at ?c ?r)
             (agent_has_item ?a ?i)
+            (is_dishcloth ?i)
         )
       :effect (clean_desk ?c)
     )
+
     ; End actions
 )

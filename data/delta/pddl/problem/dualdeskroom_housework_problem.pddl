@@ -29,11 +29,10 @@
         (item_on dish_2 rightdesk)
         (item_on dish_3 rightdesk)
         (item_on pot rightdesk)
-
         (item_on clothes leftdesk)
         (item_on phone leftdesk)
         
-        (container_at shelf rightdesk)
+        (container_at shelf rightdeskroom)
         (container_at leftdesk leftdeskroom)
         (container_at rightdesk rightdeskroom)
 
