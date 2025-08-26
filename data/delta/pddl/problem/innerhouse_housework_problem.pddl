@@ -1,0 +1,133 @@
+(define (problem innerhouse_housework)
+    (:domain housework)
+
+    ; Begin objects
+    (:objects
+        robot - agent
+        kitchen bathroom bedroom livingroom - room
+        bread, kettle, pot, cup_ramen, food, water_bottle, dish_1, dish_2, dish_3, eggs, clothes, phone, charger, dishcloth - item
+        egg_container toaster stove water_dispenser microwave bathroom_lightswitch livingroom_lightswitch bedroom_lightswitch washing_machine - appliance
+        livingroom_desk shelf - surface
+    )
+    ; End objects
+
+    ; Begin init
+    (:init
+        ; Connections
+        (neighbor kitchen livingroom)
+        (neighbor livingroom kitchen)
+        (neighbor bedroom livingroom)
+        (neighbor livingroom bedroom)
+        (neighbor bathroom livingroom)
+        (neighbor livingroom bathroom)
+
+        ; Position
+        (agent_at robot livingroom)
+        (agent_hand_free robot)
+
+        (item_at food kitchen)
+        (item_at water_bottle kitchen)
+        (item_at eggs kitchen)
+        (item_at dishcloth livingroom)
+        (item_at clothes bedroom)
+        (item_at phone bedroom)
+        (item_at bread kitchen)
+        (item_at cup_ramen kitchen)
+        (item_at kettle kitchen)
+        (item_at pot kitchen)
+        (item_at dish_1 kitchen)
+        (item_at dish_2 kitchen)
+        (item_at dish_3 kitchen)
+        (item_at livingroom_desk livingroom)
+
+        (appliance_at microwave kitchen)
+        (appliance_at toaster kitchen)
+        (appliance_at induction kitchen)
+        (appliance_at stove kitchen)
+        (appliance_at egg_container kitchen)
+        (appliance_at water_dispenser kitchen)
+        (appliance_at washing_machine bathroom)
+        (appliance_at charger bedroom)
+        (appliance_at kitchen_lightswitch kitchen)
+        (appliance_at livingroom_lightswitch livingroom)
+        (appliance_at bedroom_lightswitch bedroom)
+        (appliance_at bathroom_lightswitch bathroom)
+
+        ; Attributes
+        (item_accessible food)
+        (item_pickable food)
+        (item_accessible water_bottle)
+        (item_pickable water_bottle)
+        (item_accessible eggs)
+        (item_pickable eggs)
+        (item_accessible dishcloth)
+        (item_pickable dishcloth)
+        (item_accessible clothes)
+        (item_pickable clothes)
+        (item_accessible phone)
+        (item_pickable phone)
+        (item_accessible bread)
+        (item_pickable bread)
+        (item_accessible cup_ramen)
+        (item_pickable cup_ramen)
+        (item_accessible kettle)
+        (item_pickable kettle)
+        (item_accessible pot)
+        (item_pickable pot)
+        (item_accessible dish_1)
+        (item_pickable dish_1)
+        (item_accessible dish_2)
+        (item_pickable dish_2)
+        (item_accessible dish_3)
+        (item_pickable dish_3)
+
+        (item_accessible microwave)
+        (item_accessible egg_container)
+        (item_accessible toaster)
+        (item_accessible induction)
+        (item_accessible stove)
+        (item_accessible water_dispenser)
+        (item_accessible washing_machine)
+        (item_accessible charger)
+        (item_accessible kitchen_lightswitch)
+        (item_accessible livingroom_lightswitch)
+        (item_accessible bedroom_lightswitch)
+        (item_accessible bathroom_lightswitch)
+        (item_accessible livingroom_desk)
+
+        (is_food food)
+        (is_water_bottle water_bottle)
+        (is_eggs eggs)
+        (is_dishcloth dishcloth)
+        (is_clothes clothes)
+        (is_phone phone)
+
+        (is_microwave microwave)
+        (is_toaster toaster)
+        (is_induction induction)
+        (is_stove stove)
+        (is_washing_machine washing_machine)
+        (is_egg_container egg_container)
+        (is_charger charger)
+        (is_water_dispenser water_dispenser)
+
+        (is_lightswitch kitchen_lightswitch)
+        (is_lightswitch livingroom_lightswitch)
+        (is_lightswitch bedroom_lightswitch)
+        (is_lightswitch bathroom_lightswitch)
+
+        (is_desk livingroom_desk)
+        (is_shelf shelf)
+
+    )
+    ; End init
+
+    ; Begin goal
+    (:goal (and
+        (heated food)
+        (item_on food livingroom_desk)
+        (item_on water_bottle livingroom_desk)
+        (item_in eggs egg_container)
+    ))
+    ; End goal
+)

@@ -34,6 +34,7 @@ def query(domain_path: str, problem_path: str, plan_file: str, print_plan: False
     plan_time = 0.
     plan = None
     err_msg = err.decode()
+    #print("output:", output)
     if "Solution found" in str(output):
         for line in str(output).split("\\n"):
             if "Plan cost: " in line:
@@ -223,10 +224,10 @@ def validate(domain_file: str, problem_file: str, plan_file: str):
 
     #print(err)
     if "Plan valid" in str(output):
-        #print("VAL: Plan valid!")
+        print("VAL: Plan valid!")
         return True, "Plan succeeded."
     else:
-        #print("VAL: Plan invalid!")
+        print("VAL: Plan invalid!")
         repair_phrase = "Plan Repair Advice:"
         if repair_phrase in str(output):
             out_str = str(output)

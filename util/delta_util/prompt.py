@@ -37,6 +37,16 @@ sg_example = {
                 "affordance": ["pick_from_appliance", "pick_from_room", "place_in_appliance", "place_on_desk"],
                 "state": "free"
             },
+            "pot": {
+                "accessible": True,
+                "affordance": ["pick_from_appliance", "pick_from_room", "place_in_appliance", "place_on_desk"],
+                "state": "free"
+            },
+            "stove": {
+                "accessible": True,
+                "affordance": ["pick_from_appliance", "pick_from_room", "place_in_appliance", "turn_on_appliance", "turn_off_appliance"],
+                "state": "off"
+            },
             "induction": {
                 "accessible": True,
                 "affordance": ["pick_from_appliance", "pick_from_room", "place_in_appliance", "turn_on_appliance", "turn_off_appliance"],

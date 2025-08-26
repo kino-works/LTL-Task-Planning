@@ -1,0 +1,165 @@
+You are an excellent PDDL problem file generator. Given a scene graph representation of an environment, a PDDL domain file and a goal description, you can generate a PDDL problem file.
+    Here is an example of a scene graph in the form of a nested dictionary in Python:
+    ```
+{'name': 'exhome', 'rooms': {'kitchen': {'items': {'toaster': {'accessible': True, 'affordance': ['pick_from_appliance', 'pick_from_room', 'place_in_appliance', 'turn_on_appliance', 'turn_off_appliance'], 'state': 'off'}, 'bread': {'accessible': True, 'affordance': ['pick_from_appliance', 'pick_from_room', 'place_in_appliance', 'place_on_desk'], 'state': 'free'}, 'kettle': {'accessible': True, 'affordance': ['pick_from_appliance', 'pick_from_room', 'place_in_appliance', 'place_on_desk'], 'state': 'free'}, 'stove': {'accessible': True, 'affordance': ['pick_from_appliance', 'pick_from_room', 'place_in_appliance', 'turn_on_appliance', 'turn_off_appliance'], 'state': 'off'}, 'cup_ramen': {'accessible': True, 'affordance': ['pick_from_appliance', 'pick_from_room', 'place_in_appliance', 'place_on_desk'], 'state': 'free'}, 'water_dispenser': {'accessible': True, 'affordance': ['pick_from_appliance', 'pick_from_room', 'place_in_appliance'], 'state': 'off'}}, 'neighbor': []}, 'livingroom': {'items': {'desk': {'accessible': True, 'affordance': ['pick_from_appliance', 'pick_from_room', 'place_in_desk', 'wipe'], 'state': 'dirty', 'content': []}}, 'neighbor': []}}, 'agent': {'position': 'livingroom', 'state': 'hand-free', 'holding': None}}
+```
+
+    The top level keys are the name of the scene, the rooms, the agents, and possibly the humans.
+    Each room contains a dictionary of 'items' inside the rooms, and a list of 'neighbor' (connected) rooms. The 'neighbor' relation is bidirectional, i.e. if kitchen is neighbor of corridor, then corridor is also neighbor of kitchen.
+    Each item has three attributes, 'accessible' means if the item can be accessed or not, 'affordance' indicates the affordable actions of this item, 'state' infers whether the item is free, or occupied, e.g. being picked by an agent.
+    Each agent has two attributes, the current position and the state.
+
+    Given a goal description e.g., Make cook(toast) bread and place it on the desk, Boil water in the kettle and place it on the desk , Cook cup ramen using the water dispenser and place it on the desk , and using the pre-defined object types, predicated in the PDDL domain example named exhousework:
+    ```
+    (:types
+        agent room item - object
+        desk appliance - item
+    )
+    (:predicates
+        (agent_at ?a - agent ?r - room)
+        (agent_hand_free ?a - agent)
+        (agent_has_item ?a - agent ?i - item)
+
+        (item_at ?i - item ?r - room)
+        (item_on ?i - item ?d - desk)
+        (item_in ?i - item ?ap - appliance) 
+
+        (item_accessible ?i - item)
+        (item_pickable ?i - item)
+
+        (appliance_on ?ap - appliance)
+        (appliance_at ?ap - appliance ?r - room)
+
+        (neighbor ?r1 - room ?r2 - room)
+
+        (cooked ?i - item)
+        (boiled ?i - item)
+        (cooked ?i - item)
+
+        (is_bread ?i - item)
+        (is_toaster ?ap - appliance)
+        (is_kettle ?i - item)
+        (is_stove ?ap - appliance)
+        (is_cup_ramen ?i - item)
+        (is_water_dispenser ?ap - appliance)
+        (is_desk ?d - desk)
+    )
+```
+    A corresponding PDDL problem file can be formulated as follows:
+    ```
+(define (problem exhome_exhousework)
+    (:domain exhousework)
+
+    ; Begin objects
+    (:objects
+        robot - agent
+        kitchen livingroom - room
+        bread kettle cup_ramen - item
+        toaster stove water_dispenser - appliance
+        livingroom_desk - desk
+    )
+
+    ; Begin init
+    (:init
+        ; Connections
+        (neighbor kitchen livingroom)
+        (neighbor livingroom kitchen)
+
+        ; Positions
+        (agent_at robot livingroom)
+        (agent_hand_free robot)
+        (item_at bread kitchen)
+        (item_at kettle kitchen)
+        (item_at cup_ramen kitchen)
+        (item_at livingroom_desk livingroom)
+        (appliance_at toaster kitchen)
+        (appliance_at stove kitchen)
+        (appliance_at water_dispenser kitchen)
+
+        ; Attributes
+        (item_accessible bread)
+        (item_pickable bread)
+        (item_accessible toaster)
+        (item_accessible kettle)
+        (item_pickable kettle)
+        (item_accessible stove)
+        (item_accessible cup_ramen)
+        (item_pickable cup_ramen)
+        (item_accessible water_dispenser)
+        (item_accessible livingroom_desk)
+
+        (is_bread bread)
+        (is_toaster toaster)
+        (is_kettle kettle)
+        (is_stove stove)
+        (is_cup_ramen cup_ramen)
+        (is_water_dispenser water_dispenser)
+        (is_desk livingroom_desk)
+    )
+    ; End init
+
+    ; Begin goal
+    (:goal (and
+        (cooked bread)
+        (item_on bread livingroom_desk)
+        (boiled kettle)
+        (item_on kettle livingroom_desk)
+        (cooked cup_ramen)
+        (item_on cup_ramen livingroom_desk)
+    ))
+    ; End goal
+)
+
+```
+    The first line defines the name of the problem, usually the scene graph's name.
+    The second line refers to the domain it based on.
+    The "(:objects )" section lists all the items included in the scene graph with corresponding object types. Remember to distinguish the additional object types from the other items.
+    The "(:init )" section lists the connections (neighbors) of the rooms in the scene graph, the positions of the items and the agent, and the attributes of all listed items (e.g. accessible, pickable, turnable etc.).
+    The ; Connections part lists the neighbor rooms of all rooms in the scene graph. Note that the connection of each two neighbor rooms always exists as a pair, e.g. if there is a "(neighbor corridor kitchen)", there should always exist a "(neighbor kitchen corridor)".
+    The ; Positions part lists the positions of all items and the agent in the scene graph. 
+    The ; Attributes part lists the attributes of all items in the scene graph.
+    The "(:goal )" section defines the goal using the goal description given above.
+
+    Now given a new scene graph: 
+```
+{'name': 'singledeskroom', 'rooms': {'singledeskroom': {'items': {'singledesk': {'accessible': True, 'affordance': ['pick_from_appliance', 'pick_from_room', 'place_in_desk', 'wipe'], 'state': 'dirty', 'content': []}, 'toaster': {'accessible': True, 'affordance': ['pick_from_appliance', 'pick_from_room', 'place_in_appliance', 'turn_on_appliance', 'turn_off_appliance'], 'state': 'off'}, 'bread': {'accessible': True, 'affordance': ['pick_from_appliance', 'pick_from_room', 'place_in_appliance', 'place_on_desk'], 'state': 'free'}, 'kettle': {'accessible': True, 'affordance': ['pick_from_appliance', 'pick_from_room', 'place_in_appliance', 'place_on_desk'], 'state': 'free'}, 'stove': {'accessible': True, 'affordance': ['pick_from_appliance', 'pick_from_room', 'place_in_appliance', 'turn_on_appliance', 'turn_off_appliance'], 'state': 'off'}, 'cup_ramen': {'accessible': True, 'affordance': ['pick_from_appliance', 'pick_from_room', 'place_in_appliance', 'place_on_desk'], 'state': 'free'}, 'water_dispenser': {'accessible': True, 'affordance': ['pick_from_appliance', 'pick_from_room', 'place_in_appliance'], 'state': 'off'}}, 'neighbor': []}}, 'agent': {'position': 'singledeskroom', 'state': 'hand-free', 'holding': None}}
+```
+    and a new goal description: Make cook(toast) bread and place it on the desk , Boil water in the kettle and place it on the desk , Cook cup ramen using the water dispenser and place it on the desk 
+    and using the object types, predicates from the new PDDL domain file named housework:
+    ```
+    (:types
+        agent room item - object
+        desk appliance - item
+    )
+    (:predicates
+        (agent_at ?a - agent ?r - room)
+        (agent_hand_free ?a - agent)
+        (agent_has_item ?a - agent ?i - item)
+
+        (item_at ?i - item ?r - room)
+        (item_on ?i - item ?d - desk)
+        (item_in ?i - item ?ap - appliance) 
+
+        (item_accessible ?i - item)
+        (item_pickable ?i - item)
+
+        (appliance_on ?ap - appliance)
+        (appliance_at ?ap - appliance ?r - room)
+
+        (neighbor ?r1 - room ?r2 - room)
+
+        (cooked ?i - item)
+        (boiled ?i - item)
+
+        (is_bread ?i - item)
+        (is_toaster ?ap - appliance)
+        (is_kettle ?i - item)
+        (is_stove ?ap - appliance)
+        (is_cup_ramen ?i - item)
+        (is_water_dispenser ?ap - appliance)
+        (is_desk ?d - desk)
+    )
+```
+    Please provide a new problem file in PDDL with respect to the new scene graph and goal specification directly without further explanations. Please also keep the comments such as "; Begin goal", "; End goal" etc. in the problem file.
+    The goal should only consist of the previously defined predicates without any further keyword which not appear in the examples such as "forall" etc.
+    

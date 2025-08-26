@@ -1,0 +1,294 @@
+You are an excellent assistant in pruning items. Given a list of items and a goal description, you can prune the item list by only keeping the relevant items.
+    Here is an example of a list of items: ['kitchen_lightswitch', 'toaster', 'bread', 'kettle', 'pot', 'stove', 'induction', 'cup_ramen', 'water_dispenser', 'food', 'microwave', 'water_bottle', 'dish_1', 'dish_2', 'dish_3', 'shelf', 'eggs', 'egg_container', 'livingroom_lightswitch', 'desk', 'dishcloth']
+    
+    Given an example of a goal description: Make cook(toast) bread and place it on the desk, Boil water in the kettle and place it on the desk , Cook cup ramen using the water dispenser and place it on the desk , and the corresponding action knowledge
+    (:action goto
+        :parameters (?a - agent ?from - room ?to - room)
+        :precondition (and
+            (agent_at ?a ?from)
+            (neighbor ?from ?to)
+        )
+        :effect (and
+            (not (agent_at ?a ?from))
+            (agent_at ?a ?to)
+        )
+    )
+
+    (:action pick_from_room
+        :parameters (?a - agent ?i - item ?r - room)
+        :precondition (and
+            (agent_at ?a ?r)
+            (item_at ?i ?r)
+            (item_accessible ?i)
+            (item_pickable ?i)
+            (agent_hand_free ?a)
+        )
+        :effect (and
+            (not (item_at ?i ?r))
+            (not (agent_hand_free ?a))
+            (agent_has_item ?a ?i)
+        )
+    )
+
+    (:action pick_from_appliance
+        :parameters (?a - agent ?i - item ?ap - appliance ?r - room)
+        :precondition (and
+            (agent_at ?a ?r)
+            (agent_hand_free ?a)
+            (item_in ?i ?ap)
+            (appliance_at ?ap ?r)
+            (item_accessible ?i)
+            (item_pickable ?i)
+        )
+        :effect (and
+            (not (item_in ?i ?ap))
+            (not (agent_hand_free ?a))
+            (agent_has_item ?a ?i)
+        )
+    )
+
+    (:action place_on_desk
+        :parameters (?a - agent ?i - item ?d - desk ?r - room)
+        :precondition (and
+            (agent_at ?a ?r)
+            (not (item_on ?i ?d))
+            (agent_has_item ?a ?i)
+        )
+        :effect (and
+            (not (agent_has_item ?a ?i))
+            (agent_hand_free ?a)
+            (item_on ?i ?d)
+        )
+    )
+    
+    (:action place_in_appliance
+        :parameters (?a - agent ?i - item ?ap - appliance ?r - room)
+        :precondition (and
+            (agent_at ?a ?r)
+            (not (item_in ?i ?ap))
+            (appliance_at ?ap ?r)
+            (agent_has_item ?a ?i)
+        )
+        :effect (and
+            (not (agent_has_item ?a ?i))
+            (agent_hand_free ?a)
+            (item_in ?i ?ap)
+        )
+    )
+
+    (:action turn_on_appliance
+        :parameters (?a - agent ?ap - appliance ?r - room)
+        :precondition (and
+            (agent_at ?a ?r)
+            (appliance_at ?ap ?r)
+            (not (appliance_on ?ap))
+        )
+        :effect (and
+            (appliance_on ?ap)
+        )
+    )
+
+    (:action turn_off_appliance
+        :parameters (?a - agent ?ap - appliance ?r - room)
+        :precondition (and
+            (agent_at ?a ?r)
+            (appliance_at ?ap ?r)
+            (appliance_on ?ap)
+        )
+        :effect (and
+            (not (appliance_on ?ap))
+        )
+    )
+
+    (:action wait_cook_bread
+        :parameters (?a - agent ?i - item ?ap - appliance ?r - room)
+        :precondition (and
+            (agent_at ?a ?r)
+            (item_in ?i ?ap)
+            (appliance_at ?ap ?r)
+            (is_toaster ?ap)
+            (appliance_on ?ap)
+            (not (cooked ?i))
+        )
+        :effect (and
+            (cooked ?i)
+        )
+    )
+
+    (:action wait_boil_water
+        :parameters (?a - agent ?i - item ?ap - appliance ?r - room)
+        :precondition (and
+            (agent_at ?a ?r)
+            (item_in ?i ?ap)
+            (appliance_at ?ap ?r)
+            (is_stove ?ap)
+            (appliance_on ?ap)
+            (not (boiled ?i))
+        )
+        :effect (and
+            (boiled ?i)
+        )
+    )
+
+    (:action wait_cook_ramen
+        :parameters (?a - agent ?i - item ?ap - appliance ?r - room)
+        :precondition (and
+            (agent_at ?a ?r)
+            (item_in ?i ?ap)
+            (appliance_at ?ap ?r)
+            (is_water_dispenser ?ap)
+            (appliance_on ?ap)
+            (not (cooked ?i))
+        )
+        :effect (and
+            (cooked ?i)
+        )
+    ) 
+    the relevant items for accomplishing the goal are ['bread', 'toaster', 'desk', 'kettle', 'stove', 'cup_ramen', 'water_dispenser'].
+    
+    Now given a new list of items: ['singledesk', 'singledeskroom_lightswitch', 'toaster', 'bread', 'kettle', 'pot', 'stove', 'induction', 'cup_ramen', 'water_dispenser', 'food', 'microwave', 'water_bottle', 'dish_1', 'dish_2', 'dish_3', 'shelf', 'eggs', 'egg_container', 'clothes', 'phone', 'charger', 'dishcloth', 'washing_machine']
+    and a new goal description: Make cook(toast) bread and place it on the desk , Boil water in the kettle and place it on the desk , Cook cup ramen using the water dispenser and place it on the desk , and the new action knowledge
+    (:action goto
+        :parameters (?a - agent ?from - room ?to - room)
+        :precondition (and
+            (agent_at ?a ?from)
+            (neighbor ?from ?to)
+        )
+        :effect (and
+            (not (agent_at ?a ?from))
+            (agent_at ?a ?to)
+        )
+    )
+
+    (:action pick_from_room
+        :parameters (?a - agent ?i - item ?r - room)
+        :precondition (and
+            (agent_at ?a ?r)
+            (item_at ?i ?r)
+            (item_accessible ?i)
+            (item_pickable ?i)
+            (agent_hand_free ?a)
+        )
+        :effect (and
+            (not (item_at ?i ?r))
+            (not (agent_hand_free ?a))
+            (agent_has_item ?a ?i)
+        )
+    )
+
+    (:action pick_from_appliance
+        :parameters (?a - agent ?i - item ?ap - appliance ?r - room)
+        :precondition (and
+            (agent_at ?a ?r)
+            (agent_hand_free ?a)
+            (item_in ?i ?ap)
+            (appliance_at ?ap ?r)
+            (item_accessible ?i)
+            (item_pickable ?i)
+        )
+        :effect (and
+            (not (item_in ?i ?ap))
+            (not (agent_hand_free ?a))
+            (agent_has_item ?a ?i)
+        )
+    )
+
+    (:action place_on_desk
+        :parameters (?a - agent ?i - item ?d - desk ?r - room)
+        :precondition (and
+            (agent_at ?a ?r)
+            (not (item_on ?i ?d))
+            (agent_has_item ?a ?i)
+        )
+        :effect (and
+            (not (agent_has_item ?a ?i))
+            (agent_hand_free ?a)
+            (item_on ?i ?d)
+        )
+    )
+    
+    (:action place_in_appliance
+        :parameters (?a - agent ?i - item ?ap - appliance ?r - room)
+        :precondition (and
+            (agent_at ?a ?r)
+            (not (item_in ?i ?ap))
+            (appliance_at ?ap ?r)
+            (agent_has_item ?a ?i)
+        )
+        :effect (and
+            (not (agent_has_item ?a ?i))
+            (agent_hand_free ?a)
+            (item_in ?i ?ap)
+        )
+    )
+
+    (:action turn_on_appliance
+        :parameters (?a - agent ?ap - appliance ?r - room)
+        :precondition (and
+            (agent_at ?a ?r)
+            (appliance_at ?ap ?r)
+            (not (appliance_on ?ap))
+        )
+        :effect (and
+            (appliance_on ?ap)
+        )
+    )
+
+    (:action turn_off_appliance
+        :parameters (?a - agent ?ap - appliance ?r - room)
+        :precondition (and
+            (agent_at ?a ?r)
+            (appliance_at ?ap ?r)
+            (appliance_on ?ap)
+        )
+        :effect (and
+            (not (appliance_on ?ap))
+        )
+    )
+
+    (:action wait_cook_bread
+        :parameters (?a - agent ?i - item ?ap - appliance ?r - room)
+        :precondition (and
+            (agent_at ?a ?r)
+            (item_in ?i ?ap)
+            (appliance_at ?ap ?r)
+            (is_toaster ?ap)
+            (appliance_on ?ap)
+            (not (cooked ?i))
+        )
+        :effect (and
+            (cooked ?i)
+        )
+    )
+
+    (:action wait_boil_water
+        :parameters (?a - agent ?i - item ?ap - appliance ?r - room)
+        :precondition (and
+            (agent_at ?a ?r)
+            (item_in ?i ?ap)
+            (appliance_at ?ap ?r)
+            (is_stove ?ap)
+            (appliance_on ?ap)
+            (not (boiled ?i))
+        )
+        :effect (and
+            (boiled ?i)
+        )
+    )
+
+    (:action wait_cook_ramen
+        :parameters (?a - agent ?i - item ?ap - appliance ?r - room)
+        :precondition (and
+            (agent_at ?a ?r)
+            (item_in ?i ?ap)
+            (appliance_at ?ap ?r)
+            (is_water_dispenser ?ap)
+            (appliance_on ?ap)
+            (not (cooked ?i))
+        )
+        :effect (and
+            (cooked ?i)
+        )
+    )
+    please provide a list of the relevent items from the new item list for accomplishing the new goal directly without further explanations, and keep the same data structure.
+    

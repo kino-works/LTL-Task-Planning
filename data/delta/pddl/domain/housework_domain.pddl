@@ -5,7 +5,7 @@
     ; Begin types
     (:types
         agent room item - object
-        desk appliance - item
+        surface appliance - item
     )
     ; End types
 
@@ -16,7 +16,7 @@
         (agent_has_item ?a - agent ?i - item)
 
         (item_at ?i - item ?r - room)
-        (item_on ?i - item ?d - desk)
+        (item_on ?i - item ?s - surface)
         (item_in ?i - item ?ap - appliance)
         
         (item_accessible ?i - item)
@@ -28,13 +28,35 @@
         (neighbor ?r1 - room ?r2 - room)
 
         (is_food ?i - item)
-        (is_microwave ?ap - appliance)
         (is_water_bottle ?i - item)
         (is_eggs ?i - item)
-        (is_desk ?d - desk)
+        (is_clothes ?i - item)
+        (is_dishcloth ?i - item)
+        (is_phone ?i - item)
+
+        (is_microwave ?ap - appliance)
+        (is_toaster ?ap - appliance)
+        (is_induction ?ap - appliance)
+        (is_stove ?ap - appliance)
+        (is_washing_machine ?ap - appliance)
         (is_egg_container ?ap - appliance)
+        (is_charger ?ap - appliance)
+        (is_water_dispenser ?ap - appliance)
+        (is_kitchen_lightswitch ?ap - appliance)
+        (is_livingroom_lightswitch ?ap - appliance)
+        (is_bedroom_lightswitch ?ap - appliance)
+        (is_bathroom_lightswitch ?ap - appliance)
+
+        (is_shelf ?s - surface)
+        (is_desk ?s - surface)
 
         (heated ?i - item)
+        (toasted ?i - item)
+        (boiled ?i - item)
+        (washed ?i - item)
+        (charged ?i - item)
+        (clean_desk ?i - item)
+        (clean_cloth ?i - item)
     )
     ; End predicates
 
@@ -84,17 +106,34 @@
         )
     )
 
-    (:action place_on_desk
-        :parameters (?a - agent ?i - item ?d - desk ?r - room)
+    (:action pick_from_desk
+        :parameters (?a - agent ?i - item ?s - surface ?r - room)
         :precondition (and
             (agent_at ?a ?r)
-            (not (item_on ?i ?d))
+            (agent_hand_free ?a)
+            (item_on ?i ?s)
+            (is_desk ?s - surface)
+            (item_accessible ?i)
+            (item_pickable ?i)
+        )
+        :effect (and
+            (not (item_on ?i ?s))
+            (not (agent_hand_free ?a))
+            (agent_has_item ?a ?i)
+        )
+    )
+    
+    (:action place_on_surface
+        :parameters (?a - agent ?i - item ?s - surface ?r - room)
+        :precondition (and
+            (agent_at ?a ?r)
+            (not (item_on ?i ?s))
             (agent_has_item ?a ?i)
         )
         :effect (and
             (not (agent_has_item ?a ?i))
             (agent_hand_free ?a)
-            (item_on ?i ?d)
+            (item_on ?i ?s)
         )
     )
     
@@ -137,6 +176,76 @@
         )
     )
 
+    (:action wait_cook_bread
+        :parameters (?a - agent ?i - item ?ap - appliance ?r - room)
+        :precondition (and
+            (agent_at ?a ?r)
+            (ap_at ?ap ?r)
+            (at ?i ?ap)
+            (on ?ap)
+            (not (cooked ?i))
+        )
+        :effect (and
+            (cooked ?i)
+        )
+    )
+    (:action wait_boil_water
+        :parameters (?a - agent ?i - item ?ap - appliance ?r - room)
+        :precondition (and
+            (agent_at ?a ?r)
+            (ap_at ?ap ?r)
+            (at ?i ?ap)
+            (on ?ap)
+            (not (boiled ?i))
+        )
+        :effect (and
+            (boiled ?i)
+        )
+    )
+    
+    (:action wait_heat_pot
+        :parameters (?a - agent ?i - item ?ap - appliance ?r - room)
+        :precondition (and
+            (agent_at ?a ?r)
+            (ap_at ?ap ?r)
+            (at ?i ?ap)
+            (on ?ap)
+            (not (heated ?i))
+        )
+        :effect (and
+            (heated ?i)
+        )
+    )
+    
+    (:action wait_wash_clothes
+        :parameters (?a - agent ?i - item ?ap - appliance ?r - room)
+        :precondition (and
+            (agent_at ?a ?r)
+            (item_in ?i ?ap)
+            (is_washing_machine ?ap)
+            (appliance_at ?ap ?r)
+            (appliance_on ?ap)
+            (not (clean_cloth ?i))
+        )
+        :effect (and
+            (clean_cloth ?i)
+        )
+    )
+
+    (:action wait_cook_ramen
+        :parameters (?a - agent ?i - item ?ap - appliance ?r - room)
+        :precondition (and
+            (agent_at ?a ?r)
+            (ap_at ?ap ?r)
+            (at ?i ?ap)
+            (on ?ap)
+            (not (cooked ?i))
+        )
+        :effect (and
+            (cooked ?i)
+        )
+    )
+
     (:action wait_heat_food
         :parameters (?a - agent ?i - item ?ap - appliance ?r - room)
         :precondition (and
@@ -150,6 +259,29 @@
         :effect (and
             (heated ?i)
         )
+    )
+
+    (:action wait_charge_phone
+        :parameters (?a - agent ?i - item ?ap - appliance ?r - room)
+        :precondition (and
+            (agent_at ?a ?r)
+            (ap_at ?ap ?r)
+            (at ?i ?ap)
+            (on ?ap)
+            (not (charged ?i))
+        )
+        :effect (and
+            (charged ?i)
+        )
+    )
+
+    (:action wipe
+      :parameters (?a - agent ?i - item ?r - room ?s - surface)
+      :precondition (and
+            (agent_at ?a ?r)
+            (agent_has_item ?a ?i)
+        )
+      :effect (clean_desk ?s)
     )
 
     (:action store_egg

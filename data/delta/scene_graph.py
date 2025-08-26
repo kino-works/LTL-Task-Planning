@@ -3,7 +3,7 @@ import copy
 HOME = {
     "name": "home",
     "rooms": {
-        "singledesk_room": {
+        "singledeskroom": {
             "items": {
                 "singledesk": {
                     "accessible": True,
@@ -131,21 +131,15 @@ HOME = {
             },
             "neighbor": []
         },
-        "dualdesk_room": {
+        "rightdeskroom": {
             "items": {
-                "dualdesk_1": {
+                "rightdesk": {
                     "accessible": True,
                     "affordance": ["pick_from_appliance", "pick_from_room", "place_in_desk", "wipe"],
                     "state": "dirty",
                     "content": []
                 },
-                "dualdesk_2": {
-                    "accessible": True,
-                    "affordance": ["pick_from_appliance", "pick_from_room", "place_in_desk", "wipe"],
-                    "state": "dirty",
-                    "content": []
-                },
-                "dualdeskroom_lightswitch": {
+                "rightdeskroom_lightswitch": {
                     "accessible": True,
                     "affordance": ["turn_on_switch", "turn_off_switch"],
                     "state": "off"
@@ -236,6 +230,22 @@ HOME = {
                     "affordance": ["pick_from_appliance", "pick_from_room", "place_in_appliance", "turn_on_appliance", "turn_off_appliance"],
                     "state": "empty",
                     "content": {}
+                }
+            },
+            "neighbor": []
+        },
+        "leftdeskroom": {
+            "items": {
+                "leftdesk": {
+                    "accessible": True,
+                    "affordance": ["pick_from_appliance", "pick_from_room", "place_in_desk", "wipe"],
+                    "state": "dirty",
+                    "content": []
+                },
+                "leftdeskroom_lightswitch": {
+                    "accessible": True,
+                    "affordance": ["turn_on_switch", "turn_off_switch"],
+                    "state": "off"
                 },
                 "clothes": {
                     "accessible": True,
@@ -561,9 +571,9 @@ EXHOME = {
 }
 
 HOME_VAR = {
-    "inner_house": ["kitchen", "bathroom", "bedroom", "livingroom"],
-    "singledesk_room": ["singledesk_room"],
-    "dualdesk_room": ["dualdesk_room"]
+    "innerhouse": ["kitchen", "bathroom", "bedroom", "livingroom"],
+    "singledeskroom": ["singledeskroom"],
+    "dualdeskroom": ["leftdeskroom", "rightdeskroom"]
 }
 
 def make_home_variant(variant: str) -> dict:

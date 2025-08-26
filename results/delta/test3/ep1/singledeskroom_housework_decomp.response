@@ -1,0 +1,27 @@
+1. Heat the food in the microwave.
+   ```pddl
+   (:goal
+       (heated food)
+   )
+   ```
+
+2. Place the heated food on the desk.
+   ```pddl
+   (:goal
+       (item_on food singledesk)
+   )
+   ```
+
+3. Place the water bottle on the desk.
+   ```pddl
+   (:goal
+       (item_on water_bottle singledesk)
+   )
+   ```
+
+4. Place the eggs in the egg container.
+   ```pddl
+   (:goal
+       (item_in eggs egg_container)
+   )
+   ```

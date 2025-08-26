@@ -27,27 +27,24 @@ load_dotenv()
 openai.api_key = os.getenv("OPENAI_API_KEY")
 
 import json
-INPUT_JSON_PATH = os.path.join(project_root, "test_input.json")
+INPUT_JSON_PATH = os.path.join(project_root, "./baseline/test_input.json")
 with open(INPUT_JSON_PATH, "r") as f:
     config = json.load(f)
+
+LOG_PATH = "results/delta/"
+
+def SRC_DOMAIN_PATH(d):
+    return f"./data/delta/pddl/domain/{d}_domain.pddl"
+
+def SRC_PROBLEM_PATH(s, d):
+    return f"./data/delta/pddl/problem/{s}_{d}_problem.pddl"
+
 
 DEFAULT_LLM = "gpt-4o"
 TEMPERATURE = 0.0
 TOP_P = 1.0
 EPISODE = 2
 MAX_TIME = 120
-
-
-def SRC_DOMAIN_PATH(d):
-    return f"./data/delta/domain/{d}_domain.pddl"
-
-
-def SRC_PROBLEM_PATH(s, d):
-    return f"./data/delta/problem/{s}_{d}_problem.pddl"
-
-
-def LOG_PATH(t):
-    return f"results/delta/{t}"
 
 
 if __name__ == "__main__":
@@ -84,7 +81,7 @@ if __name__ == "__main__":
         "--scene-example", type=str, dest="scene_example", default="exhome"
     )
     parser.add_argument(
-        "--domain-query", type=str, dest="domain_example", default="housework"
+        "--domain-query", type=str, dest="domain", default="housework"
     )
     parser.add_argument(
         "--no-plan", action="store_true", default=False
@@ -143,7 +140,7 @@ if __name__ == "__main__":
 
         qry = query.generate_domain_query(task_names)["HOUSEWORK"]
         
-        scene_key = "home" if query_scene in {"inner_house", "singledesk_room", "dualdesk_room"} else query_scene
+        scene_key = "home" if query_scene in {"innerhouse", "singledeskroom", "dualdeskroom"} else query_scene
         if scene_key not in qry["scene"]:
             raise Exception(f"Scene {scene_key} is not supported by this task set (supported={list(qry['gt_cost'].keys())}).")
         
@@ -156,7 +153,7 @@ if __name__ == "__main__":
         for e in range(args.episode):
             model.reset()
 
-            log_path = os.path.join(LOG_PATH(curr_time),  f"test{set_idx:02}/ep{e}/")
+            log_path = os.path.join(LOG_PATH, f"test{set_idx}/ep{e}/")
             Path(log_path).mkdir(parents=True, exist_ok=True)
 
             scene_exp = load_scene_graph(args.scene_example)
@@ -319,8 +316,10 @@ if __name__ == "__main__":
             if exit_code == 1:
                 with open(plan_file, "w") as pf:
                     pf.write("\n".join(plan))
-                is_valid, val_info = planner.validate(SRC_DOMAIN_PATH(
-                    args.domain), SRC_PROBLEM_PATH(query_scene, args.domain), plan_file)
+                is_valid, val_info = planner.validate(
+                    SRC_DOMAIN_PATH(args.domain),
+                    p_tar_file,
+                    plan_file)
                 if is_valid:
                     success_orig += 1
                 else:
@@ -335,7 +334,7 @@ if __name__ == "__main__":
                         for sp in plans:
                             pdf.writelines("\n".join(sp) + "\n\n")
                     is_valid_decomp, val_info_decomp = planner.validate(SRC_DOMAIN_PATH(
-                        args.domain), SRC_PROBLEM_PATH(query_scene, args.domain), plan_decomp_file)
+                        args.domain), p_tar_file, plan_decomp_file)
                     if is_valid_decomp:
                         success += 1
                     else:
@@ -344,6 +343,9 @@ if __name__ == "__main__":
                 print("No decomposed subgoals!")
                 plans, times, nodes, costs, completed_sp = [], [], [], [], None
                 exit_code_decomp = 7
+
+            print("==================== Episode {}/{}, Success Orig. {}, Total Success: {} ====================".format(
+            e + 1, args.episode, success_orig, success))
 
             data_list.append([e, exit_code, exit_code_decomp, success, success_orig, args.experiment, args.model, args.temperature,
                             args.domain_example, args.scene_example, args.domain, query_scene,
@@ -362,7 +364,7 @@ if __name__ == "__main__":
                                           "Plan Time Decomp", "Plan Time Sub-P",
                                           "Node Expanded Decomp", "Node Expanded Sub-P",
                                           "Cost Decomp", "Cost Sub-P", "GT Cost", "Items Keep"])
-    df.to_csv(os.path.join(LOG_PATH(curr_time), "log.csv"))
+    df.to_csv(os.path.join(LOG_PATH, "log.csv"))
     print("Success rate w/o decomposition: {:.2f}%".format(
         success_orig / args.episode * 100.))
     print("Success rate with decomposition: {:.2f}%".format(

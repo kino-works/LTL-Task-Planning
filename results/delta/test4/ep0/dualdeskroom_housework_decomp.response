@@ -1,0 +1,41 @@
+1. Cook the bread in the toaster:
+   ```
+   (:goal
+       (cooked bread)
+   )
+   ```
+
+2. Move the cooked bread to dualdesk_1:
+   ```
+   (:goal
+       (item_on bread dualdesk_1)
+   )
+   ```
+
+3. Boil the water in the kettle:
+   ```
+   (:goal
+       (boiled kettle)
+   )
+   ```
+
+4. Move the boiled kettle to dualdesk_1:
+   ```
+   (:goal
+       (item_on kettle dualdesk_1)
+   )
+   ```
+
+5. Cook cup ramen with the water dispenser:
+   ```
+   (:goal
+       (cooked cup_ramen)
+   )
+   ```
+
+6. Move the cooked cup ramen to dualdesk_1:
+   ```
+   (:goal
+       (item_on cup_ramen dualdesk_1)
+   )
+   ```
