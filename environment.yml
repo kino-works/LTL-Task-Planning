@@ -11,9 +11,10 @@ dependencies:
   - tiktoken==0.7.0
   - plotly==5.19.0
   - varname==0.13.3
+  - gym
   - pip
   - pip:
-      - openai==1.43.0
+      - openai==1.102.0
       - bitsandbytes==0.43.0
       - dotenv==0.9.9
       - python-dotenv==1.0.1

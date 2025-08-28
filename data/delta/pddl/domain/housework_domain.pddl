@@ -39,6 +39,7 @@
         (is_dishcloth ?i - item)
         (is_phone ?i - item)
         (is_dish ?i - item)
+        (is_pot ?i - item)
 
         (is_microwave ?ap - appliance)
         (is_toaster ?ap - appliance)
@@ -53,12 +54,14 @@
         (is_shelf ?c - container)
         (is_desk ?c - container)
 
+        (loose ?i - item) 
+        
         (heated ?i - item)
         (cooked ?i - item)
         (boiled ?i - item)
         (washed ?i - item)
         (charged ?i - item)
-        (clean_desk ?i - item)
+        (clean_desk ?c - container)
         (clean_cloth ?i - item)
     )
     ; End predicates
@@ -84,12 +87,12 @@
             (item_accessible ?i)
             (item_pickable ?i)
             (agent_hand_free ?a)
-            (forall (?c - container) (not (item_on ?i ?c)))
-            (forall (?ap - appliance) (not (item_in ?i ?ap)))
+            (loose ?i) 
         )
         :effect (and
             (not (item_at ?i ?r))
             (not (agent_hand_free ?a))
+            (not (loose ?i))
             (agent_has_item ?a ?i)
         )
     )
@@ -103,6 +106,7 @@
             (appliance_at ?ap ?r)
             (item_accessible ?i)
             (item_pickable ?i)
+            (not (loose ?i))
         )
         :effect (and
             (not (item_in ?i ?ap))
@@ -120,6 +124,7 @@
             (is_desk ?c)
             (item_accessible ?i)
             (item_pickable ?i)
+            (not (loose ?i))
         )
         :effect (and
             (not (item_on ?i ?c))
@@ -234,7 +239,6 @@
         :precondition (and
             (agent_at ?a ?r)
             (item_in ?i ?ap)
-            (is_washing_machine ?ap)
             (appliance_at ?ap ?r)
             (appliance_on ?ap)
             (is_clothes ?i)
@@ -268,7 +272,6 @@
             (agent_at ?a ?r)
             (item_in ?i ?ap)
             (appliance_at ?ap ?r)
-            (is_microwave ?ap)
             (appliance_on ?ap)
             (is_food ?i)
             (is_microwave ?ap)

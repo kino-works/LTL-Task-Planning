@@ -1,7 +1,12 @@
 # LTL-timing
-### baseline
+RILAB LTL-timing baseline test
 
-### test_input.json
-- query scene, domain을 정의하는 파일
-- scene은 scenegraph HOME에 정의된 room을 재구성 ex. inner_house, singledesk_room, dualdesk_room
-- domain은 매 test마다 수행할 task들 리스트 ex. ["Cookedtoast", "Boiledwater", "Cookedcupramen"]
+### baseline
+- ISR-LLM: Iterative Self-Refined Large Language Model for Long-Horizon Sequential Task Planning (https://arxiv.org/abs/2308.13724)
+- Self-Corrective Task Planning by Inverse Prompting with Large Language Models (https://arxiv.org/abs/2503.07317)
+- DELTA: Decomposed Efficient Long-Term Robot Task Planning using Large Language Models (https://delta-llm.github.io/)
+
+### setting
+- .env 파일 만들고 open ai key 작성 (ex. OPENAI_API_KEY = ~)
+- environment.yml 설치 (conda 환경)
+- PDDLGym Planners, PDDL validator 설치 (https://github.com/boschresearch/DELTA 의 Installing dependencies 파트 참조)

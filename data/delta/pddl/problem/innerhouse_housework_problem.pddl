@@ -109,6 +109,7 @@
         (is_dish dish_1)
         (is_dish dish_2)
         (is_dish dish_3)
+        (is_pot pot)
 
         (is_microwave microwave)
         (is_toaster toaster)
@@ -126,6 +127,20 @@
 
         (is_desk livingroom_desk)
         (is_shelf shelf)
+
+        (loose bread)
+        (loose kettle)
+        (loose food)
+        (loose cup_ramen)
+        (loose water_bottle)
+        (loose eggs)
+        (loose dishcloth)
+        (loose clothes)
+        (loose phone)
+        (loose dish_1)
+        (loose dish_2)
+        (loose dish_3)
+        (loose pot)
 
     )
     ; End init
