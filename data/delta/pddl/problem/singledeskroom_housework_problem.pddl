@@ -31,6 +31,20 @@
         (item_on dish_2 singledesk)
         (item_on dish_3 singledesk)
 
+        (not (loose bread))
+        (not (loose kettle))
+        (not (loose food))
+        (not (loose cup_ramen))
+        (not (loose water_bottle))
+        (not (loose eggs))
+        (not (loose dishcloth))
+        (not (loose clothes))
+        (not (loose phone))
+        (not (loose dish_1))
+        (not (loose dish_2))
+        (not (loose dish_3))
+        (not (loose pot))
+
         (appliance_at microwave singledeskroom)
         (appliance_at toaster singledeskroom)
         (appliance_at induction singledeskroom)
@@ -83,12 +97,19 @@
         (item_accessible singledeskroom_lightswitch)
         (item_accessible singledesk)
 
+        (is_bread bread)
+        (is_kettle kettle)
         (is_food food)
+        (is_cup_ramen cup_ramen)
         (is_water_bottle water_bottle)
         (is_eggs eggs)
         (is_dishcloth dishcloth)
         (is_clothes clothes)
         (is_phone phone)
+        (is_dish dish_1)
+        (is_dish dish_2)
+        (is_dish dish_3)
+        (is_pot pot)
 
         (is_microwave microwave)
         (is_toaster toaster)
@@ -102,7 +123,6 @@
 
         (is_desk singledesk)
         (is_shelf shelf)
-
     )
     ; End init
 

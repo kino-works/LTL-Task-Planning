@@ -125,6 +125,8 @@ def query_pddlgym(domain: str, p_idx: int = 0, max_time: float = 120):
             state, reward, done, truncated, info = env.step(act)
         exit_code = 1
     except Exception as err:
+        print("err (repr):", repr(err))
+        print("err (str):", str(err))
         err_msg = str(err)
         print("Could not find solution!", err_msg)
     return [p.pddl_str() for p in plan] if exit_code == 1 else None, time, node, cost, exit_code

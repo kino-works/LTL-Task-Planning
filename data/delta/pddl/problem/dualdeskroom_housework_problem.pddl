@@ -88,12 +88,19 @@
         (item_accessible rightdesk)
         (item_accessible leftdesk)
 
+        (is_bread bread)
+        (is_kettle kettle)
         (is_food food)
+        (is_cup_ramen cup_ramen)
         (is_water_bottle water_bottle)
         (is_eggs eggs)
         (is_dishcloth dishcloth)
         (is_clothes clothes)
         (is_phone phone)
+        (is_dish dish_1)
+        (is_dish dish_2)
+        (is_dish dish_3)
+        (is_pot pot)
 
         (is_microwave microwave)
         (is_toaster toaster)
@@ -109,7 +116,6 @@
         (is_desk rightdesk)
         (is_desk leftdesk)
         (is_shelf shelf)
-
     )
     ; End init
 

@@ -30,6 +30,8 @@
 
         (neighbor ?r1 - room ?r2 - room)
 
+        (loose ?i - item) 
+
         (cooked ?i - item)
         (boiled ?i - item)
         (cooked ?i - item)
@@ -65,11 +67,13 @@
             (item_accessible ?i)
             (item_pickable ?i)
             (agent_hand_free ?a)
+            (loose ?i - item) 
         )
         :effect (and
             (not (item_at ?i ?r))
             (not (agent_hand_free ?a))
             (agent_has_item ?a ?i)
+            (not (loose ?i - item))
         )
     )
 
@@ -82,6 +86,7 @@
             (appliance_at ?ap ?r)
             (item_accessible ?i)
             (item_pickable ?i)
+            (not (loose ?i - item))
         )
         :effect (and
             (not (item_in ?i ?ap))
@@ -97,6 +102,7 @@
             (container_at ?c ?r)
             (not (item_on ?i ?c))
             (agent_has_item ?a ?i)
+            (not (loose ?i - item))
         )
         :effect (and
             (not (agent_has_item ?a ?i))
@@ -112,6 +118,7 @@
             (not (item_in ?i ?ap))
             (appliance_at ?ap ?r)
             (agent_has_item ?a ?i)
+            (not (loose ?i - item))
         )
         :effect (and
             (not (agent_has_item ?a ?i))
@@ -150,6 +157,7 @@
             (agent_at ?a ?r)
             (item_in ?i ?ap)
             (appliance_at ?ap ?r)
+            (is_bread ?i)
             (is_toaster ?ap)
             (appliance_on ?ap)
             (not (cooked ?i))
@@ -165,6 +173,7 @@
             (agent_at ?a ?r)
             (item_in ?i ?ap)
             (appliance_at ?ap ?r)
+            (is_kettle ?i)
             (is_stove ?ap)
             (appliance_on ?ap)
             (not (boiled ?i))
@@ -180,6 +189,7 @@
             (agent_at ?a ?r)
             (item_in ?i ?ap)
             (appliance_at ?ap ?r)
+            (is_cup_ramen ?i)
             (is_water_dispenser ?ap)
             (appliance_on ?ap)
             (not (cooked ?i))

@@ -49,6 +49,10 @@
         (is_cup_ramen cup_ramen)
         (is_water_dispenser water_dispenser)
         (is_desk livingroom_desk)
+
+        (loose bread)
+        (loose kettle)
+        (loose cup_ramen)
     )
     ; End init
 
