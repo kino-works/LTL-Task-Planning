@@ -1,0 +1,350 @@
+You are a helpful, pattern-following assistant that examines the correctness of each action during a task planning process. You work like a state machine.
+
+Question:
+Initial state:
+(agent_at robot1 bedroom)
+(agent_hand_free robot1)
+(at bread kitchen)
+(at cup_ramen kitchen)
+(at kettle kitchen)
+(at desk livingroom)
+(ap_at toaster kitchen)
+(ap_at stove kitchen)
+(ap_at water_dispenser kitchen)
+(not (on toaster))
+(not (on stove))
+(not (on water_dispenser))
+(not (cooked bread))
+(not (boiled kettle))
+(not (cooked cup_ramen))
+
+Goal state:
+(cooked bread)
+(at bread desk)
+(boiled kettle)
+(at kettle desk)
+(cooked cup_ramen)
+(at cup_ramen desk)
+
+Examined action sequence:
+(goto robot1 bedroom kitchen)
+(pick robot1 bread kitchen)
+(place robot1 bread toaster)
+(turn_on robot1 toaster kitchen)
+(wait_cook_bread robot1 bread toaster kitchen)
+(turn_off robot1 toaster kitchen)
+(pick robot1 bread toaster)
+(goto robot1 kitchen livingroom)
+(place robot1 bread desk)
+(goto robot1 livingroom kitchen)
+(pick robot1 kettle kitchen)
+(place robot1 kettle stove)
+(turn_on robot1 stove kitchen)
+(wait_boil_water robot1 kettle stove kitchen)
+(turn_off robot1 stove kitchen)
+(pick robot1 kettle stove)
+(goto robot1 kitchen livingroom)
+(place robot1 kettle desk)
+(goto robot1 livingroom kitchen)
+(pick robot1 cup_ramen kitchen)
+(place robot1 cup_ramen water_dispenser)
+(turn_on robot1 water_dispenser kitchen)
+(wait_cook_ramen robot1 cup_ramen water_dispenser kitchen)
+(turn_off robot1 water_dispenser kitchen)
+(pick robot1 cup_ramen water_dispenser)
+(goto robot1 kitchen livingroom)
+(place robot1 cup_ramen desk)
+
+
+Answer:
+Analysis:
+Initial state:
+(agent_at robot1 bedroom),
+(agent_hand_free robot1),
+(at bread kitchen),
+(at cup_ramen kitchen),
+(at kettle kitchen),
+(at desk livingroom),
+(ap_at toaster kitchen),
+(ap_at stove kitchen),
+(ap_at water_dispenser kitchen),
+(not (on toaster)),
+(not (on stove)),
+(not (on water_dispenser)),
+(not (cooked bread)),
+(not (boiled kettle)),
+(not (cooked cup_ramen))
+
+(goto robot1 bedroom kitchen): robot1 is now in kitchen
+(pick robot1 bread kitchen): bread in robot1's hand
+(place robot1 bread toaster): bread on toaster
+(turn_on robot1 toaster kitchen): toaster is on
+(wait_cook_bread robot1 bread toaster kitchen): bread becomes cooked → (cooked bread)
+(turn_off robot1 toaster kitchen): toaster is off
+(pick robot1 bread toaster): bread in hand
+(goto robot1 kitchen livingroom): robot1 in livingroom
+(place robot1 bread desk): bread placed → (at bread desk)
+(goto robot1 livingroom kitchen): robot1 in kitchen
+(pick robot1 kettle kitchen): kettle in hand
+(place robot1 kettle stove): kettle on stove
+(turn_on robot1 stove kitchen): stove is on
+(wait_boil_water robot1 kettle stove kitchen): kettle is boiled → (boiled kettle)
+(turn_off robot1 stove kitchen): stove is off
+(pick robot1 kettle stove): kettle in hand
+(goto robot1 kitchen livingroom): robot1 in livingroom
+(place robot1 kettle desk): kettle placed → (at kettle desk)
+(goto robot1 livingroom kitchen): robot1 in kitchen
+(pick robot1 cup_ramen kitchen): cup_ramen in hand
+(place robot1 cup_ramen water_dispenser): cup_ramen on water dispenser
+(turn_on robot1 water_dispenser kitchen): water_dispenser is on
+(wait_cook_ramen robot1 cup_ramen water_dispenser kitchen): cup_ramen cooked → (cooked cup_ramen)
+(turn_off robot1 water_dispenser kitchen): water_dispenser is off
+(pick robot1 cup_ramen water_dispenser): cup_ramen in hand
+(goto robot1 kitchen livingroom): robot1 in livingroom
+(place robot1 cup_ramen desk): cup_ramen placed → (at cup_ramen desk)
+
+All required goal predicates are satisfied: cooked bread, boiled kettle, cooked cup_ramen, bread, kettle, cup_ramen at desk
+
+Final answer:
+Yes, the action sequence is correct, it can accomplish the task.
+
+Question:
+Initial state:
+(agent_at robot1 bedroom)
+(agent_hand_free robot1)
+(at food kitchen)
+(at water_bottle kitchen)
+(at eggs kitchen)
+(at desk livingroom)
+(ap_at egg_container kitchen)
+(ap_at microwave kitchen)
+(not (on microwave))
+(not (on egg_container))
+(not (heated food))
+
+Goal state:
+(heated food)
+(at food desk)
+(at water_bottle desk)
+(at eggs egg_container)
+
+Examined action sequence:
+(goto robot1 bedroom kitchen)
+(pick robot1 food kitchen)
+(place robot1 food microwave)
+(turn_on robot1 microwave kitchen)
+(wait_heat_food robot1 food microwave kitchen)
+(turn_off robot1 microwave kitchen)
+(pick robot1 food microwave)
+(goto robot1 kitchen livingroom)
+(place robot1 food desk)
+(goto robot1 livingroom kitchen)
+(pick robot1 water_bottle kitchen)
+(goto robot1 kitchen livingroom)
+(place robot1 water_bottle desk)
+(goto robot1 livingroom kitchen)
+(pick robot1 eggs kitchen)
+(place robot1 eggs egg_container)
+
+
+Answer:
+Analysis:
+Initial state:
+(agent_at robot1 bedroom),
+(agent_hand_free robot1),
+(at food kitchen),
+(at water_bottle kitchen),
+(at eggs kitchen),
+(at desk livingroom),
+(ap_at egg_container kitchen),
+(ap_at microwave kitchen),
+(not (on microwave)),
+(not (on egg_container)),
+(not (heated food))
+
+(goto robot1 bedroom kitchen): robot1 moves to kitchen
+(pick robot1 food kitchen): robot1 picks up the food
+(place robot1 food microwave): food placed into microwave
+(turn_on robot1 microwave kitchen): microwave turned on
+(wait_heat_food robot1 food microwave kitchen): food is heated → (heated food)
+(turn_off robot1 microwave kitchen): microwave turned off
+(pick robot1 food microwave): heated food picked again
+(goto robot1 kitchen livingroom): robot1 moves to livingroom
+(place robot1 food desk): heated food placed on desk → (at food desk)
+(goto robot1 livingroom kitchen): robot1 moves back to kitchen
+(pick robot1 water_bottle kitchen): robot1 picks up water bottle
+(goto robot1 kitchen livingroom): robot1 moves to livingroom
+(place robot1 water_bottle desk): water bottle placed on desk → (at water_bottle desk)
+(goto robot1 livingroom kitchen): robot1 moves back to kitchen
+(pick robot1 eggs kitchen): robot1 picks up eggs
+(place robot1 eggs egg_container): eggs placed into container → (at eggs egg_container)
+
+All required goal predicates are satisfied: heated food, at food desk, at water_bottle desk, at eggs egg_container
+
+Final answer:
+Yes, the action sequence is correct, it can accomplish the task.
+
+Question:
+Initial state:
+(agent_at robot1 bedroom)
+(agent_hand_free robot1)
+(at dishcloth livingroom)
+(at phone bedroom)
+(at water_bottle kitchen)
+(at desk livingroom)
+(ap_at charger bedroom)
+(not (on charger))
+(not (clean_desk desk))
+(not (charged phone))
+
+Goal state:
+(clean_desk desk)
+(charged phone)
+(at phone desk)
+(at water_bottle desk)
+
+Examined action sequence:
+(goto robot1 bedroom livingroom)
+(pick robot1 dishcloth livingroom)
+(wipe robot1 dishcloth livingroom desk)
+(goto robot1 livingroom bedroom)
+(pick robot1 phone bedroom)
+(place robot1 phone charger)
+(turn_on robot1 charger bedroom)
+(wait_charge_phone robot1 phone charger bedroom)
+(turn_off robot1 charger bedroom)
+(pick robot1 phone charger)
+(goto robot1 bedroom livingroom)
+(place robot1 phone desk)
+(goto robot1 livingroom kitchen)
+(pick robot1 water_bottle kitchen)
+(goto robot1 kitchen livingroom)
+(place robot1 water_bottle desk)
+
+
+Answer:
+Analysis:
+Initial state:
+(agent_at robot1 bedroom),
+(agent_hand_free robot1),
+(at dishcloth livingroom),
+(at phone bedroom),
+(at water_bottle kitchen),
+(at desk livingroom),
+(ap_at charger bedroom),
+(not (on charger)),
+(not (clean_desk desk)),
+(not (charged phone))
+
+(goto robot1 bedroom livingroom): robot1 moves to livingroom
+(pick robot1 dishcloth livingroom): dishcloth picked
+(wipe robot1 dishcloth livingroom desk): livingroom is wiped  (wiped livingroom)
+(goto robot1 livingroom bedroom): robot1 moves to bedroom
+(pick robot1 phone bedroom): phone picked
+(place robot1 phone charger): phone placed on charger
+(turn_on robot1 charger bedroom): charger turned on
+(wait_charge_phone robot1 phone charger bedroom): phone charged → (charged phone)
+(turn_off robot1 charger bedroom): charger turned off
+(pick robot1 phone charger): phone picked up
+(goto robot1 bedroom livingroom): robot1 moves to livingroom
+(place robot1 phone desk): phone placed on desk → (at phone desk)
+(goto robot1 livingroom kitchen) robot1 moves to kitchen
+(pick robot1 water_bottle kitchen): water bottle picked
+(goto robot1 kitchen livingroom): robot1 moves to livingroom
+(place robot1 water_bottle desk): water bottle placed → (at water_bottle desk)
+
+All required goal predicates are satisfied: wiped livingroom, charged phone, at water_bottle desk
+
+Final answer:
+Yes, the action sequence is correct, it can accomplish the task.
+Question:
+Initial state: 
+(agent_at robot1 bedroom)
+        (agent_hand_free robot1)
+
+        (at bread kitchen)
+        (at kettle kitchen)
+        (at water_bottle kitchen)
+        (at desk livingroom)
+
+        (ap_at toaster kitchen)
+        (ap_at stove kitchen)
+
+        (not (on toaster))
+        (not (on stove))
+
+        (not (cooked bread))
+        (not (boiled kettle))
+Goal state:
+(cooked bread)
+        (at bread desk)
+        (boiled kettle)
+        (at kettle desk)
+        (at water_bottle desk)
+Examined action sequence:
+(goto robot1 bedroom kitchen)
+(pick robot1 bread kitchen)
+(place robot1 bread toaster)
+(turn_on robot1 toaster kitchen)
+(wait_cook_bread robot1 bread toaster kitchen)
+(turn_off robot1 toaster kitchen)
+(pick robot1 bread toaster)
+(goto robot1 kitchen livingroom)
+(place robot1 bread desk)
+(goto robot1 livingroom kitchen)
+(pick robot1 kettle kitchen)
+(place robot1 kettle stove)
+(turn_on robot1 stove kitchen)
+(wait_boil_water robot1 kettle stove kitchen)
+(turn_off robot1 stove kitchen)
+(pick robot1 kettle stove)
+(goto robot1 kitchen livingroom)
+(place robot1 kettle desk)
+(goto robot1 livingroom kitchen)
+(pick robot1 water_bottle kitchen)
+(goto robot1 kitchen livingroom)
+(place robot1 water_bottle desk)
+
+Answer:
+Analysis:
+Initial state:
+(agent_at robot1 bedroom),
+(agent_hand_free robot1),
+(at bread kitchen),
+(at kettle kitchen),
+(at water_bottle kitchen),
+(at desk livingroom),
+(ap_at toaster kitchen),
+(ap_at stove kitchen),
+(not (on toaster)),
+(not (on stove)),
+(not (cooked bread)),
+(not (boiled kettle))
+
+(goto robot1 bedroom kitchen): robot1 moves to kitchen
+(pick robot1 bread kitchen): robot1 picks up the bread
+(place robot1 bread toaster): bread placed on toaster
+(turn_on robot1 toaster kitchen): toaster turned on
+(wait_cook_bread robot1 bread toaster kitchen): bread is cooked → (cooked bread)
+(turn_off robot1 toaster kitchen): toaster turned off
+(pick robot1 bread toaster): robot1 picks up the cooked bread
+(goto robot1 kitchen livingroom): robot1 moves to livingroom
+(place robot1 bread desk): bread placed on desk → (at bread desk)
+(goto robot1 livingroom kitchen): robot1 moves back to kitchen
+(pick robot1 kettle kitchen): robot1 picks up the kettle
+(place robot1 kettle stove): kettle placed on stove
+(turn_on robot1 stove kitchen): stove turned on
+(wait_boil_water robot1 kettle stove kitchen): kettle is boiled → (boiled kettle)
+(turn_off robot1 stove kitchen): stove turned off
+(pick robot1 kettle stove): robot1 picks up the boiled kettle
+(goto robot1 kitchen livingroom): robot1 moves to livingroom
+(place robot1 kettle desk): kettle placed on desk → (at kettle desk)
+(goto robot1 livingroom kitchen): robot1 moves back to kitchen
+(pick robot1 water_bottle kitchen): robot1 picks up the water bottle
+(goto robot1 kitchen livingroom): robot1 moves to livingroom
+(place robot1 water_bottle desk): water bottle placed on desk → (at water_bottle desk)
+
+All required goal predicates are satisfied: cooked bread, at bread desk, boiled kettle, at kettle desk, at water_bottle desk
+
+Final answer:
+Yes, the action sequence is correct, it can accomplish the task.

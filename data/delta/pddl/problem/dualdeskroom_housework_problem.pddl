@@ -15,7 +15,6 @@
     (:init
         ; Position
         (agent_at robot leftdeskroom)
-        (agent_at robot rightdeskroom)
         (agent_hand_free robot)
 
         (item_on food rightdesk)
@@ -31,7 +30,7 @@
         (item_on pot rightdesk)
         (item_on clothes leftdesk)
         (item_on phone leftdesk)
-        
+
         (container_at shelf rightdeskroom)
         (container_at leftdesk leftdeskroom)
         (container_at rightdesk rightdeskroom)
@@ -116,29 +115,43 @@
         (is_desk rightdesk)
         (is_desk leftdesk)
         (is_shelf shelf)
+
+        (not (loose bread))
+        (not (loose kettle))
+        (not (loose food))
+        (not (loose cup_ramen))
+        (not (loose water_bottle))
+        (not (loose eggs))
+        (not (loose dishcloth))
+        (not (loose clothes))
+        (not (loose phone))
+        (not (loose dish_1))
+        (not (loose dish_2))
+        (not (loose dish_3))
+        (not (loose pot))
     )
     ; End init
 
     ; Begin goal
     (:goal (and
         (cooked bread)
-        (item_on bread rightdesk)
+        (item_on bread lefttdesk)
         (boiled kettle)
-        (item_on kettle rightdesk)
+        (item_on kettle lefttdesk)
         (heated pot)
-        (item_on pot rightdesk)
+        (item_on pot lefttdesk)
         (clean_cloth clothes)
         (cooked cup_ramen)
-        (item_on cup_ramen rightdesk)
+        (item_on cup_ramen lefttdesk)
         (heated food)
-        (item_on food rightdesk)
+        (item_on food lefttdesk)
         (charged phone)
-        (item_on phone leftdesk)
-        (item_on water_bottle leftdesk)
-        (clean_desk rightdesk)
-        (item_on dish_1 rightdesk)
-        (item_on dish_2 rightdesk)
-        (item_on dish_3 rightdesk)
+        (item_on phone rightdesk)
+        (item_on water_bottle rightdesk)
+        (clean_desk lefttdesk)
+        (item_on dish_1 lefttdesk)
+        (item_on dish_2 lefttdesk)
+        (item_on dish_3 lefttdesk)
         (item_in eggs egg_container)
     ))
     ; End goal

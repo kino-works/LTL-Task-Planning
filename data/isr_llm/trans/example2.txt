@@ -123,6 +123,7 @@ Problem file:
     (:goal (and
         (clean_desk desk)
         (charged phone)
+        (at phone desk)
         (at water_bottle desk)
     ))
 )

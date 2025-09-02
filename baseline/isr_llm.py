@@ -26,6 +26,8 @@ from util.isr_llm_util.utils import (
     extract_action_description,
 )
 
+def create_goal_state(task_list):
+    
 
 def run_isr_llm(
     simulator: HouseholdSim,

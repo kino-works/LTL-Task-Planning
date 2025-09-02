@@ -1,0 +1,177 @@
+[Test 0] Test log for household (self-feedback).
+Test case index: 3
+The robot is in the bedroom.\nIn the kitchen: bread, cup_ramen, dish_1, dish_2, dish_3, egg_container, eggs, food, induction, kettle, kitchen_lightswitch, microwave, pot, shelf, stove, toaster, water_bottle, water_dispenser.\nIn the bathroom: bathroom_lightswitch, washing_machine.\nIn the bedroom: bedroom_lightswitch, charger, clothes, phone.\nIn the livingroom: desk, dishcloth, livingroom_lightswitch.
+Attempt: 0
+Action Sequence:
+Step 1:
+robot1 is now in the bedroom.
+(at bread kitchen) with goal (cooked bread) and (at bread desk)
+(at kettle kitchen) with goal (boiled kettle) and (at kettle desk)
+(at water_bottle kitchen) with goal (at water_bottle desk)
+bread is unsatisfied, kettle is unsatisfied, water_bottle is unsatisfied.
+Go to complete cooking bread:
+(goto robot1 bedroom kitchen)
+(pick robot1 bread kitchen)
+(place robot1 bread toaster)
+(turn_on robot1 toaster kitchen)
+(wait_cook_bread robot1 bread toaster kitchen)
+(turn_off robot1 toaster kitchen)
+(pick robot1 bread toaster)
+(goto robot1 kitchen livingroom)
+(place robot1 bread desk)
+
+Step 2:
+robot1 is now in the livingroom.
+(at bread desk) with goal (cooked bread) and (at bread desk)
+(at kettle kitchen) with goal (boiled kettle) and (at kettle desk)
+(at water_bottle kitchen) with goal (at water_bottle desk)
+bread is satisfied, kettle is unsatisfied, water_bottle is unsatisfied.
+Go to complete boiling kettle:
+(goto robot1 livingroom kitchen)
+(pick robot1 kettle kitchen)
+(place robot1 kettle stove)
+(turn_on robot1 stove kitchen)
+(wait_boil_water robot1 kettle stove kitchen)
+(turn_off robot1 stove kitchen)
+(pick robot1 kettle stove)
+(goto robot1 kitchen livingroom)
+(place robot1 kettle desk)
+
+Step 3:
+robot1 is now in the livingroom.
+(at bread desk) with goal (cooked bread) and (at bread desk)
+(at kettle desk) with goal (boiled kettle) and (at kettle desk)
+(at water_bottle kitchen) with goal (at water_bottle desk)
+bread is satisfied, kettle is satisfied, water_bottle is unsatisfied.
+Go to complete placing water_bottle:
+(goto robot1 livingroom kitchen)
+(pick robot1 water_bottle kitchen)
+(goto robot1 kitchen livingroom)
+(place robot1 water_bottle desk)
+
+Step 4:
+robot1 is now in the livingroom.
+(at bread desk) with goal (cooked bread) and (at bread desk)
+(at kettle desk) with goal (boiled kettle) and (at kettle desk)
+(at water_bottle desk) with goal (at water_bottle desk)
+bread is satisfied, kettle is satisfied, water_bottle is satisfied.
+All objects are satisfied.
+Analysis: 
+Question:
+Initial state: 
+(agent_at robot1 bedroom)
+        (agent_hand_free robot1)
+
+        (at bread kitchen)
+        (at kettle kitchen)
+        (at water_bottle kitchen)
+        (at desk livingroom)
+
+        (ap_at toaster kitchen)
+        (ap_at stove kitchen)
+
+        (not (on toaster))
+        (not (on stove))
+
+        (not (cooked bread))
+        (not (boiled kettle))
+Goal state:
+(cooked bread)
+        (at bread desk)
+        (boiled kettle)
+        (at kettle desk)
+        (at water_bottle desk)
+Examined action sequence:
+(goto robot1 bedroom kitchen)
+(pick robot1 bread kitchen)
+(place robot1 bread toaster)
+(turn_on robot1 toaster kitchen)
+(wait_cook_bread robot1 bread toaster kitchen)
+(turn_off robot1 toaster kitchen)
+(pick robot1 bread toaster)
+(goto robot1 kitchen livingroom)
+(place robot1 bread desk)
+(goto robot1 livingroom kitchen)
+(pick robot1 kettle kitchen)
+(place robot1 kettle stove)
+(turn_on robot1 stove kitchen)
+(wait_boil_water robot1 kettle stove kitchen)
+(turn_off robot1 stove kitchen)
+(pick robot1 kettle stove)
+(goto robot1 kitchen livingroom)
+(place robot1 kettle desk)
+(goto robot1 livingroom kitchen)
+(pick robot1 water_bottle kitchen)
+(goto robot1 kitchen livingroom)
+(place robot1 water_bottle desk)
+
+Answer:
+Analysis:
+Initial state:
+(agent_at robot1 bedroom),
+(agent_hand_free robot1),
+(at bread kitchen),
+(at kettle kitchen),
+(at water_bottle kitchen),
+(at desk livingroom),
+(ap_at toaster kitchen),
+(ap_at stove kitchen),
+(not (on toaster)),
+(not (on stove)),
+(not (cooked bread)),
+(not (boiled kettle))
+
+(goto robot1 bedroom kitchen): robot1 moves to kitchen
+(pick robot1 bread kitchen): robot1 picks up the bread
+(place robot1 bread toaster): bread placed on toaster
+(turn_on robot1 toaster kitchen): toaster turned on
+(wait_cook_bread robot1 bread toaster kitchen): bread is cooked → (cooked bread)
+(turn_off robot1 toaster kitchen): toaster turned off
+(pick robot1 bread toaster): robot1 picks up the cooked bread
+(goto robot1 kitchen livingroom): robot1 moves to livingroom
+(place robot1 bread desk): bread placed on desk → (at bread desk)
+(goto robot1 livingroom kitchen): robot1 moves back to kitchen
+(pick robot1 kettle kitchen): robot1 picks up the kettle
+(place robot1 kettle stove): kettle placed on stove
+(turn_on robot1 stove kitchen): stove turned on
+(wait_boil_water robot1 kettle stove kitchen): kettle is boiled → (boiled kettle)
+(turn_off robot1 stove kitchen): stove turned off
+(pick robot1 kettle stove): robot1 picks up the boiled kettle
+(goto robot1 kitchen livingroom): robot1 moves to livingroom
+(place robot1 kettle desk): kettle placed on desk → (at kettle desk)
+(goto robot1 livingroom kitchen): robot1 moves back to kitchen
+(pick robot1 water_bottle kitchen): robot1 picks up the water bottle
+(goto robot1 kitchen livingroom): robot1 moves to livingroom
+(place robot1 water_bottle desk): water bottle placed on desk → (at water_bottle desk)
+
+All required goal predicates are satisfied: cooked bread, at bread desk, boiled kettle, at kettle desk, at water_bottle desk
+
+Final answer:
+Yes, the action sequence is correct, it can accomplish the task.
+Self-evaluation suggests a solution.
+Actual analysis:
+Step 1: goto robot1 bedroom kitchen -> Moved to kitchen.
+Step 2: pick robot1 bread kitchen -> Picked up bread.
+Step 3: place robot1 bread toaster -> Placed bread to toaster.
+Step 4: turn_on robot1 toaster kitchen -> Turned on toaster.
+Step 5: wait_cook_bread robot1 bread toaster kitchen -> Cooked bread.
+Step 6: turn_off robot1 toaster kitchen -> Turned off toaster.
+Step 7: pick robot1 bread toaster -> Picked up bread.
+Step 8: goto robot1 kitchen livingroom -> Moved to livingroom.
+Step 9: place robot1 bread desk -> Placed bread to desk.
+Step 10: goto robot1 livingroom kitchen -> Moved to kitchen.
+Step 11: pick robot1 kettle kitchen -> Picked up kettle.
+Step 12: place robot1 kettle stove -> Placed kettle to stove.
+Step 13: turn_on robot1 stove kitchen -> Turned on stove.
+Step 14: wait_boil_water robot1 kettle stove kitchen -> Boiled kettle.
+Step 15: turn_off robot1 stove kitchen -> Turned off stove.
+Step 16: pick robot1 kettle stove -> Picked up kettle.
+Step 17: goto robot1 kitchen livingroom -> Moved to livingroom.
+Step 18: place robot1 kettle desk -> Placed kettle to desk.
+Step 19: goto robot1 livingroom kitchen -> Moved to kitchen.
+Step 20: pick robot1 water_bottle kitchen -> Picked up water_bottle.
+Step 21: goto robot1 kitchen livingroom -> Moved to livingroom.
+Step 22: place robot1 water_bottle desk -> Placed water_bottle to desk.
+End of test case 3
+
+

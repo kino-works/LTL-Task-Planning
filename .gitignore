@@ -2,3 +2,4 @@
 results/
 VAL/
 pddlgym_planners/
+.gitignore
