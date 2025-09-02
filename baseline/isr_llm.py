@@ -249,7 +249,7 @@ def main():
                 wait_seconds=args.wait_sec,
             )
     
-    print("\n--- All tests completed.")
+    print("\nAll tests completed!")
 
     all_results = []
     for i in range(num_base_tests):

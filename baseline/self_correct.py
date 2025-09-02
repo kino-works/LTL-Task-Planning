@@ -39,6 +39,7 @@ def load_scenarios(input_filepath, scenarios_filepath):
     scenario_map = {s['scene']: s for s in scenarios_data}
     final_initial_states = []
     final_goal_states = []
+    final_tasks_info = []
 
     for test in test_inputs:
         scene_name = test.get("scene")
@@ -58,12 +59,15 @@ def load_scenarios(input_filepath, scenarios_filepath):
                         current_goal_state.append(predicates)
                 else:
                     print(f"'cannot find goal state about '{task}'")
-            
+
             final_initial_states.append(base_initial_state)
             final_goal_states.append(str(current_goal_state).replace("'", ""))
+            final_tasks_info.append({
+                "scene": scene_name,
+                "selected_task": task_group
+            })
 
-    return final_initial_states, final_goal_states
-
+    return final_initial_states, final_goal_states, final_tasks_info
 
 
 def run_episode(
@@ -202,7 +206,7 @@ def main():
     parser.add_argument("--num_plan_ex", type=int, default=3)
     parser.add_argument("--num_valid_ex", type=int, default=3)
     parser.add_argument("--num_test", type=int, default=1)
-    parser.add_argument("--max_refine", type=int, default=10)
+    parser.add_argument("--max_refine", type=int, default=2)
     parser.add_argument("--max_temp", type=float, default=0.4)
     parser.add_argument("--wait_sec", type=float, default=30)
     parser.add_argument("--model", type=str, default="gpt-4o")
@@ -219,12 +223,12 @@ def main():
     
     # Log dir
     if args.logdir is None:
-        args.logdir = os.path.join(project_root, "results/self_correct")
+        args.logdir = os.path.join(project_root, "results", "self_correct")
     os.makedirs(args.logdir, exist_ok=True)
 
     simulator = HouseholdSim()
 
-    base_initial_states, base_goal_states = load_scenarios(
+    base_initial_states, base_goal_states,  base_tasks_info= load_scenarios(
         args.test_input_file, args.test_scenarios_file
     )
 
@@ -245,8 +249,53 @@ def main():
                 wait_seconds=args.wait_sec,
             )
     
-    print("\n--- All tests completed.")
-    
+    print("\nAll tests completed!")
+
+    all_results = []
+    for i in range(num_base_tests):
+        for j in range(args.num_test):
+            test_idx = i + 1
+            episode_idx = j + 1
+            
+            episode_log_dir = os.path.join(args.logdir, f"test{test_idx}", f"ep{episode_idx}")
+            plan_file = os.path.join(episode_log_dir, "final_plan.plan")
+            log_file = os.path.join(episode_log_dir, "test_log.txt")
+
+            final_plan = []
+            try:
+                with open(plan_file, 'r', encoding='utf-8') as f:
+                    content = f.read()
+                    parsed = re.findall(r"\((.*?)\)", content, flags=re.S)
+                    if parsed:
+                        final_plan = [f"({p.strip()})" for p in parsed]
+            except FileNotFoundError:
+                print(f"Warning: Plan file not found at {plan_file}")
+
+            validation_status = "Failure"
+            try:
+                with open(log_file, 'r', encoding='utf-8') as f:
+                    if "Simulation completed successfully." in f.read():
+                        validation_status = "Success"
+            except FileNotFoundError:
+                print(f"Warning: Log file not found at {log_file}")
+            
+            task_info = base_tasks_info[i]
+
+            result = {
+                "test": test_idx,
+                "episode": episode_idx,
+                "baseline": "self_correct",
+                "scene": task_info["scene"],
+                "selected_task": task_info["selected_task"],
+                "final_plan": final_plan,
+                "validate": validation_status
+            }
+            all_results.append(result)
+
+    final_output_path = os.path.join(args.logdir, "test_out.json")
+
+    with open(final_output_path, 'w', encoding='utf-8') as f:
+        json.dump(all_results, f, ensure_ascii=False, indent=4)
 
 
 if __name__ == "__main__":
