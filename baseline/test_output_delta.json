@@ -1,7 +1,8 @@
 [
     {
-        "episode": 0,
-        "baseline": "delta",
+        "test": 1,
+        "episode": 1,
+        "baseline": "isr_llm",
         "scene": "innerhouse",
         "selected_task": ["Cookedtoast", "Boiledwater", "Cookedcupramen"],
         "final_plan": [
@@ -34,8 +35,9 @@
         "validate": "Success"
     },
     {
-        "episode": 1,
-        "baseline": "delta",
+        "test": 1,
+        "episode": 2,
+        "baseline": "isr_llm",
         "scene": "innerhouse",
         "selected_task": ["Cookedtoast", "Boiledwater", "Cookedcupramen"],
         "final_plan": [
@@ -66,31 +68,9 @@
         "validate": "Success"
     },
     {
-        "episode": 0,
-        "baseline": "delta",
-        "scene": "innerhouse",
-        "selected_task": ["Heatedfood", "Placedwaterbottle", "Storedeggs"],
-        "final_plan": [
-            "(goto robot livingroom kitchen)",
-            "(turn_on_appliance robot microwave kitchen)",
-            "(pick_from_room robot eggs kitchen)",
-            "(place_in_appliance robot eggs egg_container kitchen)",
-            "(pick_from_room robot food kitchen)",
-            "(place_in_appliance robot food microwave kitchen)",
-            "(wait_heat_food robot food microwave kitchen)",
-            "(pick_from_appliance robot food microwave kitchen)",
-            "(goto robot kitchen livingroom)",
-            "(place_on_container robot food livingroom_desk livingroom)",
-            "(goto robot livingroom kitchen)",
-            "(pick_from_room robot water_bottle kitchen)",
-            "(goto robot kitchen livingroom)",
-            "(place_on_container robot water_bottle livingroom_desk livingroom)"
-        ],
-        "validate": "Success"
-    },
-    {
+        "test": 2,
         "episode": 1,
-        "baseline": "delta",
+        "baseline": "isr_llm",
         "scene": "innerhouse",
         "selected_task": ["Heatedfood", "Placedwaterbottle", "Storedeggs"],
         "final_plan": [
@@ -112,8 +92,33 @@
         "validate": "Success"
     },
     {
-        "episode": 0,
-        "baseline": "delta",
+        "test": 2,
+        "episode": 2,
+        "baseline": "isr_llm",
+        "scene": "innerhouse",
+        "selected_task": ["Heatedfood", "Placedwaterbottle", "Storedeggs"],
+        "final_plan": [
+            "(goto robot livingroom kitchen)",
+            "(turn_on_appliance robot microwave kitchen)",
+            "(pick_from_room robot eggs kitchen)",
+            "(place_in_appliance robot eggs egg_container kitchen)",
+            "(pick_from_room robot food kitchen)",
+            "(place_in_appliance robot food microwave kitchen)",
+            "(wait_heat_food robot food microwave kitchen)",
+            "(pick_from_appliance robot food microwave kitchen)",
+            "(goto robot kitchen livingroom)",
+            "(place_on_container robot food livingroom_desk livingroom)",
+            "(goto robot livingroom kitchen)",
+            "(pick_from_room robot water_bottle kitchen)",
+            "(goto robot kitchen livingroom)",
+            "(place_on_container robot water_bottle livingroom_desk livingroom)"
+        ],
+        "validate": "Success"
+    },
+    {
+        "test": 3,
+        "episode": 1,
+        "baseline": "isr_llm",
         "scene": "singledeskroom",
         "selected_task": ["Cookedtoast", "Boiledwater", "Cookedcupramen"],
         "final_plan": [
@@ -138,8 +143,9 @@
         "validate": "Success"
     },
     {
-        "episode": 1,
-        "baseline": "delta",
+        "test": 3,
+        "episode": 2,
+        "baseline": "isr_llm",
         "scene": "singledeskroom",
         "selected_task": ["Cookedtoast", "Boiledwater", "Cookedcupramen"],
         "final_plan": [
@@ -164,8 +170,9 @@
         "validate": "Success"
     },
     {
-        "episode": 0,
-        "baseline": "delta",
+        "test": 4,
+        "episode": 1,
+        "baseline": "isr_llm",
         "scene": "singledeskroom",
         "selected_task": ["Heatedfood", "Placedwaterbottle", "Storedeggs"],
         "final_plan": [
@@ -182,8 +189,9 @@
         "validate": "Failure"
     },
     {
-        "episode": 1,
-        "baseline": "delta",
+        "test": 4,
+        "episode": 2,
+        "baseline": "isr_llm",
         "scene": "singledeskroom",
         "selected_task": ["Heatedfood", "Placedwaterbottle", "Storedeggs"],
         "final_plan": [
@@ -201,36 +209,9 @@
         "validate": "Success"
     },
     {
-        "episode": 0,
-        "baseline": "delta",
-        "scene": "dualdeskroom",
-        "selected_task": ["Cookedtoast", "Boiledwater", "Cookedcupramen"],
-        "final_plan": [
-            "(turn_on_appliance robot stove rightdeskroom)",
-            "(turn_on_appliance robot toaster rightdeskroom)",
-            "(pick_from_room robot bread rightdeskroom)",
-            "(place_in_appliance robot bread toaster rightdeskroom)",
-            "(wait_cook_bread robot bread toaster rightdeskroom)",
-            "(pick_from_room robot cup_ramen rightdeskroom)",
-            "(place_in_appliance robot cup_ramen toaster rightdeskroom)",
-            "(wait_cook_bread robot cup_ramen toaster rightdeskroom)",
-            "(turn_off_appliance robot toaster rightdeskroom)",
-            "(pick_from_appliance robot bread toaster rightdeskroom)",
-            "(place_on_container robot bread rightdesk rightdeskroom)",
-            "(pick_from_appliance robot cup_ramen toaster rightdeskroom)",
-            "(place_on_container robot cup_ramen rightdesk rightdeskroom)",
-            "(pick_from_room robot kettle rightdeskroom)",
-            "(place_in_appliance robot kettle stove rightdeskroom)",
-            "(wait_boil_water robot kettle stove rightdeskroom)",
-            "(turn_off_appliance robot stove rightdeskroom)",
-            "(pick_from_appliance robot kettle stove rightdeskroom)",
-            "(place_on_container robot kettle rightdesk rightdeskroom)"
-        ],
-        "validate": "Success"
-    },
-    {
+        "test": 5,
         "episode": 1,
-        "baseline": "delta",
+        "baseline": "isr_llm",
         "scene": "dualdeskroom",
         "selected_task": ["Cookedtoast", "Boiledwater", "Cookedcupramen"],
         "final_plan": [
@@ -257,8 +238,38 @@
         "validate": "Success"
     },
     {
-        "episode": 0,
-        "baseline": "delta",
+        "test": 5,
+        "episode": 2,
+        "baseline": "isr_llm",
+        "scene": "dualdeskroom",
+        "selected_task": ["Cookedtoast", "Boiledwater", "Cookedcupramen"],
+        "final_plan": [
+            "(turn_on_appliance robot stove rightdeskroom)",
+            "(turn_on_appliance robot toaster rightdeskroom)",
+            "(pick_from_room robot bread rightdeskroom)",
+            "(place_in_appliance robot bread toaster rightdeskroom)",
+            "(wait_cook_bread robot bread toaster rightdeskroom)",
+            "(pick_from_room robot cup_ramen rightdeskroom)",
+            "(place_in_appliance robot cup_ramen toaster rightdeskroom)",
+            "(wait_cook_bread robot cup_ramen toaster rightdeskroom)",
+            "(turn_off_appliance robot toaster rightdeskroom)",
+            "(pick_from_appliance robot bread toaster rightdeskroom)",
+            "(place_on_container robot bread rightdesk rightdeskroom)",
+            "(pick_from_appliance robot cup_ramen toaster rightdeskroom)",
+            "(place_on_container robot cup_ramen rightdesk rightdeskroom)",
+            "(pick_from_room robot kettle rightdeskroom)",
+            "(place_in_appliance robot kettle stove rightdeskroom)",
+            "(wait_boil_water robot kettle stove rightdeskroom)",
+            "(turn_off_appliance robot stove rightdeskroom)",
+            "(pick_from_appliance robot kettle stove rightdeskroom)",
+            "(place_on_container robot kettle rightdesk rightdeskroom)"
+        ],
+        "validate": "Success"
+    },
+    {
+        "test": 6,
+        "episode": 1,
+        "baseline": "isr_llm",
         "scene": "dualdeskroom",
         "selected_task": ["Heatedfood", "Placedwaterbottle", "Storedeggs"],
         "final_plan": [
@@ -276,8 +287,9 @@
         "validate": "Success"
     },
     {
-        "episode": 1,
-        "baseline": "delta",
+        "test": 6,
+        "episode": 2,
+        "baseline": "isr_llm",
         "scene": "dualdeskroom",
         "selected_task": ["Heatedfood", "Placedwaterbottle", "Storedeggs"],
         "final_plan": [

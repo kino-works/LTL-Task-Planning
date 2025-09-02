@@ -17,7 +17,7 @@ OBJECTS_BY_ROOM: Dict[str, List[str]] = {
     ],
     "bathroom": ["bathroom_lightswitch", "washing_machine"],
     "bedroom": ["bedroom_lightswitch", "clothes", "phone", "charger"],
-    "livingroom": ["livingroom_lightswitch", "desk", "dishcloth"],
+    "livingroom": ["livingroom_lightswitch", "livingroom_desk", "dishcloth"],
 }
 
 APPLIANCES = {

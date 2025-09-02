@@ -3,14 +3,14 @@ from collections import defaultdict
 
 class HouseholdSim(object):
     def __init__(self):
-        self.rooms = ['kitchen', 'bathroom', 'bedroom', 'livingroom']
+        self.rooms = ['kitchen', 'bathroom', 'bedroom', 'livingroom', 'singledeskroom', 'dualdeskroom']
         self.robot_room = None
         self.holding = None
         self.object_locations = {}
         self.container_defs = {
             'toaster': 1, 'induction': 1, 'microwave': 1, 'water_dispenser': 1,
             'washing_machine': 1, 'charger': 1, 'stove': 1,
-            'desk': None, 'shelf': None, 'egg_container': None
+            'livingroom_desk': None, 'singledesk': None, 'rightdesk': None, 'leftdesk': None, 'shelf': None, 'egg_container': None
         }
         self.container_contents = {c: [] for c in self.container_defs}
         devices = [
@@ -18,6 +18,8 @@ class HouseholdSim(object):
             'bathroom_lightswitch',
             'bedroom_lightswitch',
             'livingroom_lightswitch',
+            'singledeskroom_lightswitch',
+            'dualdeskroom_lightswitch',
             'toaster',
             'induction',
             'microwave',
@@ -27,7 +29,10 @@ class HouseholdSim(object):
             'stove'
         ]
         self.device_power = {d: False for d in devices}
-        self.cleanliness = {'desk': False}
+        self.cleanliness = {'livingroom_desk': False}
+        self.cleanliness = {'singledesk': False}
+        self.cleanliness = {'rightdesk': False}
+        self.cleanliness = {'leftdesk': False}
         #self.time_elapsed = 0
         self.cooked = set()   
         self.boiled = set()   
@@ -35,7 +40,7 @@ class HouseholdSim(object):
         self.charged = set()
 
     def initialize_state(self, initial_locations):
-        self.robot_room = initial_locations.get('robot_room')
+        self.robot_room = None
         self.holding = None
 
         self.object_locations.clear()
@@ -50,16 +55,17 @@ class HouseholdSim(object):
         self.heated.clear()
         self.charged.clear()
 
-        for obj, loc in initial_locations.items():
-            if obj == 'robot_room':
+        for pred in initial_locations:
+            match = re.search(r"\(at\s+([^\s]+)\s+([^\s\)]+)\)", pred)
+            if not match:
                 continue
+            obj, loc = match.groups()
+            if obj == "robot1":
+                self.robot_room = loc
+                continue
+            self.object_locations[obj] = loc
             if loc in self.container_defs:
-                self.object_locations[obj] = loc
                 self.container_contents[loc].append(obj)
-            elif loc in self.rooms:
-                self.object_locations[obj] = loc
-            else:
-                raise ValueError(f"Unknown location '{loc}' for object '{obj}'")
         #self.time_elapsed = 0
 
     def apply_action(self, action_str):
@@ -250,22 +256,12 @@ class HouseholdSim(object):
         #print(f"Time elapsed: {self.time_elapsed} minutes.")
         return True, False, "", ""
 
-    def generate_scene_description(self, input_data):
+    def generate_scene_description(self, initial_state, goal_state, constraint=None):
         rooms = defaultdict(list)
         robot_room = "unknown"
         devices_on, devices_off = [], []
 
-        if isinstance(input_data, dict):
-            pred_list = []
-            for obj, loc in input_data.items():
-                if obj == "robot_room":
-                    pred_list.append(f"(at robot1 {loc})")
-                else:
-                    pred_list.append(f"(at {obj} {loc})")
-        else:
-            pred_list = input_data
-
-        for p in pred_list:
+        for p in initial_state:
             p = p.strip()
             m = re.findall(r"\((?:at|robot-at)\s+([^\s]+)\s+([^\s\)]+)\)", p)
             if m:
@@ -282,7 +278,7 @@ class HouseholdSim(object):
                 devices_off.append(p[9:-2].strip())
             elif p.startswith("(off "):
                 devices_off.append(p[5:-1].strip())
-
+        
         lines = [f"The robot is in the {robot_room}."]
         for r, objs in rooms.items():
             if objs:
@@ -291,5 +287,13 @@ class HouseholdSim(object):
             lines.append("Turned on: " + ", ".join(sorted(devices_on)) + ".")
         if devices_off:
             lines.append("Turned off: " + ", ".join(sorted(devices_off)) + ".")
+        
+        initial_description = "\\n".join(lines)
 
-        return "\\n".join(lines)
+        try:
+            goal_preds = goal_state.strip("[]").split(", ")
+            goal_description = "The goal is to achieve the following states: " + ", ".join(goal_preds)
+        except:
+            goal_description = "The goal is not specified."
+
+        return f"{initial_description}\n\n{goal_description}"
