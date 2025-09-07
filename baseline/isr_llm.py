@@ -187,13 +187,24 @@ def run_episode(
         actions = [a.strip() for a in parsed]
     else:
         actions = [line.strip() for line in raw_actions.splitlines() if line.strip()]
-
-    simulator.simulate_actions(actions, test_log_file_path)
     
+    success, failure, err_msg, failed_action = simulator.simulate_actions(actions, test_log_file_path)
+
+    if success and not failure:
+        validation_status = "Success"
+        with open(test_log_file_path, "a") as f:
+            f.write("Simulation completed successfully.\n")
+    else:
+        validation_status = "Failure"
+        with open(test_log_file_path, "a") as f:
+            f.write(f"Simulation failed at action: {failed_action}, reason: {err_msg}\n")
+
     planner.init_messages(is_reinitialize=True)
 
     with open(test_log_file_path, "a") as f:
         f.write(f"End of Test {test_idx}, Episode {episode_idx}\n\n\n")
+
+    return validation_status
 
 
 def main():
@@ -233,14 +244,18 @@ def main():
     )
 
     num_base_tests = len(base_initial_states)
+    all_results = []
 
     for i in range(num_base_tests):
         for j in range(args.num_test):
-            run_episode(
+            test_idx = i + 1
+            episode_idx = j + 1
+
+            validation_status = run_episode(
                 initial_state=base_initial_states[i],
                 goal_state=base_goal_states[i],
-                test_idx=i + 1,
-                episode_idx=j + 1,
+                test_idx=test_idx,
+                episode_idx=episode_idx,
                 base_logdir=args.logdir,
                 simulator=simulator,
                 max_num_refine=args.max_refine,
@@ -248,18 +263,9 @@ def main():
                 args_obj=args,
                 wait_seconds=args.wait_sec,
             )
-    
-    print("\nAll tests completed!")
 
-    all_results = []
-    for i in range(num_base_tests):
-        for j in range(args.num_test):
-            test_idx = i + 1
-            episode_idx = j + 1
-            
             episode_log_dir = os.path.join(args.logdir, f"test{test_idx}", f"ep{episode_idx}")
             plan_file = os.path.join(episode_log_dir, "final_plan.plan")
-            log_file = os.path.join(episode_log_dir, "test_log.txt")
 
             final_plan = []
             try:
@@ -270,14 +276,6 @@ def main():
                         final_plan = [f"({p.strip()})" for p in parsed]
             except FileNotFoundError:
                 print(f"Warning: Plan file not found at {plan_file}")
-
-            validation_status = "Failure"
-            try:
-                with open(log_file, 'r', encoding='utf-8') as f:
-                    if "Simulation completed successfully." in f.read():
-                        validation_status = "Success"
-            except FileNotFoundError:
-                print(f"Warning: Log file not found at {log_file}")
             
             task_info = base_tasks_info[i]
 
@@ -292,8 +290,9 @@ def main():
             }
             all_results.append(result)
 
-    final_output_path = os.path.join(args.logdir, "test_out.json")
+    print("\nAll tests completed!")
 
+    final_output_path = os.path.join(args.logdir, "test_out.json")
     with open(final_output_path, 'w', encoding='utf-8') as f:
         json.dump(all_results, f, ensure_ascii=False, indent=4)
 

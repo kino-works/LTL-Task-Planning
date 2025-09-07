@@ -5,10 +5,9 @@ import datetime
 import argparse
 import openai
 import re
-import copy 
+import copy
 import json
 
-# Project paths (adjust if needed)
 project_root = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 sys.path.insert(0, project_root)
 sys.path.append(os.path.join(project_root, "util"))
@@ -16,9 +15,15 @@ sys.path.append(os.path.join(project_root, "baseline"))
 
 from dotenv import load_dotenv
 
-# util imports (edit to your actual module names)
 from util.isr_llm_util.Planner import Planner
 from util.isr_llm_util.Household_Sim import HouseholdSim
+
+action_keywords = [
+    'goto', 'pick', 'place', 'turn_on', 'turn_off',
+    'turn_on_switch', 'turn_off_switch', 'wipe', 'wait_cook_bread',
+    'wait_boil_water', 'wait_heat_pot', 'wait_wash_clothes',
+    'wait_cook_ramen', 'wait_heat_food', 'wait_charge_phone'
+]
 
 def load_scenarios(input_filepath, scenarios_filepath):
     try:
@@ -113,43 +118,43 @@ def run_episode(
             f.write(f"Attempt: {j}\n")
 
         temperature = 0 if test_idx == 1 else min(max_refine_temperature, 0.1 * (test_idx - 1))
-        action_sequence = planner.query(planning_problem, is_append=(j > 0), temperature=temperature)
+        action_sequence_text = planner.query(planning_problem, is_append=(j > 0), temperature=temperature)
 
         print(f"Attempt {j} sequence:")
         with open(test_log_file_path, "a") as f:
-            f.write(action_sequence + "\n")
+            f.write(action_sequence_text + "\n")
             f.write("Analysis:\n")
+
+        actions = []
+        for line in action_sequence_text.splitlines():
+            clean_line = line.strip()
+            if clean_line.startswith('('):
+                action_head = clean_line[1:].split()[0].lower()
+                if action_head in action_keywords:
+                    actions.append(clean_line)
         
-        parsed = re.findall(r"\((.*?)\)", action_sequence, flags=re.S)
-        if parsed:
-            actions = [a.strip() for a in parsed]
-        else:
-            actions = [line.strip() for line in action_sequence.splitlines() if line.strip()]
-
-        final_actions = [f"({a})" for a in actions]
-        with open(final_plan_file_path, "w") as f:
-            f.write("\n".join(final_actions))
-
         # 3) simulator validating
         is_satisfied, is_error, error_message, error_action = simulator.simulate_actions(actions, test_log_file_path)
 
-        if is_error:
-            if not is_satisfied:
-                if error_action:
-                    planning_problem = f"Action ({error_action}) is wrong. Error info: {error_message}. Please find a new plan."
-                else:
-                    planning_problem = f"{error_message} Please find a new plan."
-            else:
-                planning_problem = f"{error_message} Please ignore actions after action ({error_action})."
-            
-            with open(test_log_file_path, "a") as f:
-                f.write(f"Feedback: {planning_problem}\n")
-        else:
+        final_actions = actions
+        
+        if not is_error and is_satisfied:
             print("Plan successful.")
             with open(test_log_file_path, "a") as f:
                 f.write("Plan successful.\n")
             break
-        # validating 종료
+        else:
+            if error_action:
+                 planning_problem = f"Feedback: Action {error_action} is wrong. Error info: {error_message}. Please find a new plan."
+            else:
+                 planning_problem = f"Feedback: {error_message} Please find a new plan."
+
+            with open(test_log_file_path, "a") as f:
+                f.write(f"{planning_problem}\n")
+
+    # Refinement loop finish
+    with open(final_plan_file_path, "w") as f:
+        f.write("\n".join(final_actions))
 
     planner.init_messages(is_reinitialize=True)
 
@@ -175,7 +180,7 @@ def main():
     parser.add_argument("--plan_prompt_dir",  default="data/cap")
     parser.add_argument("--test_input_file", type=str, default="baseline/test_input.json")
     parser.add_argument("--test_scenarios_file", type=str, default="data/isr_llm/test_scenarios.json")
-
+    
     args = parser.parse_args()
 
     load_dotenv()
@@ -191,6 +196,8 @@ def main():
         args.test_input_file, args.test_scenarios_file
     )
     num_base_tests = len(base_initial_states)
+    
+    all_results = []
 
     for i in range(num_base_tests):
         for j in range(args.num_test):
@@ -206,12 +213,7 @@ def main():
                 args_obj=args,
                 wait_seconds=args.wait_sec,
             )
-    
-    print("\nAll tests completed!")
-
-    all_results = []
-    for i in range(num_base_tests):
-        for j in range(args.num_test):
+            
             task_info = base_tasks_info[i]
             result = {
                 "test": i + 1,
@@ -223,9 +225,10 @@ def main():
                 "validate": validation_status
             }
             all_results.append(result)
+    
+    print("\nAll tests completed!")
 
     final_output_path = os.path.join(args.logdir, "test_out.json")
-
     with open(final_output_path, 'w', encoding='utf-8') as f:
         json.dump(all_results, f, ensure_ascii=False, indent=4)
 

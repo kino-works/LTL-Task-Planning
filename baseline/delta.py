@@ -43,7 +43,7 @@ def SRC_PROBLEM_PATH(s, d):
 DEFAULT_LLM = "gpt-4o"
 TEMPERATURE = 0.0
 TOP_P = 1.0
-EPISODE = 2
+EPISODE = 1
 MAX_TIME = 120
 
 
@@ -369,3 +369,47 @@ if __name__ == "__main__":
         success_orig / args.episode * 100.))
     print("Success rate with decomposition: {:.2f}%".format(
         success / args.episode * 100.))
+
+    all_results = []
+    
+    for i, (scene, task_group) in enumerate(task_sets):
+        for j in range(args.episode):
+            test_idx = i + 1
+            episode_idx = j + 1
+            
+            episode_log_dir = os.path.join(LOG_PATH, f"test{test_idx}", f"ep{episode_idx}")
+
+            final_plan = ""
+            plan_file = os.path.join(episode_log_dir, "final_plan.plan")
+        
+            try:
+                with open(plan_file, 'r', encoding='utf-8') as f:
+                    final_plan = f.read()
+            except FileNotFoundError:
+                print(f"Warning: Plan file not found at {plan_file}")
+
+            validation_status = "Failure"
+            if 'plans' in locals() and len(subgoal_pddl_list) > 0:
+                if 'is_valid_decomp' in locals() and is_valid_decomp:
+                    validation_status = "Success"
+            else: 
+                if 'is_valid' in locals() and is_valid:
+                    validation_status = "Success"
+
+            result = {
+                "test": test_idx,
+                "episode": episode_idx,
+                "baseline": "delta",
+                "scene": scene,
+                "selected_task": task_group,
+                "final_plan": final_plan,
+                "validate": validation_status
+            }
+            all_results.append(result)
+
+    final_output_path = os.path.join(LOG_PATH, "test_out.json")
+
+    with open(final_output_path, 'w', encoding='utf-8') as f:
+        json.dump(all_results, f, ensure_ascii=False, indent=4)
+
+    print(f"All tests completed!")
