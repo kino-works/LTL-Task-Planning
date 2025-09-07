@@ -214,7 +214,7 @@ def query_pddlgym_decompose(domain: str, subgoal_pddl_list: list, save_path: str
 
 
 def validate(domain_file: str, problem_file: str, plan_file: str):
-    command = "Validate -v " + domain_file + \
+    #command = "./VAL/build/linux64/Release/bin/Validate -v " + domain_file + \
         " " + problem_file + " " + plan_file
     print("command:", command)
     p = subprocess.Popen(command, stdout=subprocess.PIPE,
@@ -222,7 +222,7 @@ def validate(domain_file: str, problem_file: str, plan_file: str):
     (output, err) = p.communicate()
     p.wait()
 
-    #print(err)
+    #print("output:", output)
     if "Plan valid" in str(output):
         print("VAL: Plan valid!")
         return True, "Plan succeeded."

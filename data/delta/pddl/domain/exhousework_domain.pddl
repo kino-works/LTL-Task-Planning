@@ -30,8 +30,6 @@
 
         (neighbor ?r1 - room ?r2 - room)
 
-        (loose ?i - item) 
-
         (cooked ?i - item)
         (boiled ?i - item)
         (cooked ?i - item)
@@ -92,22 +90,6 @@
             (not (item_in ?i ?ap))
             (not (agent_hand_free ?a))
             (agent_has_item ?a ?i)
-        )
-    )
-
-    (:action place_on_container
-        :parameters (?a - agent ?i - item ?c - container ?r - room)
-        :precondition (and
-            (agent_at ?a ?r)
-            (container_at ?c ?r)
-            (not (item_on ?i ?c))
-            (agent_has_item ?a ?i)
-            (not (loose ?i - item))
-        )
-        :effect (and
-            (not (agent_has_item ?a ?i))
-            (agent_hand_free ?a)
-            (item_on ?i ?c)
         )
     )
     

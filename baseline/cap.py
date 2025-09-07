@@ -6,6 +6,7 @@ import argparse
 import openai
 import re
 import copy 
+import json
 
 # Project paths (adjust if needed)
 project_root = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
@@ -94,7 +95,6 @@ def run_episode(
     description = simulator.generate_scene_description(initial_state, goal_state)
     planning_problem = description
 
-    print(f"--- Running Test {test_idx}, Episode {episode_idx} (No Translator) ---")
     print(description)
     with open(test_log_file_path, "a") as f:
         f.write(f"Test case index: {test_idx}, Episode: {episode_idx}\n")

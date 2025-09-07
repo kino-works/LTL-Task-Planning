@@ -153,7 +153,7 @@ if __name__ == "__main__":
         for e in range(args.episode):
             model.reset()
 
-            log_path = os.path.join(LOG_PATH, f"test{set_idx}/ep{e}/")
+            log_path = os.path.join(LOG_PATH, f"test{set_idx+1}/ep{e+1}/")
             Path(log_path).mkdir(parents=True, exist_ok=True)
 
             scene_exp = load_scene_graph(args.scene_example)

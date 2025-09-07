@@ -53,8 +53,6 @@
 
         (is_shelf ?c - container)
         (is_desk ?c - container)
-
-        (loose ?i - item) 
         
         (heated ?i - item)
         (cooked ?i - item)
@@ -87,12 +85,10 @@
             (item_accessible ?i)
             (item_pickable ?i)
             (agent_hand_free ?a)
-            (loose ?i) 
         )
         :effect (and
             (not (item_at ?i ?r))
             (not (agent_hand_free ?a))
-            (not (loose ?i))
             (agent_has_item ?a ?i)
         )
     )
@@ -106,7 +102,6 @@
             (appliance_at ?ap ?r)
             (item_accessible ?i)
             (item_pickable ?i)
-            (not (loose ?i))
         )
         :effect (and
             (not (item_in ?i ?ap))
@@ -114,25 +109,7 @@
             (agent_has_item ?a ?i)
         )
     )
-    (:action pick_from_container
-        :parameters (?a - agent ?i - item ?c - container ?r - room)
-        :precondition (and
-            (agent_at ?a ?r)
-            (agent_hand_free ?a)
-            (container_at ?c ?r)
-            (item_on ?i ?c)
-            (is_desk ?c)
-            (item_accessible ?i)
-            (item_pickable ?i)
-            (not (loose ?i))
-        )
-        :effect (and
-            (not (item_on ?i ?c))
-            (not (agent_hand_free ?a))
-            (agent_has_item ?a ?i)
-        )
-    )
-    
+
     (:action place_on_container
         :parameters (?a - agent ?i - item ?c - container ?r - room)
         :precondition (and
