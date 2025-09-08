@@ -127,6 +127,15 @@
 
         (is_desk livingroom_desk)
         (is_shelf shelf)
+
+        (not (heated food))
+        (not (cooked bread))
+        (not (cooked cup_ramen))
+        (not (boiled kettle))
+        (not (boiled pot))
+        (not (charged phone))
+        (not (cleaned_desk livingroom_desk))
+        (not (cleaned_clothes clothes))
     )
     ; End init
 
@@ -138,7 +147,7 @@
         (item_on kettle livingroom_desk)
         (heated pot)
         (item_on pot livingroom_desk)
-        (clean_cloth clothes)
+        (cleaned_clothes clothes)
         (cooked cup_ramen)
         (item_on cup_ramen livingroom_desk)
         (heated food)
@@ -146,7 +155,7 @@
         (charged phone)
         (item_on phone livingroom_desk)
         (item_on water_bottle livingroom_desk)
-        (clean_desk livingroom_desk)
+        (cleaned_desk livingroom_desk)
         (item_on dish_1 shelf)
         (item_on dish_2 shelf)
         (item_on dish_3 shelf)

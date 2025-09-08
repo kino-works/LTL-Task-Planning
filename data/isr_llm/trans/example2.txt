@@ -19,7 +19,7 @@ Domain file:
         (ap_at ?ap - appliance ?r - room)
         (on ?ap - appliance)
 
-        (clean_desk ?d - desk)
+        (cleaned_desk ?d - desk)
         (charged ?i - item)
     )
     (:action goto
@@ -78,7 +78,7 @@ Domain file:
         (agent_at ?a ?r)
         (agent_has_item ?a ?i)
     )
-      :effect (clean_desk ?d)
+      :effect (cleaned_desk ?d)
     )
     (:action wait_charge_phone
         :parameters (?a - agent ?i - item ?ap - appliance ?r - room)
@@ -117,11 +117,11 @@ Problem file:
         (ap_at charger bedroom)
         (not (on charger))
 
-        (not (clean_desk desk))
+        (not (cleaned_desk desk))
         (not (charged phone))
     )
     (:goal (and
-        (clean_desk desk)
+        (cleaned_desk desk)
         (charged phone)
         (at phone desk)
         (at water_bottle desk)

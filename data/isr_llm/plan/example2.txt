@@ -12,7 +12,7 @@ Domain file:
         (ap_at ?ap - appliance ?r - room)
         (on ?ap - appliance)
 
-        (clean_desk ?d - desk)
+        (cleaned_desk ?d - desk)
         (charged ?i - item)
     )
     (:action goto
@@ -71,7 +71,7 @@ Domain file:
         (agent_at ?a ?r)
         (agent_has_item ?a ?i)
     )
-      :effect (clean_desk ?d)
+      :effect (cleaned_desk ?d)
     )
     (:action wait_charge_phone
         :parameters (?a - agent ?i - item ?ap - appliance ?r - room)
@@ -110,11 +110,11 @@ Problem file:
         (ap_at charger bedroom)
         (not (on charger))
 
-        (not (clean_desk desk))
+        (not (cleaned_desk desk))
         (not (charged phone))
     )
     (:goal (and
-        (clean_desk desk)
+        (cleaned_desk desk)
         (charged phone)
         (at water_bottle desk)
     ))
@@ -123,7 +123,7 @@ Problem file:
 Action Sequence :
 Step 1:
 robot1 is now in the bedroom.
-(at dishcloth livingroom) with goal (clean_desk desk)
+(at dishcloth livingroom) with goal (cleaned_desk desk)
 (at phone bedroom)   with goal (charged phone)
 (at water_bottle kitchen) with goal (at water_bottle desk)
 dishcloth is unsatisfied, phone is unsatisfied, water_bottle is unsatisfied.
@@ -134,7 +134,7 @@ Go to complete wipe(desk):
 
 Step 2:
 robot1 is now in the livingroom.
-(at dishcloth livingroom) with goal (clean_desk desk)
+(at dishcloth livingroom) with goal (cleaned_desk desk)
 (at phone bedroom)   with goal (charged phone)
 (at water_bottle kitchen) with goal (at water_bottle desk)
 wipe is satisfied, phone is unsatisfied, water_bottle is unsatisfied.
@@ -162,8 +162,8 @@ Go to complete place(water_bottle, desk):
 
 Step 4:
 robot1 is now in the livingroom.
-(at dishcloth livingroom) with goal (clean_desk desk)
+(at dishcloth livingroom) with goal (cleaned_desk desk)
 (at phone desk) with goal (charged phone)
 (at water_bottle desk) with goal (at water_bottle desk)
-(clean_desk desk) is satisfied, charged(phone) is satisfied, water_bottle is satisfied.
+(cleaned_desk desk) is satisfied, charged(phone) is satisfied, water_bottle is satisfied.
 All objects are satisfied.

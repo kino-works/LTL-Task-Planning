@@ -121,7 +121,7 @@ HOME = {
                 "dishcloth": {
                     "accessible": True,
                     "affordance": ["pick_from_appliance", "pick_from_container", "place_in_desk", "wipe"],
-                    "state": "clean"
+                    "state": "cleaned"
                 },
                 "washing_machine": {
                     "accessible": True,
@@ -131,18 +131,13 @@ HOME = {
             },
             "neighbor": []
         },
-        "rightdeskroom": {
+        "upperarea": {
             "items": {
-                "rightdesk": {
+                "upperdesk": {
                     "accessible": True,
                     "affordance": ["pick_from_appliance", "pick_from_container", "place_on_container", "wipe"],
                     "state": "dirty",
                     "content": []
-                },
-                "rightdeskroom_lightswitch": {
-                    "accessible": True,
-                    "affordance": ["turn_on_appliance", "turn_off_appliance"],
-                    "state": "off"
                 },
                 "toaster": {
                     "accessible": True,
@@ -234,18 +229,13 @@ HOME = {
             },
             "neighbor": []
         },
-        "leftdeskroom": {
+        "lowerarea": {
             "items": {
-                "leftdesk": {
+                "lowerdesk": {
                     "accessible": True,
                     "affordance": ["pick_from_appliance", "pick_from_container", "place_in_desk", "wipe"],
                     "state": "dirty",
                     "content": []
-                },
-                "leftdeskroom_lightswitch": {
-                    "accessible": True,
-                    "affordance": ["turn_on_appliance", "pick_from_container", "turn_off_appliance"],
-                    "state": "off"
                 },
                 "clothes": {
                     "accessible": True,
@@ -265,7 +255,7 @@ HOME = {
                 "dishcloth": {
                     "accessible": True,
                     "affordance": ["pick_from_appliance", "pick_from_container", "place_in_desk", "wipe"],
-                    "state": "clean"
+                    "state": "cleaned"
                 },
                 "washing_machine": {
                     "accessible": True,
@@ -428,7 +418,7 @@ HOME = {
                 "dishcloth": {
                     "accessible": True,
                     "affordance": ["pick_from_appliance", "pick_from_container", "pick_from_room", "place_in_desk", "wipe"],
-                    "state": "clean"
+                    "state": "cleaned"
                 }
             },
             "neighbor": []
@@ -557,7 +547,7 @@ EXHOME = {
                 "dishcloth": {
                     "accessible": True,
                     "affordance": ["pick_from_appliance", "pick_from_room", "place_in_desk", "wipe"],
-                    "state": "clean"
+                    "state": "cleaned"
                 }
             },
             "neighbor": []
@@ -573,7 +563,7 @@ EXHOME = {
 HOME_VAR = {
     "innerhouse": ["kitchen", "bathroom", "bedroom", "livingroom"],
     "singledeskroom": ["singledeskroom"],
-    "dualdeskroom": ["leftdeskroom", "rightdeskroom"]
+    "dualdeskroom": ["lowerarea", "upperarea"]
 }
 
 def make_home_variant(variant: str) -> dict:

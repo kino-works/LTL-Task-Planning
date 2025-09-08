@@ -8,11 +8,11 @@ Initial state:
 (at desk livingroom)
 (ap_at charger bedroom)
 (not (on charger))
-(not (clean_desk desk))
+(not (cleaned_desk desk))
 (not (charged phone))
 
 Goal state:
-(clean_desk desk)
+(cleaned_desk desk)
 (charged phone)
 (at phone desk)
 (at water_bottle desk)
@@ -46,7 +46,7 @@ Initial state:
 (at desk livingroom),
 (ap_at charger bedroom),
 (not (on charger)),
-(not (clean_desk desk)),
+(not (cleaned_desk desk)),
 (not (charged phone))
 
 (goto robot1 bedroom livingroom): robot1 moves to livingroom

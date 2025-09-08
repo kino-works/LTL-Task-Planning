@@ -4,47 +4,45 @@
     ; Begin objects
     (:objects
         robot - agent
-        leftdeskroom rightdeskroom - room
+        lowerarea upperarea - room
         bread kettle pot cup_ramen food water_bottle dish_1 dish_2 dish_3 eggs clothes phone dishcloth - item
-        induction egg_container toaster stove water_dispenser microwave rightdeskroom_lightswitch leftdeskroom_lightswitch washing_machine charger - appliance
-        rightdesk leftdesk shelf - container
+        induction egg_container toaster stove water_dispenser microwave washing_machine charger - appliance
+        upperdesk lowerdesk shelf - container
     )
     ; End objects
 
     ; Begin init
     (:init
         ; Position
-        (agent_at robot leftdeskroom)
+        (agent_at robot lowerarea)
         (agent_hand_free robot)
 
-        (item_at food rightdeskroom)
-        (item_at water_bottle rightdeskroom)
-        (item_at eggs rightdeskroom)
-        (item_at dishcloth rightdeskroom)
-        (item_at bread rightdeskroom)
-        (item_at cup_ramen rightdeskroom)
-        (item_at kettle rightdeskroom)
-        (item_at dish_1 rightdeskroom)
-        (item_at dish_2 rightdeskroom)
-        (item_at dish_3 rightdeskroom)
-        (item_at pot rightdeskroom)
-        (item_at clothes leftdeskroom)
-        (item_at phone leftdeskroom)
+        (item_at food upperarea)
+        (item_at water_bottle upperarea)
+        (item_at eggs upperarea)
+        (item_at dishcloth upperarea)
+        (item_at bread upperarea)
+        (item_at cup_ramen upperarea)
+        (item_at kettle upperarea)
+        (item_at dish_1 upperarea)
+        (item_at dish_2 upperarea)
+        (item_at dish_3 upperarea)
+        (item_at pot upperarea)
+        (item_at clothes lowerarea)
+        (item_at phone lowerarea)
 
-        (container_at shelf rightdeskroom)
-        (container_at leftdesk leftdeskroom)
-        (container_at rightdesk rightdeskroom)
+        (container_at shelf upperarea)
+        (container_at lowerdesk lowerarea)
+        (container_at upperdesk upperarea)
 
-        (appliance_at microwave rightdeskroom)
-        (appliance_at toaster rightdeskroom)
-        (appliance_at induction rightdeskroom)
-        (appliance_at stove rightdeskroom)
-        (appliance_at egg_container rightdeskroom)
-        (appliance_at water_dispenser rightdeskroom)
-        (appliance_at washing_machine leftdeskroom)
-        (appliance_at charger leftdeskroom)
-        (appliance_at rightdeskroom_lightswitch rightdeskroom)
-        (appliance_at leftdeskroom_lightswitch leftdeskroom)
+        (appliance_at microwave upperarea)
+        (appliance_at toaster upperarea)
+        (appliance_at induction upperarea)
+        (appliance_at stove upperarea)
+        (appliance_at egg_container upperarea)
+        (appliance_at water_dispenser upperarea)
+        (appliance_at washing_machine lowerarea)
+        (appliance_at charger lowerarea)
 
         ; Attributes
         (item_accessible food)
@@ -82,10 +80,8 @@
         (item_accessible water_dispenser)
         (item_accessible washing_machine)
         (item_accessible charger)
-        (item_accessible rightdeskroom_lightswitch)
-        (item_accessible leftdeskroom_lightswitch)
-        (item_accessible rightdesk)
-        (item_accessible leftdesk)
+        (item_accessible upperdesk)
+        (item_accessible lowerdesk)
 
         (is_bread bread)
         (is_kettle kettle)
@@ -109,12 +105,19 @@
         (is_egg_container egg_container)
         (is_charger charger)
         (is_water_dispenser water_dispenser)
-        (is_lightswitch rightdeskroom_lightswitch)
-        (is_lightswitch leftdeskroom_lightswitch)
 
-        (is_desk rightdesk)
-        (is_desk leftdesk)
+        (is_desk upperdesk)
+        (is_desk lowerdesk)
         (is_shelf shelf)
+
+        (not (heated food))
+        (not (cooked bread))
+        (not (cooked cup_ramen))
+        (not (boiled kettle))
+        (not (boiled pot))
+        (not (charged phone))
+        (not (cleaned_desk livingroom_desk))
+        (not (cleaned_clothes clothes))
     )
     ; End init
 
@@ -126,15 +129,15 @@
         (item_on kettle lefttdesk)
         (heated pot)
         (item_on pot lefttdesk)
-        (clean_cloth clothes)
+        (cleaned_clothes clothes)
         (cooked cup_ramen)
         (item_on cup_ramen lefttdesk)
         (heated food)
         (item_on food lefttdesk)
         (charged phone)
-        (item_on phone rightdesk)
-        (item_on water_bottle rightdesk)
-        (clean_desk lefttdesk)
+        (item_on phone upperdesk)
+        (item_on water_bottle upperdesk)
+        (cleaned_desk lefttdesk)
         (item_on dish_1 lefttdesk)
         (item_on dish_2 lefttdesk)
         (item_on dish_3 lefttdesk)

@@ -3,14 +3,14 @@ from collections import defaultdict
 
 class HouseholdSim(object):
     def __init__(self):
-        self.rooms = ['kitchen', 'bathroom', 'bedroom', 'livingroom', 'singledeskroom', 'rightdeskroom', 'leftdeskroom']
+        self.rooms = ['kitchen', 'bathroom', 'bedroom', 'livingroom', 'singledeskroom', 'upperarea', 'lowerarea']
         self.robot_room = None
         self.holding = None
         self.object_locations = {}
         self.container_defs = {
             'toaster': 1, 'induction': 1, 'microwave': 1, 'water_dispenser': 1,
             'washing_machine': 1, 'charger': 1, 'stove': 1,
-            'livingroom_desk': None, 'singledesk': None, 'rightdesk': None, 'leftdesk': None, 'shelf': None, 'egg_container': None
+            'livingroom_desk': None, 'singledesk': None, 'upperdesk': None, 'lowerdesk': None, 'shelf': None, 'egg_container': None
         }
         self.container_contents = {c: [] for c in self.container_defs}
         devices = [
@@ -32,8 +32,8 @@ class HouseholdSim(object):
         self.cleanliness = {
             'livingroom_desk': False,
             'singledesk': False,
-            'rightdesk': False,
-            'leftdesk': False
+            'upperdesk': False,
+            'lowerdesk': False
         }
         #self.time_elapsed = 0
         self.cooked = set()   

@@ -364,7 +364,6 @@ if __name__ == "__main__":
                                           "Plan Time Decomp", "Plan Time Sub-P",
                                           "Node Expanded Decomp", "Node Expanded Sub-P",
                                           "Cost Decomp", "Cost Sub-P", "GT Cost", "Items Keep"])
-    df.to_csv(os.path.join(LOG_PATH, "log.csv"))
     print("Success rate w/o decomposition: {:.2f}%".format(
         success_orig / args.episode * 100.))
     print("Success rate with decomposition: {:.2f}%".format(
@@ -379,14 +378,17 @@ if __name__ == "__main__":
             
             episode_log_dir = os.path.join(LOG_PATH, f"test{test_idx}", f"ep{episode_idx}")
 
-            final_plan = ""
+            final_plan = []
             plan_file = os.path.join(episode_log_dir, "final_plan.plan")
-        
-            try:
+            plan_decomp_file = os.path.join(episode_log_dir, "final_plan_decomp.plan")
+
+            if os.path.exists(plan_file):
                 with open(plan_file, 'r', encoding='utf-8') as f:
-                    final_plan = f.read()
-            except FileNotFoundError:
-                print(f"Warning: Plan file not found at {plan_file}")
+                    final_plan = [line.strip() for line in f if line.strip()]
+            elif os.path.exists(plan_decomp_file):
+                with open(plan_decomp_file, 'r', encoding='utf-8') as f:
+                    final_plan = [line.strip() for line in f if line.strip()]
+
 
             validation_status = "Failure"
             if 'plans' in locals() and len(subgoal_pddl_list) > 0:
