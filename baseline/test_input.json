@@ -1,9 +1,8 @@
 [
     {
-        "scene":"dualdeskroom",
+        "scene":"innerhouse",
         "domain":[
-            ["Cookedtoast", "Boiledwater", "Cookedcupramen", "Chargedphone"],
-            ["Wipeddesk", "Washedclothes", "Organizeddishes"]
+            ["Heatedfood", "Wipeddesk", "Storedeggs"]
         ]
     }
 ]

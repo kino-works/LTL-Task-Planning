@@ -37,7 +37,7 @@ def g_heated_pot():
     return ["(heated pot)", "(at pot desk)"]
 
 def g_washed_clothes():
-    return ["(cleaned_clothes clothes)", "(at clothes bedroom)"]
+    return ["(cleaned clothes)", "(at clothes bedroom)"]
 
 def g_cooked_cup_ramen():
     return ["(cooked cup_ramen)", "(at cup_ramen desk)"]
@@ -52,7 +52,7 @@ def g_placed_water_bottle():
     return ["(at water_bottle desk)"]
 
 def g_wiped_desk():
-    return ["(cleaned_desk desk)"]
+    return ["(wiped desk)"]
 
 def g_turn_on(room: str):
     return [f"(on {room}_lightswitch)"]

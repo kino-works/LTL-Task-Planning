@@ -10,7 +10,7 @@ Initial state:
 (not (on charger))
 
 Goal state:
-(cleaned_desk desk)
+(wiped desk)
 (charged phone)
 (at phone desk)
 (at water_bottle desk)

@@ -32,7 +32,6 @@
 
         (cooked ?i - item)
         (boiled ?i - item)
-        (cooked ?i - item)
 
         (is_bread ?i - item)
         (is_toaster ?ap - appliance)

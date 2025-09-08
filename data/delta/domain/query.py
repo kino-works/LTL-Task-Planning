@@ -8,7 +8,6 @@ TASK_DEFINITIONS: Dict[str, Dict] = {
             "goto(<agent>, <room_1>, <room_2>): <agent> goes from <room_1> to <room_2>, where <room_1> and <room_2> should be neighbors. As a result, <agent> will leave <room_1> and be located in <room_2>.",
             "pick_from_room(<agent>, <item>, <room>): <agent> picks up an <item> that is located in <room>. The <item> must be accessible and pickable, the <agent> must be hand-free and in the same room. As a result, the <agent> will be holding the <item>, and the <item> will no longer be in the room.",
             "pick_from_appliance(<agent>, <item>, <appliance>, <room>): <agent> picks up an <item> that is inside an <appliance> in <room>. The <agent> must be in the same room, hand-free, and the appliance must be turned off. As a result, the <agent> will be holding the <item>, and it will be removed from the appliance.",
-            "pick_from_container(<agent>, <item>, <container>, <room>): <agent> picks up an <item> that is on <container> in <room>. The <agent> must be in the same room, hand-free. As a result, the <agent> will be holding the <item>, and it will be removed from the container.",
             "place_on_container(<agent>, <item>, <container>, <room>): <agent> places a held <item> onto a <container> in <room>. The <agent> must be holding the item and located in the same room as the container. As a result, the item will be placed on the container, and the agent's hand will become free.",
             "place_in_appliance(<agent>, <item>, <appliance>, <room>): <agent> places a held <item> into an <appliance> in <room>. The <agent> must be holding the item and located in the same room as the appliance. As a result, the item will be inside the appliance, and the agent's hand will become free.",
             "turn_on_appliance(<agent>, <appliance>, <room>): <agent> turns on an <appliance> at <room>. <appliance> must be accessible, the action must be in the <appliance>'s affordance, both <agent> and <appliance> must be in <room>, <agent> must not be holding an item, and the <appliance> state must be 'off'. As a result, the <appliance> state will change to 'on'.",
@@ -27,7 +26,6 @@ TASK_DEFINITIONS: Dict[str, Dict] = {
             "goto(<agent>, <room_1>, <room_2>): <agent> goes from <room_1> to <room_2>, where <room_1> and <room_2> should be neighbors. As a result, <agent> will leave <room_1> and be located in <room_2>.",
             "pick_from_room(<agent>, <item>, <room>): <agent> picks up an <item> that is located in <room>. The <item> must be accessible and pickable, the <agent> must be hand-free and in the same room. As a result, the <agent> will be holding the <item>, and the <item> will no longer be in the room.",
             "pick_from_appliance(<agent>, <item>, <appliance>, <room>): <agent> picks up an <item> that is inside an <appliance> in <room>. The <agent> must be in the same room, hand-free, and the appliance must be turned off. As a result, the <agent> will be holding the <item>, and it will be removed from the appliance.",
-            "pick_from_container(<agent>, <item>, <container>, <room>): <agent> picks up an <item> that is on <container> in <room>. The <agent> must be in the same room, hand-free. As a result, the <agent> will be holding the <item>, and it will be removed from the container.",
             "place_on_container(<agent>, <item>, <container>, <room>): <agent> places a held <item> onto a <container> in <room>. The <agent> must be holding the item and located in the same room as the container. As a result, the item will be placed on the container, and the agent's hand will become free.",
             "place_in_appliance(<agent>, <item>, <appliance>, <room>): <agent> places a held <item> into an <appliance> in <room>. The <agent> must be holding the item and located in the same room as the appliance. As a result, the item will be inside the appliance, and the agent's hand will become free.",
             "turn_on_appliance(<agent>, <appliance>, <room>): <agent> turns on an <appliance> at <room>. <appliance> must be accessible, the action must be in the <appliance>'s affordance, both <agent> and <appliance> must be in <room>, <agent> must not be holding an item, and the <appliance> state must be 'off'. As a result, the <appliance> state will change to 'on'.",
@@ -47,7 +45,6 @@ TASK_DEFINITIONS: Dict[str, Dict] = {
             "goto(<agent>, <room_1>, <room_2>): <agent> goes from <room_1> to <room_2>, where <room_1> and <room_2> should be neighbors. As a result, <agent> will leave <room_1> and be located in <room_2>.",
             "pick_from_room(<agent>, <item>, <room>): <agent> picks up an <item> that is located in <room>. The <item> must be accessible and pickable, the <agent> must be hand-free and in the same room. As a result, the <agent> will be holding the <item>, and the <item> will no longer be in the room.",
             "pick_from_appliance(<agent>, <item>, <appliance>, <room>): <agent> picks up an <item> that is inside an <appliance> in <room>. The <agent> must be in the same room, hand-free, and the appliance must be turned off. As a result, the <agent> will be holding the <item>, and it will be removed from the appliance.",
-            "pick_from_container(<agent>, <item>, <container>, <room>): <agent> picks up an <item> that is on <container> in <room>. The <agent> must be in the same room, hand-free. As a result, the <agent> will be holding the <item>, and it will be removed from the container.",
             "place_on_container(<agent>, <item>, <container>, <room>): <agent> places a held <item> onto a <container> in <room>. The <agent> must be holding the item and located in the same room as the container. As a result, the item will be placed on the container, and the agent's hand will become free.",
             "place_in_appliance(<agent>, <item>, <appliance>, <room>): <agent> places a held <item> into an <appliance> in <room>. The <agent> must be holding the item and located in the same room as the appliance. As a result, the item will be inside the appliance, and the agent's hand will become free.",
             "turn_on_appliance(<agent>, <appliance>, <room>): <agent> turns on an <appliance> at <room>. <appliance> must be accessible, the action must be in the <appliance>'s affordance, both <agent> and <appliance> must be in <room>, <agent> must not be holding an item, and the <appliance> state must be 'off'. As a result, the <appliance> state will change to 'on'.",
@@ -61,23 +58,22 @@ TASK_DEFINITIONS: Dict[str, Dict] = {
         "env_state": ["heated(pot): pot is heated.", "item_on(pot, desk): pot is on the desk."]
     },
     "Washedclothes": {
-        "scene": ["home"], "add_obj": None,
+        "scene": ["home", "exhome"], "add_obj": None,
         "add_act": [
             "goto(<agent>, <room_1>, <room_2>): <agent> goes from <room_1> to <room_2>, where <room_1> and <room_2> should be neighbors. As a result, <agent> will leave <room_1> and be located in <room_2>.",
             "pick_from_room(<agent>, <item>, <room>): <agent> picks up an <item> that is located in <room>. The <item> must be accessible and pickable, the <agent> must be hand-free and in the same room. As a result, the <agent> will be holding the <item>, and the <item> will no longer be in the room.",
             "pick_from_appliance(<agent>, <item>, <appliance>, <room>): <agent> picks up an <item> that is inside an <appliance> in <room>. The <agent> must be in the same room, hand-free, and the appliance must be turned off. As a result, the <agent> will be holding the <item>, and it will be removed from the appliance.",
-            "pick_from_container(<agent>, <item>, <container>, <room>): <agent> picks up an <item> that is on <container> in <room>. The <agent> must be in the same room, hand-free. As a result, the <agent> will be holding the <item>, and it will be removed from the container.",
             "place_on_container(<agent>, <item>, <container>, <room>): <agent> places a held <item> onto a <container> in <room>. The <agent> must be holding the item and located in the same room as the container. As a result, the item will be placed on the container, and the agent's hand will become free.",
             "place_in_appliance(<agent>, <item>, <appliance>, <room>): <agent> places a held <item> into an <appliance> in <room>. The <agent> must be holding the item and located in the same room as the appliance. As a result, the item will be inside the appliance, and the agent's hand will become free.",
             "turn_on_appliance(<agent>, <appliance>, <room>): <agent> turns on an <appliance> at <room>. <appliance> must be accessible, the action must be in the <appliance>'s affordance, both <agent> and <appliance> must be in <room>, <agent> must not be holding an item, and the <appliance> state must be 'off'. As a result, the <appliance> state will change to 'on'.",
             "turn_off_appliance(<agent>, <appliance>, <room>): <agent> turns off an <appliance> at <room>. <appliance> must be accessible, the action must be in the <appliance>'s affordance, both <agent> and <appliance> must be in <room>, <agent> must not be holding an appliance, and the <appliance> state must be 'on'. As a result, the <appliance> state will change to 'off'.",
-            "wait_wash_clothes(<agent>, <clothes>, <washing_machine>, <room>): After turning the machine on and waiting, the clothes inside become cleaned."
+            "wait_wash_clothes(<agent>, <clothes>, <washing_machine>, <room>): After turning the machine on and waiting, the clothes inside become clean."
         ],
-        "goal": "Wash the clothes in the washing machine and place them back in the specified room.", "cost": {"home": 10},
+        "goal": "Wash the clothes in the washing machine and place them on the desk.", "cost": {"home": 10, "exhome": 10},
         "item_keep": ["clothes", "washing_machine"],
-        "subgoal": ["Wash the clothes", "Return clothes to the bedroom"],
-        "subgoal_pddl": ["(:goal (and (cleaned_clothes clothes)))"],
-        "env_state": ["cleaned_clothes(clothes): clothes are cleaned."]
+        "subgoal": ["Wash the clothes", "Move the clothes to the desk"],
+        "subgoal_pddl": ["(:goal (and (cleaned clothes)))", "(:goal (and (item_on clothes desk)))"],
+        "env_state": ["cleaned(clothes): clothes are cleaned.", "item_on(clothes, desk): clothes is on the desk."]
     },
     "Cookedcupramen": {
         "scene": ["home", "exhome"], "add_obj": None,
@@ -85,7 +81,6 @@ TASK_DEFINITIONS: Dict[str, Dict] = {
             "goto(<agent>, <room_1>, <room_2>): <agent> goes from <room_1> to <room_2>, where <room_1> and <room_2> should be neighbors. As a result, <agent> will leave <room_1> and be located in <room_2>.",
             "pick_from_room(<agent>, <item>, <room>): <agent> picks up an <item> that is located in <room>. The <item> must be accessible and pickable, the <agent> must be hand-free and in the same room. As a result, the <agent> will be holding the <item>, and the <item> will no longer be in the room.",
             "pick_from_appliance(<agent>, <item>, <appliance>, <room>): <agent> picks up an <item> that is inside an <appliance> in <room>. The <agent> must be in the same room, hand-free, and the appliance must be turned off. As a result, the <agent> will be holding the <item>, and it will be removed from the appliance.",
-            "pick_from_container(<agent>, <item>, <container>, <room>): <agent> picks up an <item> that is on <container> in <room>. The <agent> must be in the same room, hand-free. As a result, the <agent> will be holding the <item>, and it will be removed from the container.",
             "place_on_container(<agent>, <item>, <container>, <room>): <agent> places a held <item> onto a <container> in <room>. The <agent> must be holding the item and located in the same room as the container. As a result, the item will be placed on the container, and the agent's hand will become free.",
             "place_in_appliance(<agent>, <item>, <appliance>, <room>): <agent> places a held <item> into an <appliance> in <room>. The <agent> must be holding the item and located in the same room as the appliance. As a result, the item will be inside the appliance, and the agent's hand will become free.",
             "turn_on_appliance(<agent>, <appliance>, <room>): <agent> turns on an <appliance> at <room>. <appliance> must be accessible, the action must be in the <appliance>'s affordance, both <agent> and <appliance> must be in <room>, <agent> must not be holding an item, and the <appliance> state must be 'off'. As a result, the <appliance> state will change to 'on'.",
@@ -104,7 +99,6 @@ TASK_DEFINITIONS: Dict[str, Dict] = {
             "goto(<agent>, <room_1>, <room_2>): <agent> goes from <room_1> to <room_2>, where <room_1> and <room_2> should be neighbors. As a result, <agent> will leave <room_1> and be located in <room_2>.",
             "pick_from_room(<agent>, <item>, <room>): <agent> picks up an <item> that is located in <room>. The <item> must be accessible and pickable, the <agent> must be hand-free and in the same room. As a result, the <agent> will be holding the <item>, and the <item> will no longer be in the room.",
             "pick_from_appliance(<agent>, <item>, <appliance>, <room>): <agent> picks up an <item> that is inside an <appliance> in <room>. The <agent> must be in the same room, hand-free, and the appliance must be turned off. As a result, the <agent> will be holding the <item>, and it will be removed from the appliance.",
-            "pick_from_container(<agent>, <item>, <container>, <room>): <agent> picks up an <item> that is on <container> in <room>. The <agent> must be in the same room, hand-free. As a result, the <agent> will be holding the <item>, and it will be removed from the container.",
             "place_on_container(<agent>, <item>, <container>, <room>): <agent> places a held <item> onto a <container> in <room>. The <agent> must be holding the item and located in the same room as the container. As a result, the item will be placed on the container, and the agent's hand will become free.",
             "place_in_appliance(<agent>, <item>, <appliance>, <room>): <agent> places a held <item> into an <appliance> in <room>. The <agent> must be holding the item and located in the same room as the appliance. As a result, the item will be inside the appliance, and the agent's hand will become free.",
             "turn_on_appliance(<agent>, <appliance>, <room>): <agent> turns on an <appliance> at <room>. <appliance> must be accessible, the action must be in the <appliance>'s affordance, both <agent> and <appliance> must be in <room>, <agent> must not be holding an item, and the <appliance> state must be 'off'. As a result, the <appliance> state will change to 'on'.",
@@ -118,19 +112,18 @@ TASK_DEFINITIONS: Dict[str, Dict] = {
         "env_state": ["heated(food): food is heated.", "item_on(food, desk): food is on the desk."]
     },
     "Chargedphone": {
-        "scene": ["home"], "add_obj": None,
+        "scene": ["home", "exhome"], "add_obj": None,
         "add_act": [
             "goto(<agent>, <room_1>, <room_2>): <agent> goes from <room_1> to <room_2>, where <room_1> and <room_2> should be neighbors. As a result, <agent> will leave <room_1> and be located in <room_2>.",
             "pick_from_room(<agent>, <item>, <room>): <agent> picks up an <item> that is located in <room>. The <item> must be accessible and pickable, the <agent> must be hand-free and in the same room. As a result, the <agent> will be holding the <item>, and the <item> will no longer be in the room.",
             "pick_from_appliance(<agent>, <item>, <appliance>, <room>): <agent> picks up an <item> that is inside an <appliance> in <room>. The <agent> must be in the same room, hand-free, and the appliance must be turned off. As a result, the <agent> will be holding the <item>, and it will be removed from the appliance.",
-            "pick_from_container(<agent>, <item>, <container>, <room>): <agent> picks up an <item> that is on <container> in <room>. The <agent> must be in the same room, hand-free. As a result, the <agent> will be holding the <item>, and it will be removed from the container.",
             "place_on_container(<agent>, <item>, <container>, <room>): <agent> places a held <item> onto a <container> in <room>. The <agent> must be holding the item and located in the same room as the container. As a result, the item will be placed on the container, and the agent's hand will become free.",
             "place_in_appliance(<agent>, <item>, <appliance>, <room>): <agent> places a held <item> into an <appliance> in <room>. The <agent> must be holding the item and located in the same room as the appliance. As a result, the item will be inside the appliance, and the agent's hand will become free.",
             "turn_on_appliance(<agent>, <appliance>, <room>): <agent> turns on an <appliance> at <room>. <appliance> must be accessible, the action must be in the <appliance>'s affordance, both <agent> and <appliance> must be in <room>, <agent> must not be holding an item, and the <appliance> state must be 'off'. As a result, the <appliance> state will change to 'on'.",
             "turn_off_appliance(<agent>, <appliance>, <room>): <agent> turns off an <appliance> at <room>. <appliance> must be accessible, the action must be in the <appliance>'s affordance, both <agent> and <appliance> must be in <room>, <agent> must not be holding an appliance, and the <appliance> state must be 'on'. As a result, the <appliance> state will change to 'off'.",
             "wait_charge_phone(<agent>, <phone>, <charger>, <room>): After turning the charger on and waiting, the phone becomes charged."
         ],
-        "goal": "Charge the phone and place it on the desk ", "cost": {"home": 9},
+        "goal": "Charge the phone and place it on the desk ", "cost": {"home": 9, "exhome": 9},
         "item_keep": ["phone", "charger", "desk"],
         "subgoal": ["Charge the phone", "Move the phone to the desk"],
         "subgoal_pddl": ["(:goal (and (charged phone)))", "(:goal (and (item_on phone desk)))"],
@@ -141,7 +134,6 @@ TASK_DEFINITIONS: Dict[str, Dict] = {
         "add_act": [
             "goto(<agent>, <room_1>, <room_2>): <agent> goes from <room_1> to <room_2>, where <room_1> and <room_2> should be neighbors. As a result, <agent> will leave <room_1> and be located in <room_2>.",
             "pick_from_room(<agent>, <item>, <room>): <agent> picks up an <item> that is located in <room>. The <item> must be accessible and pickable, the <agent> must be hand-free and in the same room. As a result, the <agent> will be holding the <item>, and the <item> will no longer be in the room.",
-            "pick_from_container(<agent>, <item>, <container>, <room>): <agent> picks up an <item> that is on <container> in <room>. The <agent> must be in the same room, hand-free. As a result, the <agent> will be holding the <item>, and it will be removed from the container.",
             "place_on_container(<agent>, <item>, <container>, <room>): <agent> places a held <item> onto a <container> in <room>. The <agent> must be holding the item and located in the same room as the container. As a result, the item will be placed on the container, and the agent's hand will become free.",
         ],
         "goal": "Place the water bottle onto the desk ", "cost": {"home": 4, "exhome": 4},
@@ -155,14 +147,13 @@ TASK_DEFINITIONS: Dict[str, Dict] = {
         "add_act": [
             "goto(<agent>, <room_1>, <room_2>): <agent> goes from <room_1> to <room_2>, where <room_1> and <room_2> should be neighbors. As a result, <agent> will leave <room_1> and be located in <room_2>.",
             "pick_from_room(<agent>, <item>, <room>): <agent> picks up an <item> that is located in <room>. The <item> must be accessible and pickable, the <agent> must be hand-free and in the same room. As a result, the <agent> will be holding the <item>, and the <item> will no longer be in the room.",
-            "pick_from_container(<agent>, <item>, <container>, <room>): <agent> picks up an <item> that is on <container> in <room>. The <agent> must be in the same room, hand-free. As a result, the <agent> will be holding the <item>, and it will be removed from the container.",
-            "wipe(<agent>, <cloth>, <container>, <room>): The agent uses the held cloth to wipe a dirty container, making it cleaned."
+            "wipe(<agent>, <cloth>, <container>, <room>): The agent uses the held cloth to wipe a dirty container, making it clean."
         ],
         "goal": "Wipe the desk using the dishcloth.", "cost": {"home": 3, "exhome": 3},
         "item_keep": ["dishcloth", "desk"],
         "subgoal": ["Pick the dishcloth", "Wipe the desk"],
-        "subgoal_pddl": ["(:goal (and (cleaned_desk desk)))"],
-        "env_state": ["cleaned_desk(desk): the desk is cleaned."]
+        "subgoal_pddl": ["(:goal (and (wiped desk)))"],
+        "env_state": ["wiped(desk): the desk is wiped."]
     },
     "Turnonswitch": {
         "scene": ["home", "exhome"], "add_obj": None,
@@ -189,21 +180,19 @@ TASK_DEFINITIONS: Dict[str, Dict] = {
         "scene": ["home", "exhome"], "add_obj": None,
         "add_act": [
             "pick_from_room(<agent>, <item>, <room>): <agent> picks up an <item> that is located in <room>. The <item> must be accessible and pickable, the <agent> must be hand-free and in the same room. As a result, the <agent> will be holding the <item>, and the <item> will no longer be in the room.",
-            "pick_from_container(<agent>, <item>, <container>, <room>): <agent> picks up an <item> that is on <container> in <room>. The <agent> must be in the same room, hand-free. As a result, the <agent> will be holding the <item>, and it will be removed from the container.",
             "place_in_appliance(<agent>, <item>, <appliance>, <room>): <agent> places a held <item> into an <appliance> in <room>. The <agent> must be holding the item and located in the same room as the appliance. As a result, the item will be inside the appliance, and the agent's hand will become free.",
         ],
         "goal": "Organize all the dishes by placing them onto the shelf.", "cost": {"home": 7, "exhome": 7},
         "item_keep": ["dish_1", "dish_2", "dish_3", "shelf"],
         "subgoal": ["Place all dishes on the shelf"],
         "subgoal_pddl": ["(:goal (and (item_on dish_1 shelf) (item_on dish_2 shelf) (item_on dish_3 shelf)))"],
-        "env_state": ["item_on(dish_1, shelf): dish 1 is on the shelf."]
+        "env_state": ["item_on(dish_1, shelf): dish 1 is on the shelf.", "item_on(dish_2, shelf): dish 1 is on the shelf.", "item_on(dish_3, shelf): dish 1 is on the shelf."]
     },
     "Storedeggs": {
         "scene": ["home", "exhome"], "add_obj": None,
         "add_act": [
             "goto(<agent>, <room_1>, <room_2>): <agent> goes from <room_1> to <room_2>, where <room_1> and <room_2> should be neighbors. As a result, <agent> will leave <room_1> and be located in <room_2>.",
             "pick_from_room(<agent>, <item>, <room>): <agent> picks up an <item> that is located in <room>. The <item> must be accessible and pickable, the <agent> must be hand-free and in the same room. As a result, the <agent> will be holding the <item>, and the <item> will no longer be in the room.",
-            "pick_from_container(<agent>, <item>, <container>, <room>): <agent> picks up an <item> that is on <container> in <room>. The <agent> must be in the same room, hand-free. As a result, the <agent> will be holding the <item>, and it will be removed from the container.",
             "place_in_appliance(<agent>, <item>, <appliance>, <room>): <agent> places a held <item> into an <appliance> in <room>. The <agent> must be holding the item and located in the same room as the appliance. As a result, the item will be inside the appliance, and the agent's hand will become free.",
         ],
         "goal": "Place the eggs in the egg container.", "cost": {"home": 3, "exhome": 3},

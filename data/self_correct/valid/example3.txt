@@ -15,7 +15,7 @@ Initial state:
 (not (on kitchen_lightswitch))
 (not (on stove))
 (not (on induction))
-(not (cleaned_desk desk))
+(not (wiped desk))
 (not (charged phone))
 (not (heated pot))
 
@@ -77,7 +77,7 @@ Initial state:
 (not (on kitchen_lightswitch)),
 (not (on stove)),
 (not (on induction)),
-(not (cleaned_desk desk)),
+(not (wiped desk)),
 (not (charged phone)),
 (not (heated pot))
 

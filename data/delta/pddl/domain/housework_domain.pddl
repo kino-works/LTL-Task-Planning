@@ -58,8 +58,8 @@
         (cooked ?i - item)
         (boiled ?i - item)
         (charged ?i - item)
-        (cleaned_desk ?c - container)
-        (cleaned_clothes ?i - item)
+        (wiped ?c - container)
+        (cleaned ?i - item)
     )
     ; End predicates
 
@@ -145,6 +145,7 @@
             (agent_at ?a ?r)
             (appliance_at ?ap ?r)
             (not (appliance_on ?ap))
+            (agent_hand_free ?a)
         )
         :effect (and
             (appliance_on ?ap)
@@ -157,6 +158,7 @@
             (agent_at ?a ?r)
             (appliance_at ?ap ?r)
             (appliance_on ?ap)
+            (agent_hand_free ?a)
         )
         :effect (and
             (not (appliance_on ?ap))
@@ -219,10 +221,10 @@
             (appliance_on ?ap)
             (is_clothes ?i)
             (is_washing_machine ?ap)
-            (not (cleaned_clothes ?i))
+            (not (cleaned ?i))
         )
         :effect (and
-            (cleaned_clothes ?i)
+            (cleaned ?i)
         )
     )
 
@@ -281,8 +283,11 @@
             (container_at ?c ?r)
             (agent_has_item ?a ?i)
             (is_dishcloth ?i)
+            (not (wiped ?c))
         )
-      :effect (cleaned_desk ?c)
+        :effect (and
+            (wiped ?c)
+        )
     )
 
     ; End actions
