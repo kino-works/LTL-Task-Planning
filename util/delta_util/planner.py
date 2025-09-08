@@ -34,7 +34,7 @@ def query(domain_path: str, problem_path: str, plan_file: str, print_plan: False
     plan_time = 0.
     plan = None
     err_msg = err.decode()
-    #print("output:", output)
+    print("output:", output)
     if "Solution found" in str(output):
         for line in str(output).split("\\n"):
             if "Plan cost: " in line:
@@ -51,7 +51,7 @@ def query(domain_path: str, problem_path: str, plan_file: str, print_plan: False
         exit_code = 1
     else:
         # TODO: error handling with exit code
-        print(err_msg)
+        #print(err_msg)
         if "Time limit reached" in err_msg or "Time limit reached" in str(output):
             exit_code = 3
         elif "Argument" in err_msg and "not in params" in err_msg:

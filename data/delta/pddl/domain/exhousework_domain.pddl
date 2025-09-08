@@ -30,9 +30,6 @@
 
         (neighbor ?r1 - room ?r2 - room)
 
-        (cooked ?i - item)
-        (boiled ?i - item)
-
         (is_bread ?i - item)
         (is_toaster ?ap - appliance)
         (is_kettle ?i - item)
@@ -40,6 +37,9 @@
         (is_cup_ramen ?i - item)
         (is_water_dispenser ?ap - appliance)
         (is_desk ?c - container)
+
+        (cooked ?i - item)
+        (boiled ?i - item)
     )
     ; End predicates
 
@@ -64,13 +64,11 @@
             (item_accessible ?i)
             (item_pickable ?i)
             (agent_hand_free ?a)
-            (loose ?i - item) 
         )
         :effect (and
             (not (item_at ?i ?r))
             (not (agent_hand_free ?a))
             (agent_has_item ?a ?i)
-            (not (loose ?i - item))
         )
     )
 
@@ -83,7 +81,6 @@
             (appliance_at ?ap ?r)
             (item_accessible ?i)
             (item_pickable ?i)
-            (not (loose ?i - item))
         )
         :effect (and
             (not (item_in ?i ?ap))
@@ -99,7 +96,6 @@
             (not (item_in ?i ?ap))
             (appliance_at ?ap ?r)
             (agent_has_item ?a ?i)
-            (not (loose ?i - item))
         )
         :effect (and
             (not (agent_has_item ?a ?i))

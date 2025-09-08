@@ -8,7 +8,6 @@ actions = """
     goto(<agent>, <room_1>, <room_2>): <agent> goes from <room_1> to <room_2>, where <room_1> and <room_2> should be neighbors. As a result, <agent> will leave <room_1> and be located in <room_2>.
     pick_from_room(<agent>, <item>, <room>): <agent> picks up an <item> that is located in <room>. The <item> must be accessible and pickable, the <agent> must be hand-free and in the same room. As a result, the <agent> will be holding the <item>, and the <item> will no longer be in the room.
     pick_from_appliance(<agent>, <item>, <appliance>, <room>): <agent> picks up an <item> that is inside an <appliance> in <room>. The <agent> must be in the same room, hand-free, and the appliance must be turned off. As a result, the <agent> will be holding the <item>, and it will be removed from the appliance.
-    pick_from_container(<agent>, <item>, <container>, <room>): <agent> picks up an <item> that is on <container> in <room>. The <agent> must be in the same room, hand-free. As a result, the <agent> will be holding the <item>, and it will be removed from the container.
     place_on_container(<agent>, <item>, <container>, <room>): <agent> places a held <item> onto a <container> in <room>. The <agent> must be holding the item and located in the same room as the container. As a result, the item will be placed on the container, and the agent's hand will become free.        
     place_in_appliance(<agent>, <item>, <appliance>, <room>): <agent> places a held <item> into an <appliance> in <room>. The <agent> must be holding the item and located in the same room as the appliance. As a result, the item will be inside the appliance, and the agent's hand will become free.
     turn_on_appliance(<agent>, <appliance>, <room>): <agent> turns on an <appliance> at <room>. <appliance> must be accessible, the action must be in the <appliance>'s affordance, both <agent> and <appliance> must be in <room>, <agent> must not be holding an item, and the <appliance> state must be 'off'. As a result, the <appliance> state will change to 'on'.
@@ -20,7 +19,7 @@ sg_example = {
         "items": {
             "kitchen_lightswitch": {
                 "accessible": True,
-                "affordance": ["turn_on_switch", "turn_off_switch"],
+                "affordance": ["turn_on_appliance", "turn_off_appliance"],
                 "state": "off"
             },
             "toaster": {
@@ -112,6 +111,67 @@ sg_example = {
             }
         },
         "neighbor": []
+    },
+    "bathroom": {
+        "items": {
+            "bathroom_lightswitch": {
+                "accessible": True,
+                "affordance": ["turn_on_appliance", "turn_off_appliance"],
+                "state": "off"
+            },
+            "washing_machine": {
+                "accessible": True,
+                "affordance": ["pick_from_appliance", "pick_from_room", "place_in_appliance", "turn_on_appliance", "turn_off_appliance"],
+                "state": "off"
+            }
+        },
+        "neighbor": []
+    },
+    "bedroom": {
+        "items": {
+            "bedroom_lightswitch": {
+                "accessible": True,
+                "affordance": ["turn_on_appliance", "turn_off_appliance"],
+                "state": "off"
+            },
+            "clothes": {
+                "accessible": True,
+                "affordance": ["pick_from_appliance", "pick_from_room", "place_in_appliance", "place_on_container"],
+                "state": "free"
+            },
+            "phone": {
+                "accessible": True,
+                "affordance": ["pick_from_appliance", "pick_from_room", "place_in_appliance", "place_on_container"],
+                "state": "free"
+            },
+            "charger": {
+                "accessible": True,
+                "affordance": ["pick_from_appliance", "pick_from_room", "place_in_appliance", "place_on_container"],
+                "state": "off"
+            }
+        },
+        "neighbor": []
+    },
+    "livingroom": {
+        "items": {
+            "livingroom_lightswitch": {
+                "accessible": True,
+                "affordance": ["turn_on_appliance", "turn_off_appliance"],
+                "state": "off"
+            },
+            "livingroom_desk": {
+                "accessible": True,
+                "affordance": ["pick_from_appliance", "pick_from_room", "place_in_desk", "wipe"],
+                "state": "free",
+                "content": []
+            },
+            "dishcloth": {
+                "accessible": True,
+                "affordance": ["pick_from_appliance", "pick_from_room", "place_in_desk", "wipe"],
+                "state": "free"
+            }
+        },
+        "neighbor": []
     }
 }
 
@@ -147,7 +207,6 @@ def p_template(x): return """
     goto(<agent>, <room_1>, <room_2>): <agent> goes from <room_1> to <room_2>, where <room_1> and <room_2> should be neighbors. As a result, <agent> will leave <room_1> and be located in <room_2>.
     pick_from_room(<agent>, <item>, <room>): <agent> picks up an <item> that is located in <room>. The <item> must be accessible and pickable, the <agent> must be hand-free and in the same room. As a result, the <agent> will be holding the <item>, and the <item> will no longer be in the room.
     pick_from_appliance(<agent>, <item>, <appliance>, <room>): <agent> picks up an <item> that is inside an <appliance> in <room>. The <agent> must be in the same room, hand-free, and the appliance must be turned off. As a result, the <agent> will be holding the <item>, and it will be removed from the appliance.
-    pick_from_container(<agent>, <item>, <container>, <room>): <agent> picks up an <item> that is on <container> in <room>. The <agent> must be in the same room, hand-free. As a result, the <agent> will be holding the <item>, and it will be removed from the container.
     place_on_container(<agent>, <item>, <container>, <room>): <agent> places a held <item> onto a <container> in <room>. The <agent> must be holding the item and located in the same room as the container. As a result, the item will be placed on the container, and the agent's hand will become free.        
     place_in_appliance(<agent>, <item>, <appliance>, <room>): <agent> places a held <item> into an <appliance> in <room>. The <agent> must be holding the item and located in the same room as the appliance. As a result, the item will be inside the appliance, and the agent's hand will become free.
     turn_on_appliance(<agent>, <appliance>, <room>): <agent> turns on an <appliance> at <room>. <appliance> must be accessible, the action must be in the <appliance>'s affordance, both <agent> and <appliance> must be in <room>, <agent> must not be holding an item, and the <appliance> state must be 'off'. As a result, the <appliance> state will change to 'on'.
@@ -177,7 +236,6 @@ def sg_2_plan(sg_exp: dict, sg_qry: dict, goal_exp: str, goal_qry: str,
     goto(<agent>, <room_1>, <room_2>): <agent> goes from <room_1> to <room_2>, where <room_1> and <room_2> should be neighbors. As a result, <agent> will leave <room_1> and be located in <room_2>.
     pick_from_room(<agent>, <item>, <room>): <agent> picks up an <item> that is located in <room>. The <item> must be accessible and pickable, the <agent> must be hand-free and in the same room. As a result, the <agent> will be holding the <item>, and the <item> will no longer be in the room.
     pick_from_appliance(<agent>, <item>, <appliance>, <room>): <agent> picks up an <item> that is inside an <appliance> in <room>. The <agent> must be in the same room, hand-free, and the appliance must be turned off. As a result, the <agent> will be holding the <item>, and it will be removed from the appliance.
-    pick_from_container(<agent>, <item>, <container>, <room>): <agent> picks up an <item> that is on <container> in <room>. The <agent> must be in the same room, hand-free. As a result, the <agent> will be holding the <item>, and it will be removed from the container.
     place_on_container(<agent>, <item>, <container>, <room>): <agent> places a held <item> onto a <container> in <room>. The <agent> must be holding the item and located in the same room as the container. As a result, the item will be placed on the container, and the agent's hand will become free.        
     place_in_appliance(<agent>, <item>, <appliance>, <room>): <agent> places a held <item> into an <appliance> in <room>. The <agent> must be holding the item and located in the same room as the appliance. As a result, the item will be inside the appliance, and the agent's hand will become free.
     turn_on_appliance(<agent>, <appliance>, <room>): <agent> turns on an <appliance> at <room>. <appliance> must be accessible, the action must be in the <appliance>'s affordance, both <agent> and <appliance> must be in <room>, <agent> must not be holding an item, and the <appliance> state must be 'off'. As a result, the <appliance> state will change to 'on'.
@@ -265,7 +323,6 @@ def nl_2_pddl_domain(domain_exp: str, domain_qry_name: str, add_obj_exp: str = N
     goto(<agent>, <room_1>, <room_2>): <agent> goes from <room_1> to <room_2>, where <room_1> and <room_2> should be neighbors. As a result, <agent> will leave <room_1> and be located in <room_2>.
     pick_from_room(<agent>, <item>, <room>): <agent> picks up an <item> that is located in <room>. The <item> must be accessible and pickable, the <agent> must be hand-free and in the same room. As a result, the <agent> will be holding the <item>, and the <item> will no longer be in the room.
     pick_from_appliance(<agent>, <item>, <appliance>, <room>): <agent> picks up an <item> that is inside an <appliance> in <room>. The <agent> must be in the same room, hand-free, and the appliance must be turned off. As a result, the <agent> will be holding the <item>, and it will be removed from the appliance.
-    pick_from_container(<agent>, <item>, <container>, <room>): <agent> picks up an <item> that is on <container> in <room>. The <agent> must be in the same room, hand-free. As a result, the <agent> will be holding the <item>, and it will be removed from the container.
     place_on_container(<agent>, <item>, <container>, <room>): <agent> places a held <item> onto a <container> in <room>. The <agent> must be holding the item and located in the same room as the container. As a result, the item will be placed on the container, and the agent's hand will become free.        
     place_in_appliance(<agent>, <item>, <appliance>, <room>): <agent> places a held <item> into an <appliance> in <room>. The <agent> must be holding the item and located in the same room as the appliance. As a result, the item will be inside the appliance, and the agent's hand will become free.
     turn_on_appliance(<agent>, <appliance>, <room>): <agent> turns on an <appliance> at <room>. <appliance> must be accessible, the action must be in the <appliance>'s affordance, both <agent> and <appliance> must be in <room>, <agent> must not be holding an item, and the <appliance> state must be 'off'. As a result, the <appliance> state will change to 'on'.
@@ -470,7 +527,6 @@ def sayplan_plan_prompt(add_obj_exp: str = None, add_act_exp: str = None, add_st
     goto(<agent>, <room_1>, <room_2>): <agent> goes from <room_1> to <room_2>, where <room_1> and <room_2> should be neighbors. As a result, <agent> will leave <room_1> and be located in <room_2>.
     pick_from_room(<agent>, <item>, <room>): <agent> picks up an <item> that is located in <room>. The <item> must be accessible and pickable, the <agent> must be hand-free and in the same room. As a result, the <agent> will be holding the <item>, and the <item> will no longer be in the room.
     pick_from_appliance(<agent>, <item>, <appliance>, <room>): <agent> picks up an <item> that is inside an <appliance> in <room>. The <agent> must be in the same room, hand-free, and the appliance must be turned off. As a result, the <agent> will be holding the <item>, and it will be removed from the appliance.
-    pick_from_container(<agent>, <item>, <container>, <room>): <agent> picks up an <item> that is on <container> in <room>. The <agent> must be in the same room, hand-free. As a result, the <agent> will be holding the <item>, and it will be removed from the container.
     place_on_container(<agent>, <item>, <container>, <room>): <agent> places a held <item> onto a <container> in <room>. The <agent> must be holding the item and located in the same room as the container. As a result, the item will be placed on the container, and the agent's hand will become free.        
     place_in_appliance(<agent>, <item>, <appliance>, <room>): <agent> places a held <item> into an <appliance> in <room>. The <agent> must be holding the item and located in the same room as the appliance. As a result, the item will be inside the appliance, and the agent's hand will become free.
     turn_on_appliance(<agent>, <appliance>, <room>): <agent> turns on an <appliance> at <room>. <appliance> must be accessible, the action must be in the <appliance>'s affordance, both <agent> and <appliance> must be in <room>, <agent> must not be holding an item, and the <appliance> state must be 'off'. As a result, the <appliance> state will change to 'on'.
@@ -541,7 +597,6 @@ def sayplan_prompt(add_obj_exp: str = None, add_act_exp: str = None, add_state_e
     goto(<agent>, <room_1>, <room_2>): <agent> goes from <room_1> to <room_2>, where <room_1> and <room_2> should be neighbors. As a result, <agent> will leave <room_1> and be located in <room_2>.
     pick_from_room(<agent>, <item>, <room>): <agent> picks up an <item> that is located in <room>. The <item> must be accessible and pickable, the <agent> must be hand-free and in the same room. As a result, the <agent> will be holding the <item>, and the <item> will no longer be in the room.
     pick_from_appliance(<agent>, <item>, <appliance>, <room>): <agent> picks up an <item> that is inside an <appliance> in <room>. The <agent> must be in the same room, hand-free, and the appliance must be turned off. As a result, the <agent> will be holding the <item>, and it will be removed from the appliance.
-    pick_from_container(<agent>, <item>, <container>, <room>): <agent> picks up an <item> that is on <container> in <room>. The <agent> must be in the same room, hand-free. As a result, the <agent> will be holding the <item>, and it will be removed from the container.
     place_on_container(<agent>, <item>, <container>, <room>): <agent> places a held <item> onto a <container> in <room>. The <agent> must be holding the item and located in the same room as the container. As a result, the item will be placed on the container, and the agent's hand will become free.        
     place_in_appliance(<agent>, <item>, <appliance>, <room>): <agent> places a held <item> into an <appliance> in <room>. The <agent> must be holding the item and located in the same room as the appliance. As a result, the item will be inside the appliance, and the agent's hand will become free.
     turn_on_appliance(<agent>, <appliance>, <room>): <agent> turns on an <appliance> at <room>. <appliance> must be accessible, the action must be in the <appliance>'s affordance, both <agent> and <appliance> must be in <room>, <agent> must not be holding an item, and the <appliance> state must be 'off'. As a result, the <appliance> state will change to 'on'.

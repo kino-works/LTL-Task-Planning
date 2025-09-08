@@ -67,7 +67,7 @@ TASK_DEFINITIONS: Dict[str, Dict] = {
             "place_in_appliance(<agent>, <item>, <appliance>, <room>): <agent> places a held <item> into an <appliance> in <room>. The <agent> must be holding the item and located in the same room as the appliance. As a result, the item will be inside the appliance, and the agent's hand will become free.",
             "turn_on_appliance(<agent>, <appliance>, <room>): <agent> turns on an <appliance> at <room>. <appliance> must be accessible, the action must be in the <appliance>'s affordance, both <agent> and <appliance> must be in <room>, <agent> must not be holding an item, and the <appliance> state must be 'off'. As a result, the <appliance> state will change to 'on'.",
             "turn_off_appliance(<agent>, <appliance>, <room>): <agent> turns off an <appliance> at <room>. <appliance> must be accessible, the action must be in the <appliance>'s affordance, both <agent> and <appliance> must be in <room>, <agent> must not be holding an appliance, and the <appliance> state must be 'on'. As a result, the <appliance> state will change to 'off'.",
-            "wait_wash_clothes(<agent>, <clothes>, <washing_machine>, <room>): After turning the machine on and waiting, the clothes inside become clean."
+            "wait_wash_clothes(<agent>, <clothes>, <washing_machine>, <room>): After turning the machine on and waiting, the clothes inside become clean. Then, the <clothes> state will change to 'cleaned'."
         ],
         "goal": "Wash the clothes in the washing machine and place them on the desk.", "cost": {"home": 10, "exhome": 10},
         "item_keep": ["clothes", "washing_machine"],
@@ -147,7 +147,7 @@ TASK_DEFINITIONS: Dict[str, Dict] = {
         "add_act": [
             "goto(<agent>, <room_1>, <room_2>): <agent> goes from <room_1> to <room_2>, where <room_1> and <room_2> should be neighbors. As a result, <agent> will leave <room_1> and be located in <room_2>.",
             "pick_from_room(<agent>, <item>, <room>): <agent> picks up an <item> that is located in <room>. The <item> must be accessible and pickable, the <agent> must be hand-free and in the same room. As a result, the <agent> will be holding the <item>, and the <item> will no longer be in the room.",
-            "wipe(<agent>, <cloth>, <container>, <room>): The agent uses the held cloth to wipe a dirty container, making it clean."
+            "wipe(<agent>, <cloth>, <container>, <room>): The agent uses the held cloth to wipe a container, making it clean. Then, the <container> state will change to 'wiped'."
         ],
         "goal": "Wipe the desk using the dishcloth.", "cost": {"home": 3, "exhome": 3},
         "item_keep": ["dishcloth", "desk"],

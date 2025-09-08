@@ -8,7 +8,7 @@ HOME = {
                 "singledesk": {
                     "accessible": True,
                     "affordance": ["pick_from_appliance", "place_on_container", "wipe"],
-                    "state": "dirty",
+                    "state": "free",
                     "content": []
                 },
                 "singledeskroom_lightswitch": {
@@ -106,7 +106,7 @@ HOME = {
                 "clothes": {
                     "accessible": True,
                     "affordance": ["pick_from_appliance", "place_in_appliance", "place_on_container"],
-                    "state": "dirty"
+                    "state": "free"
                 },
                 "phone": {
                     "accessible": True,
@@ -136,7 +136,7 @@ HOME = {
                 "upperdesk": {
                     "accessible": True,
                     "affordance": ["pick_from_appliance", "place_on_container", "wipe"],
-                    "state": "dirty",
+                    "state": "free",
                     "content": []
                 },
                 "toaster": {
@@ -234,13 +234,13 @@ HOME = {
                 "lowerdesk": {
                     "accessible": True,
                     "affordance": ["pick_from_appliance", "place_in_desk", "wipe"],
-                    "state": "dirty",
+                    "state": "free",
                     "content": []
                 },
                 "clothes": {
                     "accessible": True,
                     "affordance": ["pick_from_appliance", "place_in_appliance", "place_on_container"],
-                    "state": "dirty"
+                    "state": "free"
                 },
                 "phone": {
                     "accessible": True,
@@ -387,7 +387,7 @@ HOME = {
                 "clothes": {
                     "accessible": True,
                     "affordance": ["pick_from_appliance", "pick_from_room", "place_in_appliance", "place_on_container"],
-                    "state": "dirty"
+                    "state": "free"
                 },
                 "phone": {
                     "accessible": True,
@@ -412,7 +412,7 @@ HOME = {
                 "livingroom_desk": {
                     "accessible": True,
                     "affordance": ["pick_from_appliance", "pick_from_room", "place_in_desk", "wipe"],
-                    "state": "dirty",
+                    "state": "free",
                     "content": []
                 },
                 "dishcloth": {
@@ -541,7 +541,7 @@ EXHOME = {
                 "desk": {
                     "accessible": True,
                     "affordance": ["pick_from_appliance", "pick_from_room", "place_in_desk", "wipe"],
-                    "state": "dirty",
+                    "state": "free",
                     "content": []
                 },
                 "dishcloth": {
