@@ -2,7 +2,22 @@
     {
         "scene":"innerhouse",
         "domain":[
-            ["Heatedfood", "Wipeddesk", "Storedeggs"]
+            ["Cookedtoast", "Boiledwater", "Cookedcupramen", "Washedclothes"],
+            ["Wipeddesk", "Organizeddishes", "Chargedphone"]
+        ]
+    },
+    {
+        "scene":"singledeskroom",
+        "domain":[
+            ["Cookedtoast", "Boiledwater", "Cookedcupramen", "Washedclothes"],
+            ["Wipeddesk", "Organizeddishes", "Chargedphone"]
+        ]
+    },
+    {
+        "scene":"dualdeskroom",
+        "domain":[
+            ["Cookedtoast", "Boiledwater", "Cookedcupramen", "Washedclothes"],
+            ["Wipeddesk", "Organizeddishes", "Chargedphone"]
         ]
     }
 ]
