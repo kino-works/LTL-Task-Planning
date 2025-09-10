@@ -139,6 +139,7 @@
         (item_on phone upperdesk)
         (item_on water_bottle upperdesk)
         (wiped lowerdesk)
+        (item_on dishcloth lowerdesk)
         (item_on dish_1 lowerdesk)
         (item_on dish_2 lowerdesk)
         (item_on dish_3 lowerdesk)

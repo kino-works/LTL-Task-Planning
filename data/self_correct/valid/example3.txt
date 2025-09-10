@@ -18,6 +18,17 @@ Initial state:
 (not (wiped desk))
 (not (charged phone))
 (not (heated pot))
+(is_dishcloth dishcloth)
+(is_lightswitch kitchen_lightswitch)
+(is_kettle kettle)
+(is_pot pot)
+(is_induction induction)
+(is_stove stove)
+(is_dish dish_1)
+(is_dish dish_2)
+(is_dish dish_3)
+(is_shelf shelf)
+(is_desk desk)
 
 Goal state:
 (on kitchen_lightswitch)
@@ -79,7 +90,18 @@ Initial state:
 (not (on induction)),
 (not (wiped desk)),
 (not (charged phone)),
-(not (heated pot))
+(not (heated pot)),
+(is_dishcloth dishcloth),
+(is_lightswitch kitchen_lightswitch),
+(is_kettle kettle),
+(is_pot pot),
+(is_induction induction),
+(is_stove stove),
+(is_dish dish_1),
+(is_dish dish_2),
+(is_dish dish_3),
+(is_shelf shelf),
+(is_desk desk)
 
 (goto robot1 bedroom kitchen)
 Resulting state: (agent_at robot1 kitchen), (other objects unchanged)

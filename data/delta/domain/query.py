@@ -67,11 +67,11 @@ TASK_DEFINITIONS: Dict[str, Dict] = {
             "place_in_appliance(<agent>, <item>, <appliance>, <room>): <agent> places a held <item> into an <appliance> in <room>. The <agent> must be holding the item and located in the same room as the appliance. As a result, the item will be inside the appliance, and the agent's hand will become free.",
             "turn_on_appliance(<agent>, <appliance>, <room>): <agent> turns on an <appliance> at <room>. <appliance> must be accessible, the action must be in the <appliance>'s affordance, both <agent> and <appliance> must be in <room>, <agent> must not be holding an item, and the <appliance> state must be 'off'. As a result, the <appliance> state will change to 'on'.",
             "turn_off_appliance(<agent>, <appliance>, <room>): <agent> turns off an <appliance> at <room>. <appliance> must be accessible, the action must be in the <appliance>'s affordance, both <agent> and <appliance> must be in <room>, <agent> must not be holding an appliance, and the <appliance> state must be 'on'. As a result, the <appliance> state will change to 'off'.",
-            "wait_wash_clothes(<agent>, <clothes>, <washing_machine>, <room>): After turning the machine on and waiting, the clothes inside become clean. Then, the <clothes> state will change to 'cleaned'."
+            "wait_clean_clothes(<agent>, <clothes>, <washing_machine>, <room>): After turning the machine on and waiting, the clothes inside become clean. Then, the <clothes> state will change to 'cleaned'."
         ],
-        "goal": "Wash the clothes in the washing machine and place them on the desk.", "cost": {"home": 10, "exhome": 10},
+        "goal": "Clean the clothes in the washing machine and place them on the desk.", "cost": {"home": 10, "exhome": 10},
         "item_keep": ["clothes", "washing_machine"],
-        "subgoal": ["Wash the clothes", "Move the clothes to the desk"],
+        "subgoal": ["Clean the clothes", "Move the clothes to the desk"],
         "subgoal_pddl": ["(:goal (and (cleaned clothes)))", "(:goal (and (item_on clothes desk)))"],
         "env_state": ["cleaned(clothes): clothes are cleaned.", "item_on(clothes, desk): clothes is on the desk."]
     },

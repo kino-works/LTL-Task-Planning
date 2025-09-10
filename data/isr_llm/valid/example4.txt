@@ -12,6 +12,13 @@ Initial state:
 (not (on induction))
 (not (cooked bread))
 (not (boiled kettle))
+(is_bread bread)
+(is_kettle kettle)
+(is_eggs eggs)
+(is_egg_container egg_container)
+(is_toaster toaster)
+(is_induction induction)
+(is_desk desk)
 
 Goal state:
 (cooked bread)
@@ -57,7 +64,14 @@ Initial state:
 (not (on toaster)),
 (not (on induction)),
 (not (cooked bread)),
-(not (boiled kettle))
+(not (boiled kettle)),
+(is_bread bread),
+(is_kettle kettle),
+(is_eggs eggs),
+(is_egg_container egg_container),
+(is_toaster toaster),
+(is_induction induction),
+(is_desk desk)
 
 (goto robot1 bedroom kitchen): robot1 moves from bedroom to kitchen  
 (pick robot1 bread kitchen): bread picked from kitchen, now in robot's hand  

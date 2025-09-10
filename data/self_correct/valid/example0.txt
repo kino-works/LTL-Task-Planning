@@ -15,6 +15,13 @@ Initial state:
 (not (cooked bread))
 (not (boiled kettle))
 (not (cooked cup_ramen))
+(is_bread bread)
+(is_kettle kettle)
+(is_cup_ramen cup_ramen)
+(is_toaster toaster)
+(is_stove stove)
+(is_water_dispenser water_dispenser)
+(is_desk desk)
 
 Goal state:
 (cooked bread)
@@ -70,7 +77,14 @@ Initial state:
 (not (on water_dispenser)),
 (not (cooked bread)),
 (not (boiled kettle)),
-(not (cooked cup_ramen))
+(not (cooked cup_ramen)),
+(is_bread bread),
+(is_kettle kettle),
+(is_cup_ramen cup_ramen),
+(is_toaster toaster),
+(is_stove stove),
+(is_water_dispenser water_dispenser),
+(is_desk desk)
 
 (goto robot1 bedroom kitchen)
 Resulting state: (agent_at robot1 kitchen), (other objects unchanged)

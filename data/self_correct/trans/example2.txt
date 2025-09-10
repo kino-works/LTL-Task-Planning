@@ -1,23 +1,32 @@
 I’m a service robot currently located in the bedroom of a house.
-My goals are to wipe the living room desk, charge the phone, and place the water bottle on the living room desk.
-To wipe the desk, I need the dishcloth in the living room.
-To charge the phone, I must use the charger in the bedroom and wait 10 minutes.
-After charging, I’ll bring the phone to the living room desk.
-To place the water bottle, I simply pick it up in the kitchen and carry it to the living room desk.
+My goals are to wipe the living room desk, charge the phone, and organize the dishes on the shelf.
+To wipe the desk, I will need the dishcloth, which is located in the living room. I must pick it up and use it to clean the desk.
+To charge the phone, I will find it in the bedroom and place it on the charger, also in the bedroom. I will then turn on the charger, wait until the phone is charged, and finally bring the phone to the living room desk.
+To organize the dishes, I will go to the kitchen where dish_1, dish_2, and dish_3 are located. I will pick them up one by one and place them neatly onto the shelf in the kitchen.
+Once all these tasks are completed, the living room desk will be wiped, the phone will be charged and placed at the desk, and all dishes will be stored properly on the shelf.
 
 Domain file:
 (define (domain housework)
-    (:requirements :strips :typing)
-    (:types agent room item appliance desk)
+    (:requirements :strips :typing :negative-preconditions)
+    (:types agent room item appliance desk container)
     (:predicates
         (agent_at ?a - agent ?r - room)
         (agent_hand_free ?a - agent)
         (agent_has_item ?a - agent ?i - item)
 
-        (at ?i - item ?loc - (either room appliance desk))
+        (at ?x - (either item desk) ?loc - (either room appliance desk container))
 
         (ap_at ?ap - appliance ?r - room)
         (on ?ap - appliance)
+
+        (is_dishcloth ?i - item)
+        (is_phone ?i - item)
+        (is_dish ?i - item)
+
+        (is_charger ?ap - appliance)
+
+        (is_shelf ?c - container)
+        (is_desk ?d - desk)
 
         (wiped ?d - desk)
         (charged ?i - item)
@@ -31,8 +40,9 @@ Domain file:
         )
     )
     (:action pick
-        :parameters (?a - agent ?i - item ?loc - (either room appliance desk))
+        :parameters (?a - agent ?i - item ?loc - (either room appliance desk container))
         :precondition (and
+            (agent_at ?a ?loc)
             (agent_hand_free ?a)
             (at ?i ?loc)
         )
@@ -43,8 +53,9 @@ Domain file:
         )
     )
     (:action place
-        :parameters (?a - agent ?i - item ?loc - (either room appliance desk))
+        :parameters (?a - agent ?i - item ?loc - (either room appliance desk container))
         :precondition (and
+            (agent_at ?a ?loc)
             (agent_has_item ?a ?i)
             (not (at ?i ?loc))
         )
@@ -58,6 +69,7 @@ Domain file:
         :parameters (?a - agent ?ap - appliance ?r - room)
         :precondition (and
             (agent_at ?a ?r)
+            (agent_hand_free ?a)
             (ap_at ?ap ?r)
             (not (on ?ap))
         )
@@ -67,6 +79,7 @@ Domain file:
         :parameters (?a - agent ?ap - appliance ?r - room)
         :precondition (and
             (agent_at ?a ?r)
+            (agent_hand_free ?a)
             (ap_at ?ap ?r)
             (on ?ap)
         )
@@ -77,21 +90,24 @@ Domain file:
       :precondition (and
         (agent_at ?a ?r)
         (agent_has_item ?a ?i)
-    )
+        (is_dishcloth ?i)
+        (is_desk ?d)
+      )
       :effect (wiped ?d)
     )
     (:action wait_charge_phone
         :parameters (?a - agent ?i - item ?ap - appliance ?r - room)
         :precondition (and
             (agent_at ?a ?r)
+            (agent_hand_free ?a)
             (ap_at ?ap ?r)
             (at ?i ?ap)
             (on ?ap)
             (not (charged ?i))
+            (is_phone ?i)
+            (is_charger ?ap)
         )
-        :effect (and
-            (charged ?i)
-        )
+        :effect (charged ?i)
     )
 )
 
@@ -100,10 +116,11 @@ Problem file:
     (:domain housework)
     (:objects
         robot1 - agent
-        kitchen bathroom bedroom livingroom - room
+        kitchen bedroom livingroom - room
         charger - appliance
-        dishcloth phone water_bottle - item
+        dish_1 dish_2 dish_3 dishcloth phone - item
         desk - desk
+        shelf - container
     )
     (:init
         (agent_at robot1 bedroom)
@@ -111,18 +128,36 @@ Problem file:
 
         (at dishcloth livingroom)
         (at phone bedroom)
-        (at water_bottle kitchen)
+        (at dish_1 kitchen)
+        (at dish_2 kitchen)
+        (at dish_3 kitchen)
         (at desk livingroom)
+        (at shelf kitchen)
 
         (ap_at charger bedroom)
         (not (on charger))
 
         (not (wiped desk))
         (not (charged phone))
+
+        (is_dishcloth dishcloth)
+        (is_phone phone)
+        (is_dish dish_1)
+        (is_dish dish_2)
+        (is_dish dish_3)
+
+        (is_charger charger)
+
+        (is_shelf shelf)
+        (is_desk desk)
     )
     (:goal (and
         (wiped desk)
+        (at dishcloth desk)
         (charged phone)
-        (at water_bottle desk)
+        (at phone desk)
+        (at dish_1 shelf)
+        (at dish_2 shelf)
+        (at dish_3 shelf)
     ))
 )

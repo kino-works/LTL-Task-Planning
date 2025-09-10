@@ -18,7 +18,7 @@ HOUSEHOLD_VALID_ACTIONS = {
     "wait_heat_food",
     "wait_heat_pot",
     "wait_charge_phone",
-    "wait_heat_pot",
+    "wait_clean_clothes",
     "wipe"
 }
 

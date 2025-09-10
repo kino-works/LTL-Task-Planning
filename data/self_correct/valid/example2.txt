@@ -8,9 +8,15 @@ Initial state:
 (at desk livingroom)
 (ap_at charger bedroom)
 (not (on charger))
+(is_dishcloth dishcloth)
+(is_phone phone)
+(is_water_bottle water_bottle)
+(is_charger charger)
+(is_desk desk)
 
 Goal state:
 (wiped desk)
+(at dishcloth desk)
 (charged phone)
 (at phone desk)
 (at water_bottle desk)
@@ -43,7 +49,12 @@ Initial state:
 (at water_bottle kitchen),
 (at desk livingroom),
 (ap_at charger bedroom),
-(not (on charger))
+(not (on charger)),
+(is_dishcloth dishcloth),
+(is_phone phone),
+(is_water_bottle water_bottle),
+(is_charger charger),
+(is_desk desk)
 
 (goto robot1 bedroom livingroom)
 Resulting state: (agent_at robot1 livingroom), (other objects unchanged)

@@ -21,7 +21,7 @@ from util.isr_llm_util.Household_Sim import HouseholdSim
 action_keywords = [
     'goto', 'pick', 'place', 'turn_on', 'turn_off',
     'turn_on_switch', 'turn_off_switch', 'wipe', 'wait_cook_bread',
-    'wait_boil_water', 'wait_heat_pot', 'wait_wash_clothes',
+    'wait_boil_water', 'wait_heat_pot', 'wait_clean_clothes',
     'wait_cook_ramen', 'wait_heat_food', 'wait_charge_phone'
 ]
 

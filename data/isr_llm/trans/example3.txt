@@ -1,0 +1,168 @@
+I’m a service robot currently located in the bedroom of a house.
+My goals are to heat the pot and place it on the living room desk, clean the clothes and place them on the desk, turn on the kitchen light switch, and turn off the bathroom light switch.
+To heat the pot, I will go to the kitchen where the pot and induction are located. I will pick up the pot, place it on the induction, turn on the induction, and wait until the pot is heated. After heating, I will carry the pot to the living room desk.
+To clean the clothes, I will go to the bathroom where the clothes and washing machine are located. I will put the clothes in the washing machine, turn it on, and wait until the clothes are cleaned. After washing, I will bring the clothes to the living room desk.
+For the switches, I will ensure the kitchen light switch is turned on, and I will make sure the bathroom light switch is turned off.
+Once all these tasks are complete, the pot will be heated and placed on the living room desk, the clothes will be washed and placed on the desk, the kitchen light will be on, and the bathroom light will be off.
+The robot can only use one hand at a time and can hold only one item.
+
+Domain file:
+(define (domain housework)
+    (:requirements :strips :typing :negative-preconditions)
+    (:types agent room item appliance desk)
+    (:predicates
+        (agent_at ?a - agent ?r - room)
+        (agent_hand_free ?a - agent)
+        (agent_has_item ?a - agent ?i - item)
+
+        (at ?x - (either item desk) ?loc - (either room appliance desk))
+
+        (ap_at ?ap - appliance ?r - room)
+        (on ?ap - appliance)
+
+        (is_clothes ?i - item)
+        (is_pot ?i - item)
+
+        (is_induction ?ap - appliance)
+        (is_washing_machine ?ap - appliance)
+        (is_lightswitch ?ap - appliance)
+
+        (is_desk ?d - desk)
+
+        (heated ?i - item)
+        (cleaned ?i - item)
+    )
+    (:action goto
+        :parameters (?a - agent ?from - room ?to - room)
+        :precondition (agent_at ?a ?from)
+        :effect (and
+            (not (agent_at ?a ?from))
+            (agent_at ?a ?to)
+        )
+    )
+    (:action pick
+        :parameters (?a - agent ?i - item ?loc - (either room appliance desk))
+        :precondition (and
+            (agent_at ?a ?loc)
+            (agent_hand_free ?a)
+            (at ?i ?loc)
+        )
+        :effect (and
+            (not (at ?i ?loc))
+            (not (agent_hand_free ?a))
+            (agent_has_item ?a ?i)
+        )
+    )
+    (:action place
+        :parameters (?a - agent ?i - item ?loc - (either room appliance desk))
+        :precondition (and
+            (agent_at ?a ?loc)
+            (agent_has_item ?a ?i)
+            (not (at ?i ?loc))
+        )
+        :effect (and
+            (at ?i ?loc)
+            (agent_hand_free ?a)
+            (not (agent_has_item ?a ?i))
+        )
+    )
+    (:action turn_on
+        :parameters (?a - agent ?ap - appliance ?r - room)
+        :precondition (and
+            (agent_at ?a ?r)
+            (agent_hand_free ?a)
+            (ap_at ?ap ?r)
+            (not (on ?ap))
+        )
+        :effect (on ?ap)
+    )
+    (:action turn_off
+        :parameters (?a - agent ?ap - appliance ?r - room)
+        :precondition (and
+            (agent_at ?a ?r)
+            (agent_hand_free ?a)
+            (ap_at ?ap ?r)
+            (on ?ap)
+        )
+        :effect (not (on ?ap))
+    )
+    (:action wait_heat_pot
+        :parameters (?a - agent ?i - item ?ap - appliance ?r - room)
+        :precondition (and
+            (agent_at ?a ?r)
+            (agent_hand_free ?a)
+            (ap_at ?ap ?r)
+            (at ?i ?ap)
+            (on ?ap)
+            (not (heated ?i))
+            (is_pot ?i)
+            (is_induction ?ap)
+        )
+        :effect (heated ?i)
+    )
+    (:action wait_clean_clothes
+        :parameters (?a - agent ?i - item ?ap - appliance ?r - room)
+        :precondition (and
+            (agent_at ?a ?r)
+            (agent_hand_free ?a)
+            (ap_at ?ap ?r)
+            (at ?i ?ap)
+            (on ?ap)
+            (not (cleaned ?i))
+            (is_clothes ?i)
+            (is_washing_machine ?ap)
+        )
+        :effect (cleaned ?i)
+    )
+)
+
+Problem file:
+(define (problem doing_housework)
+    (:domain housework)
+    (:objects
+        robot1 - agent
+        kitchen bathroom bedroom livingroom - room
+        induction washing_machine kitchen_lightswitch bathroom_lightswitch - appliance
+        pot clothes - item
+        desk - desk
+    )
+    (:init
+        (agent_at robot1 bedroom)
+        (agent_hand_free robot1)
+
+        (at pot kitchen)
+        (at clothes bathroom)
+        (at desk livingroom)
+
+        (ap_at induction kitchen)
+        (ap_at washing_machine bathroom)
+        (ap_at kitchen_lightswitch kitchen)
+        (ap_at bathroom_lightswitch bathroom)
+
+        (not (on induction))
+        (not (on washing_machine))
+        (not (on kitchen_lightswitch))
+        (on bathroom_lightswitch)
+
+        (not (heated pot))
+        (not (cleaned clothes))
+
+        (is_clothes clothes)
+        (is_pot pot)
+
+        (is_induction induction)
+        (is_washing_machine washing_machine)
+        (is_lightswitch kitchen_lightswitch)
+        (is_lightswitch bathroom_lightswitch)
+
+        (is_desk desk)
+    )
+    (:goal (and
+        (heated pot)
+        (at pot desk)
+        (cleaned clothes)
+        (at clothes desk)
+        (on kitchen_lightswitch)
+        (not (on bathroom_lightswitch))
+    ))
+)

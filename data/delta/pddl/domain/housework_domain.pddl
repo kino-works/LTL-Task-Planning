@@ -212,7 +212,7 @@
         )
     )
     
-    (:action wait_wash_clothes
+    (:action wait_clean_clothes
         :parameters (?a - agent ?i - item ?ap - appliance ?r - room)
         :precondition (and
             (agent_at ?a ?r)
@@ -289,6 +289,5 @@
             (wiped ?c)
         )
     )
-
     ; End actions
 )

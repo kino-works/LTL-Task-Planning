@@ -11,6 +11,12 @@ Initial state:
 (not (on microwave))
 (not (on egg_container))
 (not (heated food))
+(is_food food)
+(is_water_bottle water_bottle)
+(is_eggs is_eggs)
+(is_microwave microwave)
+(is_egg_container egg_container)
+(is_desk desk)
 
 Goal state:
 (heated food)
@@ -49,7 +55,13 @@ Initial state:
 (ap_at microwave kitchen),
 (not (on microwave)),
 (not (on egg_container)),
-(not (heated food))
+(not (heated food)),
+(is_food food),
+(is_water_bottle water_bottle),
+(is_eggs is_eggs),
+(is_microwave microwave),
+(is_egg_container egg_container),
+(is_desk desk)
 
 (goto robot1 bedroom kitchen): robot1 moves to kitchen
 (pick robot1 food kitchen): robot1 picks up the food

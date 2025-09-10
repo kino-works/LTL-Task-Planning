@@ -139,6 +139,7 @@
         (item_on phone singledesk)
         (item_on water_bottle singledesk)
         (wiped singledesk)
+        (item_on dishcloth singledesk)
         (item_on dish_1 shelf)
         (item_on dish_2 shelf)
         (item_on dish_3 shelf)

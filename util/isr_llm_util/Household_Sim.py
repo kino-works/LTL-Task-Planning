@@ -19,7 +19,6 @@ class HouseholdSim(object):
             'bedroom_lightswitch',
             'livingroom_lightswitch',
             'singledeskroom_lightswitch',
-            'dualdeskroom_lightswitch',
             'toaster',
             'induction',
             'microwave',
@@ -40,6 +39,8 @@ class HouseholdSim(object):
         self.boiled = set()   
         self.heated = set()   
         self.charged = set()
+        self.wiped = set()
+        self.cleaned = set()
 
     def initialize_state(self, initial_locations):
         self.robot_room = None
@@ -56,6 +57,8 @@ class HouseholdSim(object):
         self.boiled.clear()
         self.heated.clear()
         self.charged.clear()
+        self.wiped.clear()
+        self.cleaned.clear()
 
         for pred in initial_locations:
             match = re.search(r"\(at\s+([^\s]+)\s+([^\s\)]+)\)", pred)
@@ -229,6 +232,7 @@ class HouseholdSim(object):
                 'wait_heat_food': ('heated', self.heated, "Heated"),
                 'wait_heat_pot': ('heated', self.heated, "Heated"),
                 'wait_charge_phone': ('charged', self.charged, "Charged"),
+                'wait_clean_clothes': ('cleaned', self.cleaned, "Cleaned")
             }
             if head not in mapping:
                 return False, f"Unknown wait action '{head}'."

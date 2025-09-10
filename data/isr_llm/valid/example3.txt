@@ -16,6 +16,17 @@ Initial state:
 (not (on stove))
 (not (on induction))
 (not (heated pot))
+(is_dishcloth dishcloth)
+(is_lightswitch kitchen_lightswitch)
+(is_kettle kettle)
+(is_pot pot)
+(is_induction induction)
+(is_stove stove)
+(is_dish dish_1)
+(is_dish dish_2)
+(is_dish dish_3)
+(is_shelf shelf)
+(is_desk desk)
 
 Goal state:
 (on kitchen_lightswitch)
@@ -73,7 +84,18 @@ Initial state:
 (not (on kitchen_lightswitch)),
 (not (on stove)),
 (not (on induction)),
-(not (heated pot))
+(not (heated pot)),
+(is_dishcloth dishcloth),
+(is_lightswitch kitchen_lightswitch),
+(is_kettle kettle),
+(is_pot pot),
+(is_induction induction),
+(is_stove stove),
+(is_dish dish_1),
+(is_dish dish_2),
+(is_dish dish_3),
+(is_shelf shelf),
+(is_desk desk)
 
 (goto robot1 bedroom kitchen): robot1 is now in kitchen  
 (turn_on_switch robot1 kitchen_lightswitch kitchen): switch is now on 

@@ -6,17 +6,27 @@ After cooking, each prepared item should be placed on the desk in the living roo
 
 Domain file:
 (define (domain housework)
-    (:requirements :strips :typing)
+    (:requirements :strips :typing :negative-preconditions)
     (:types agent room item appliance desk)
     (:predicates
         (agent_at ?a - agent ?r - room)
         (agent_hand_free ?a - agent)
         (agent_has_item ?a - agent ?i - item)
 
-        (at ?i - item ?loc - (either room appliance desk))
+        (at ?x - (either item desk) ?loc - (either room appliance desk))
 
         (ap_at ?ap - appliance ?r - room)
         (on ?ap - appliance)
+
+        (is_bread ?i - item)
+        (is_kettle ?i - item)
+        (is_cup_ramen ?i - item)
+
+        (is_toaster ?ap - appliance)
+        (is_stove ?ap - appliance)
+        (is_water_dispenser ?ap - appliance)
+
+        (is_desk ?d - desk)
 
         (cooked ?i - item)
         (boiled ?i - item)
@@ -32,6 +42,7 @@ Domain file:
     (:action pick
         :parameters (?a - agent ?i - item ?loc - (either room appliance desk))
         :precondition (and
+            (agent_at ?a ?loc)
             (agent_hand_free ?a)
             (at ?i ?loc)
         )
@@ -44,6 +55,7 @@ Domain file:
     (:action place
         :parameters (?a - agent ?i - item ?loc - (either room appliance desk))
         :precondition (and
+            (agent_at ?a ?loc)
             (agent_has_item ?a ?i)
             (not (at ?i ?loc))
         )
@@ -57,6 +69,7 @@ Domain file:
         :parameters (?a - agent ?ap - appliance ?r - room)
         :precondition (and
             (agent_at ?a ?r)
+            (agent_hand_free ?a)
             (ap_at ?ap ?r)
             (not (on ?ap))
         )
@@ -66,6 +79,7 @@ Domain file:
         :parameters (?a - agent ?ap - appliance ?r - room)
         :precondition (and
             (agent_at ?a ?r)
+            (agent_hand_free ?a)
             (ap_at ?ap ?r)
             (on ?ap)
         )
@@ -75,10 +89,13 @@ Domain file:
         :parameters (?a - agent ?i - item ?ap - appliance ?r - room)
         :precondition (and
             (agent_at ?a ?r)
+            (agent_hand_free ?a)
             (ap_at ?ap ?r)
             (at ?i ?ap)
             (on ?ap)
             (not (cooked ?i))
+            (is_bread ?i)
+            (is_toaster ?ap)
         )
         :effect (and
             (cooked ?i)
@@ -88,10 +105,13 @@ Domain file:
         :parameters (?a - agent ?i - item ?ap - appliance ?r - room)
         :precondition (and
             (agent_at ?a ?r)
+            (agent_hand_free ?a)
             (ap_at ?ap ?r)
             (at ?i ?ap)
             (on ?ap)
             (not (boiled ?i))
+            (is_kettle ?i)
+            (is_stove ?ap)
         )
         :effect (and
             (boiled ?i)
@@ -101,10 +121,13 @@ Domain file:
         :parameters (?a - agent ?i - item ?ap - appliance ?r - room)
         :precondition (and
             (agent_at ?a ?r)
+            (agent_hand_free ?a)
             (ap_at ?ap ?r)
             (at ?i ?ap)
             (on ?ap)
             (not (cooked ?i))
+            (is_cup_ramen ?i)
+            (is_water_dispenser ?ap)
         )
         :effect (and
             (cooked ?i)
@@ -135,6 +158,16 @@ Problem file:
         (ap_at stove kitchen)
         (ap_at water_dispenser kitchen)
 
+        (is_bread bread)
+        (is_kettle kettle)
+        (is_cup_ramen cup_ramen)
+
+        (is_toaster toaster)
+        (is_stove stove)
+        (is_water_dispenser water_dispenser)
+
+        (is_desk desk)
+
         (not (on toaster))
         (not (on stove))
         (not (on water_dispenser))
@@ -152,3 +185,4 @@ Problem file:
         (at cup_ramen desk)
     ))
 )
+

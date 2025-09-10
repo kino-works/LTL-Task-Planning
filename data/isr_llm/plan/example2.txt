@@ -1,16 +1,25 @@
 Domain file:
 (define (domain housework)
-    (:requirements :strips :typing)
-    (:types agent room item appliance desk)
+    (:requirements :strips :typing :negative-preconditions)
+    (:types agent room item appliance desk container)
     (:predicates
         (agent_at ?a - agent ?r - room)
         (agent_hand_free ?a - agent)
         (agent_has_item ?a - agent ?i - item)
 
-        (at ?i - item ?loc - (either room appliance desk))
+        (at ?x - (either item desk) ?loc - (either room appliance desk container))
 
         (ap_at ?ap - appliance ?r - room)
         (on ?ap - appliance)
+
+        (is_dishcloth ?i - item)
+        (is_phone ?i - item)
+        (is_dish ?i - item)
+
+        (is_charger ?ap - appliance)
+
+        (is_shelf ?c - container)
+        (is_desk ?d - desk)
 
         (wiped ?d - desk)
         (charged ?i - item)
@@ -24,8 +33,9 @@ Domain file:
         )
     )
     (:action pick
-        :parameters (?a - agent ?i - item ?loc - (either room appliance desk))
+        :parameters (?a - agent ?i - item ?loc - (either room appliance desk container))
         :precondition (and
+            (agent_at ?a ?loc)
             (agent_hand_free ?a)
             (at ?i ?loc)
         )
@@ -36,8 +46,9 @@ Domain file:
         )
     )
     (:action place
-        :parameters (?a - agent ?i - item ?loc - (either room appliance desk))
+        :parameters (?a - agent ?i - item ?loc - (either room appliance desk container))
         :precondition (and
+            (agent_at ?a ?loc)
             (agent_has_item ?a ?i)
             (not (at ?i ?loc))
         )
@@ -51,6 +62,7 @@ Domain file:
         :parameters (?a - agent ?ap - appliance ?r - room)
         :precondition (and
             (agent_at ?a ?r)
+            (agent_hand_free ?a)
             (ap_at ?ap ?r)
             (not (on ?ap))
         )
@@ -60,6 +72,7 @@ Domain file:
         :parameters (?a - agent ?ap - appliance ?r - room)
         :precondition (and
             (agent_at ?a ?r)
+            (agent_hand_free ?a)
             (ap_at ?ap ?r)
             (on ?ap)
         )
@@ -70,21 +83,24 @@ Domain file:
       :precondition (and
         (agent_at ?a ?r)
         (agent_has_item ?a ?i)
-    )
+        (is_dishcloth ?i)
+        (is_desk ?d)
+      )
       :effect (wiped ?d)
     )
     (:action wait_charge_phone
         :parameters (?a - agent ?i - item ?ap - appliance ?r - room)
         :precondition (and
             (agent_at ?a ?r)
+            (agent_hand_free ?a)
             (ap_at ?ap ?r)
             (at ?i ?ap)
             (on ?ap)
             (not (charged ?i))
+            (is_phone ?i)
+            (is_charger ?ap)
         )
-        :effect (and
-            (charged ?i)
-        )
+        :effect (charged ?i)
     )
 )
 
@@ -93,10 +109,11 @@ Problem file:
     (:domain housework)
     (:objects
         robot1 - agent
-        kitchen bathroom bedroom livingroom - room
+        kitchen bedroom livingroom - room
         charger - appliance
-        dishcloth phone water_bottle - item
+        dish_1 dish_2 dish_3 dishcloth phone - item
         desk - desk
+        shelf - container
     )
     (:init
         (agent_at robot1 bedroom)
@@ -104,41 +121,57 @@ Problem file:
 
         (at dishcloth livingroom)
         (at phone bedroom)
-        (at water_bottle kitchen)
+        (at dish_1 kitchen)
+        (at dish_2 kitchen)
+        (at dish_3 kitchen)
         (at desk livingroom)
+        (at shelf kitchen)
 
         (ap_at charger bedroom)
         (not (on charger))
 
         (not (wiped desk))
         (not (charged phone))
+
+        (is_dishcloth dishcloth)
+        (is_phone phone)
+        (is_dish dish_1)
+        (is_dish dish_2)
+        (is_dish dish_3)
+
+        (is_charger charger)
+
+        (is_shelf shelf)
+        (is_desk desk)
     )
     (:goal (and
         (wiped desk)
+        (at dishcloth desk)
         (charged phone)
-        (at water_bottle desk)
+        (at phone desk)
+        (at dish_1 shelf)
+        (at dish_2 shelf)
+        (at dish_3 shelf)
     ))
 )
 
 Action Sequence :
 Step 1:
 robot1 is now in the bedroom.
-(at dishcloth livingroom) with goal (wiped desk)
-(at phone bedroom)   with goal (charged phone)
-(at water_bottle kitchen) with goal (at water_bottle desk)
-dishcloth is unsatisfied, phone is unsatisfied, water_bottle is unsatisfied.
-Go to complete wipe(desk):
+Goals: (wiped desk), (charged phone), (dishes at shelf).
+(dishcloth livingroom) for wipe → unsatisfied
+(phone bedroom) for charged phone → unsatisfied
+(dishes kitchen) for shelf → unsatisfied
+Go to complete wipe:
 (goto robot1 bedroom livingroom)
 (pick robot1 dishcloth livingroom)
 (wipe robot1 dishcloth livingroom desk)
+(place robot1 dishcloth livingroom_desk)
 
 Step 2:
 robot1 is now in the livingroom.
-(at dishcloth livingroom) with goal (wiped desk)
-(at phone bedroom)   with goal (charged phone)
-(at water_bottle kitchen) with goal (at water_bottle desk)
-wipe is satisfied, phone is unsatisfied, water_bottle is unsatisfied.
-Go to complete charge(phone):
+wipe done, phone unsatisfied, dishes unsatisfied.
+Go to complete charged phone:
 (goto robot1 livingroom bedroom)
 (pick robot1 phone bedroom)
 (place robot1 phone charger)
@@ -151,19 +184,15 @@ Go to complete charge(phone):
 
 Step 3:
 robot1 is now in the livingroom.
-(at phone livingroom) with goal (charged phone)
-(at water_bottle kitchen) with goal (at water_bottle desk)
-charged(phone) is satisfied, water_bottle is unsatisfied.
-Go to complete place(water_bottle, desk):
+wipe done, charged phone done, dishes unsatisfied.
+Go to complete dishes:
 (goto robot1 livingroom kitchen)
-(pick robot1 water_bottle kitchen)
-(goto robot1 kitchen livingroom)
-(place robot1 water_bottle desk)
+(pick robot1 dish_1 kitchen)
+(place robot1 dish_1 shelf)
+(pick robot1 dish_2 kitchen)
+(place robot1 dish_2 shelf)
+(pick robot1 dish_3 kitchen)
+(place robot1 dish_3 shelf)
 
 Step 4:
-robot1 is now in the livingroom.
-(at dishcloth livingroom) with goal (wiped desk)
-(at phone desk) with goal (charged phone)
-(at water_bottle desk) with goal (at water_bottle desk)
-(wiped desk) is satisfied, charged(phone) is satisfied, water_bottle is satisfied.
-All objects are satisfied.
+All goals satisfied: desk wiped, dishcloth at desk, phone charged at desk, dishes organized on shelf.

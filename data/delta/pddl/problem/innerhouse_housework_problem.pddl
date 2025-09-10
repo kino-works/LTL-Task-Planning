@@ -157,6 +157,7 @@
         (item_on phone livingroom_desk)
         (item_on water_bottle livingroom_desk)
         (wiped livingroom_desk)
+        (item_on dishcloth livingroom_desk)
         (item_on dish_1 shelf)
         (item_on dish_2 shelf)
         (item_on dish_3 shelf)
