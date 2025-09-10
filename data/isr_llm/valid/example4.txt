@@ -1,5 +1,11 @@
 Question:
 Initial state:
+(neighbor kitchen livingroom)
+(neighbor livingroom kitchen)
+(neighbor bedroom livingroom)
+(neighbor livingroom bedroom)
+(neighbor bathroom livingroom)
+(neighbor livingroom bathroom)
 (at robot1 bedroom)
 (at bread kitchen)
 (at kettle kitchen)
@@ -53,6 +59,12 @@ Examined action sequence:
 Answer:
 Analysis:
 Initial state:
+(neighbor kitchen livingroom),
+(neighbor livingroom kitchen),
+(neighbor bedroom livingroom),
+(neighbor livingroom bedroom),
+(neighbor bathroom livingroom),
+(neighbor livingroom bathroom),
 (at robot1 bedroom),
 (at bread kitchen),
 (at kettle kitchen),

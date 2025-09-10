@@ -2,6 +2,12 @@
     {
         "scene":"innerhouse",
         "initial_state": [
+            "(neighbor kitchen livingroom)",
+            "(neighbor livingroom kitchen)",
+            "(neighbor bedroom livingroom)",
+            "(neighbor livingroom bedroom)",
+            "(neighbor bathroom livingroom)",
+            "(neighbor livingroom bathroom)",
             "(at robot1 livingroom)",
             "(at kitchen_lightswitch kitchen)",
             "(at toaster kitchen)",
@@ -79,8 +85,8 @@
             "Chargedphone": ["(charged phone)", "(at phone livingroom_desk)"],
             "Placedwaterbottle": ["(at water_bottle livingroom_desk)"],
             "Wipeddesk": ["(wiped livingroom_desk)", "(at dishcloth livingroom_desk)"],
-            "Turnonswitch": ["(on <room>_lightswitch)"],
-            "Turnoffswitch": ["(not (on <room>_lightswitch))"],
+            "Turnonswitch": ["(not (on livingroom_lightswitch))", "(not (on bathroom_lightswitch))", "(not (on bedroom_lightswitch))", "(not (on kitchen_lightswitch))"],
+            "Turnoffswitch": ["(on livingroom_lightswitch)", "(on bathroom_lightswitch)", "(on bedroom_lightswitch)", "(on kitchen_lightswitch)"],
             "Organizeddishes": ["(at dish_1 shelf)", "(at dish_2 shelf)", "(at dish_3 shelf)"],
             "Storedeggs": ["(at eggs egg_container)"]
         }
@@ -165,6 +171,7 @@
     {
         "scene":"dualdeskroom",
         "initial_state": [
+            "(neighbor upperarea lowerarea)",
             "(at robot1 upperarea)",
             "(at toaster upperarea)",
             "(at bread upperdesk)",

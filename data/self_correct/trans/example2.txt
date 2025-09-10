@@ -4,6 +4,7 @@ To wipe the desk, I will need the dishcloth, which is located in the living room
 To charge the phone, I will find it in the bedroom and place it on the charger, also in the bedroom. I will then turn on the charger, wait until the phone is charged, and finally bring the phone to the living room desk.
 To organize the dishes, I will go to the kitchen where dish_1, dish_2, and dish_3 are located. I will pick them up one by one and place them neatly onto the shelf in the kitchen.
 Once all these tasks are completed, the living room desk will be wiped, the phone will be charged and placed at the desk, and all dishes will be stored properly on the shelf.
+The robot can only use one hand at a time and can hold only one item.
 
 Domain file:
 (define (domain housework)
@@ -13,7 +14,7 @@ Domain file:
         (agent_at ?a - agent ?r - room)
         (agent_hand_free ?a - agent)
         (agent_has_item ?a - agent ?i - item)
-
+        (neighbor ?r1 - room ?r2 - room)
         (at ?x - (either item desk) ?loc - (either room appliance desk container))
 
         (ap_at ?ap - appliance ?r - room)
@@ -123,6 +124,13 @@ Problem file:
         shelf - container
     )
     (:init
+        (neighbor kitchen livingroom)
+        (neighbor livingroom kitchen)
+        (neighbor bedroom livingroom)
+        (neighbor livingroom bedroom)
+        (neighbor bathroom livingroom)
+        (neighbor livingroom bathroom)
+
         (agent_at robot1 bedroom)
         (agent_hand_free robot1)
 

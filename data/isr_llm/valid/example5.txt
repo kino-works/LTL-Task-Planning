@@ -1,5 +1,11 @@
 Question:
 Initial state:
+(neighbor kitchen livingroom)
+(neighbor livingroom kitchen)
+(neighbor bedroom livingroom)
+(neighbor livingroom bedroom)
+(neighbor bathroom livingroom)
+(neighbor livingroom bathroom)
 (at robot1 bedroom)
 (at dishcloth livingroom)
 (at phone bedroom)
@@ -61,13 +67,17 @@ Start: robot1 at bedroom, phone in bedroom, dishcloth in livingroom, dishes in k
 (place robot1 dishcloth livingroom_desk) → dishcloth at desk
 (goto robot1 livingroom bedroom) → robot1 in bedroom.
 (pick robot1 phone bedroom) → phone in hand.
-(place robot1 phone charger)+(turn_on robot1 charger bedroom)+(wait_charge_phone robot1 phone charger bedroom) → (charged phone) true.
-(turn_off robot1 charger bedroom) + (pick robot1 phone charger) → phone in hand.
+(place robot1 phone charger) → phone at desk.
+(turn_on robot1 charger bedroom) → charger turned on.
+(wait_charge_phone robot1 phone charger bedroom) → phone charged → (charged phone).
+(turn_off robot1 charger bedroom) → charger turned off.
+(pick robot1 phone charger) → phone in hand.
 (goto robot1 bedroom livingroom) → phone placed at desk.
 (place robot1 phone desk) → Goal (charged phone) satisfied.
 (goto robot1 livingroom kitchen) → robot1 in kitchen.
-(place robot1 dish_1 shelf), (place robot1 dish_2 shelf) → dish_1, dish_2 correctly placed.
-(place robot1 dish_3 desk) → dish_3 ends up at desk, not shelf.
+(place robot1 dish_1 shelf) → dish_1 at shelf.→ (at dish_1 shelf)
+(place robot1 dish_2 shelf) → dish_2 at shelf. → (at dish_2 shelf)
+(place robot1 dish_3 desk) → dish_3 at desk, not shelf.
 
 (wiped desk) satisfied.
 (at dishcloth desk) satisfied.

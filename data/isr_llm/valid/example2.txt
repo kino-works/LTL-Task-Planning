@@ -1,5 +1,11 @@
 Question:
 Initial state:
+(neighbor kitchen livingroom)
+(neighbor livingroom kitchen)
+(neighbor bedroom livingroom)
+(neighbor livingroom bedroom)
+(neighbor bathroom livingroom)
+(neighbor livingroom bathroom)
 (agent_at robot1 bedroom)
 (agent_hand_free robot1)
 (at dishcloth livingroom)
@@ -46,6 +52,12 @@ Examined action sequence:
 Answer:
 Analysis:
 Initial state:
+(neighbor kitchen livingroom),
+(neighbor livingroom kitchen),
+(neighbor bedroom livingroom),
+(neighbor livingroom bedroom),
+(neighbor bathroom livingroom),
+(neighbor livingroom bathroom),
 (agent_at robot1 bedroom),
 (agent_hand_free robot1),
 (at dishcloth livingroom),

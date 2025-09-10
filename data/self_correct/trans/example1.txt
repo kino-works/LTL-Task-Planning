@@ -5,6 +5,7 @@ Heating food requires using the microwave in the kitchen and waiting 3 minutes.
 After heating, the food should be placed on the desk in the living room.
 Placing the water bottle simply involves picking it up in the kitchen and carrying it to the living room desk.
 Storing the eggs means picking them up from the kitchen and placing them into the egg container in the kitchen.
+The robot can only use one hand at a time and can hold only one item.
 
 Domain file:
 (define (domain housework)
@@ -14,7 +15,7 @@ Domain file:
         (agent_at ?a - agent ?r - room)
         (agent_hand_free ?a - agent)
         (agent_has_item ?a - agent ?i - item)
-
+        (neighbor ?r1 - room ?r2 - room)
         (at ?x - (either item desk) ?loc - (either room appliance desk))
 
         (ap_at ?ap - appliance ?r - room)
@@ -113,6 +114,13 @@ Problem file:
         desk - desk
     )
     (:init
+        (neighbor kitchen livingroom)
+        (neighbor livingroom kitchen)
+        (neighbor bedroom livingroom)
+        (neighbor livingroom bedroom)
+        (neighbor bathroom livingroom)
+        (neighbor livingroom bathroom)
+
         (agent_at robot1 bedroom)
         (agent_hand_free robot1)
 

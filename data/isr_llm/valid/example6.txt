@@ -1,5 +1,11 @@
 Question:
 Initial state:
+(neighbor kitchen livingroom)
+(neighbor livingroom kitchen)
+(neighbor bedroom livingroom)
+(neighbor livingroom bedroom)
+(neighbor bathroom livingroom)
+(neighbor livingroom bathroom)
 (at robot1 bedroom)
 (at pot kitchen)
 (at clothes bathroom)

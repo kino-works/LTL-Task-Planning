@@ -15,7 +15,7 @@ Domain file:
         (agent_at ?a - agent ?r - room)
         (agent_hand_free ?a - agent)
         (agent_has_item ?a - agent ?i - item)
-
+        (neighbor ?r1 - room ?r2 - room)
         (at ?x - (either item desk) ?loc - (either room appliance desk))
 
         (ap_at ?ap - appliance ?r - room)
@@ -114,6 +114,13 @@ Problem file:
         desk - desk
     )
     (:init
+        (neighbor kitchen livingroom)
+        (neighbor livingroom kitchen)
+        (neighbor bedroom livingroom)
+        (neighbor livingroom bedroom)
+        (neighbor bathroom livingroom)
+        (neighbor livingroom bathroom)
+
         (agent_at robot1 bedroom)
         (agent_hand_free robot1)
 
