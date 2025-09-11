@@ -1,29 +1,28 @@
 I’m a service robot currently located in the bedroom of a house.
-My goals are to wipe the living room desk, charge the phone, and place the water bottle on the living room desk.
-To wipe the desk, I need the dishcloth in the living room.
-To charge the phone, I must use the charger in the bedroom and wait 10 minutes.
-After charging, I’ll bring the phone to the living room desk.
-To place the water bottle, I simply pick it up in the kitchen and carry it to the living room desk.
+My goals are to wipe the living room desk, charge the phone, and organize the dishes on the shelf.
+To wipe the desk, I will need the dishcloth, which is located in the living room. I must pick it up and use it to clean the desk.
+To charge the phone, I will find it in the bedroom and place it on the charger, also in the bedroom. I will then turn on the charger, wait until the phone is charged, and finally bring the phone to the living room desk.
+To organize the dishes, I will go to the kitchen where dish_1, dish_2, and dish_3 are located. I will pick them up one by one and place them neatly onto the shelf in the kitchen.
+Once all these tasks are completed, the living room desk will be wiped, the phone will be charged and placed at the desk, and all dishes will be stored properly on the shelf.
+The robot can only use one hand at a time and can hold only one item.
 
 Action Sequence :
 Step 1:
 robot1 is now in the bedroom.
-(at dishcloth livingroom) with goal (wiped desk)
-(at phone bedroom)   with goal (charged phone)
-(at water_bottle kitchen) with goal (at water_bottle desk)
-dishcloth is unsatisfied, phone is unsatisfied, water_bottle is unsatisfied.
-Go to complete wipe(desk):
+Goals: (wiped desk), (charged phone), (dishes at shelf).
+(dishcloth livingroom) for wipe → unsatisfied
+(phone bedroom) for charged phone → unsatisfied
+(dishes kitchen) for shelf → unsatisfied
+Go to complete wipe:
 (goto robot1 bedroom livingroom)
 (pick robot1 dishcloth livingroom)
 (wipe robot1 dishcloth livingroom desk)
+(place robot1 dishcloth livingroom_desk)
 
 Step 2:
 robot1 is now in the livingroom.
-(at dishcloth livingroom) with goal (wiped desk)
-(at phone bedroom)   with goal (charged phone)
-(at water_bottle kitchen) with goal (at water_bottle desk)
-wipe is satisfied, phone is unsatisfied, water_bottle is unsatisfied.
-Go to complete charge(phone):
+wipe done, phone unsatisfied, dishes unsatisfied.
+Go to complete charged phone:
 (goto robot1 livingroom bedroom)
 (pick robot1 phone bedroom)
 (place robot1 phone charger)
@@ -36,19 +35,15 @@ Go to complete charge(phone):
 
 Step 3:
 robot1 is now in the livingroom.
-(at phone livingroom) with goal (charged phone)
-(at water_bottle kitchen) with goal (at water_bottle desk)
-charged(phone) is satisfied, water_bottle is unsatisfied.
-Go to complete place(water_bottle, desk):
+wipe done, charged phone done, dishes unsatisfied.
+Go to complete dishes:
 (goto robot1 livingroom kitchen)
-(pick robot1 water_bottle kitchen)
-(goto robot1 kitchen livingroom)
-(place robot1 water_bottle desk)
+(pick robot1 dish_1 kitchen)
+(place robot1 dish_1 shelf)
+(pick robot1 dish_2 kitchen)
+(place robot1 dish_2 shelf)
+(pick robot1 dish_3 kitchen)
+(place robot1 dish_3 shelf)
 
 Step 4:
-robot1 is now in the livingroom.
-(at dishcloth livingroom) with goal (wiped desk)
-(at phone desk) with goal (charged phone)
-(at water_bottle desk) with goal (at water_bottle desk)
-(wiped desk) is satisfied, charged(phone) is satisfied, water_bottle is satisfied.
-All objects are satisfied.
+All goals satisfied: desk wiped, dishcloth at desk, phone charged at desk, dishes organized on shelf.

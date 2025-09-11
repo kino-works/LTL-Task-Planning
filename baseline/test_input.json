@@ -2,13 +2,13 @@
     {
         "scene":"innerhouse",
         "domain":[
-            ["Washedclothes", "Turnonswitch", "Turnoffswitch"]
+            ["Wipeddesk", "Organizeddishes", "Chargedphone", "Washedclothes"]
         ]
     },
     {
         "scene":"singledeskroom",
         "domain":[
-            ["Turnonswitch", "Turnoffswitch", "Chargedphone", "Washedclothes"]
+            ["Wipeddesk", "Organizeddishes", "Chargedphone", "Washedclothes"]
         ]
     },
     {
@@ -18,3 +18,4 @@
         ]
     }
 ]
+

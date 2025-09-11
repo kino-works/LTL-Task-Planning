@@ -21,7 +21,7 @@ class Validator(object):
             raise ValueError(f"Unsupported domain for Validator: {self.arg.domain}")
 
         # Few-shot example settings
-        self.max_examples = 5
+        self.max_examples = 8
         self.num_valid_example = min(self.arg.num_valid_ex, self.max_examples)
         # Directory containing opening.txt and example{i}.txt for household validation
         self.prompt_example_root = arg.valid_prompt_dir

@@ -23,7 +23,7 @@ class Planner(object):
             raise ValueError(f"Unsupported domain for Planner: {self.arg.domain}")
 
         # Few-shot example settings
-        self.max_examples = 5
+        self.max_examples = 4
         self.num_plan_example = min(self.arg.num_plan_ex, self.max_examples)
         # Directory containing opening.txt and example{i}.txt for household
         self.prompt_example_root = arg.plan_prompt_dir

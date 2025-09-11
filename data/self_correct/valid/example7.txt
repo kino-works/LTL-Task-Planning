@@ -1,0 +1,223 @@
+Question:
+Initial state: 
+(neighbor upperarea lowerarea)
+(neighbor lowerarea upperarea)
+(agent_at robot1 upperarea)
+(agent_hand_free robot1)
+(at dishcloth lowerdesk)
+(at phone lowerdesk)
+(at dish_1 upperdesk)
+(at dish_2 upperdesk)
+(at dish_3 upperdesk)
+(at clothes lowerdesk)
+(at upperdesk upperarea)
+(at lowerdesk lowerarea)
+(at shelf upperarea)
+(ap_at charger lowerarea)
+(ap_at washing_machine lowerarea)
+(not (on charger))
+(not (on washing_machine))
+(not (wiped lowerdesk))
+(not (charged phone))
+(not (cleaned clothes))
+(is_dishcloth dishcloth)
+(is_phone phone)
+(is_dish dish_1)
+(is_dish dish_2)
+(is_dish dish_3)
+(is_clothes clothes)
+(is_charger charger)
+(is_washing_machine washing_machine)
+(is_shelf shelf)
+(is_desk upperdesk)
+(is_desk lowerdesk)
+
+Goal state:
+(wiped lowerdesk)
+(at dishcloth lowerdesk)
+(at dish_1 shelf)
+(at dish_2 shelf)
+(at dish_3 shelf)
+(charged phone)
+(at phone upperdesk)
+(cleaned clothes)
+(at clothes upperdesk)
+
+Examined action sequence:
+(pick robot1 dish_1 upperdesk)
+(place robot1 dish_1 shelf)
+(pick robot1 dish_2 upperdesk)
+(place robot1 dish_2 shelf)
+(pick robot1 dish_3 upperdesk)
+(place robot1 dish_3 shelf)
+(goto robot1 upperarea lowerarea)
+(pick robot1 dishcloth lowerdesk)
+(wipe robot1 dishcloth lowerarea lowerdesk)
+(place robot1 dishcloth lowerdesk)
+(pick robot1 phone lowerdesk)
+(place robot1 phone charger)
+(turn_on robot1 charger lowerarea)
+(wait_charge_phone robot1 phone charger lowerarea)
+(turn_off robot1 charger lowerarea)
+(pick robot1 phone charger)
+(pick robot1 clothes lowerdesk)
+(place robot1 clothes washing_machine)
+(turn_on robot1 washing_machine lowerarea)
+(wait_clean_clothes robot1 clothes washing_machine lowerarea)
+(turn_off robot1 washing_machine lowerarea)
+(pick robot1 clothes washing_machine)
+(goto robot1 lowerarea upperarea)
+(place robot1 phone upperdesk)
+(place robot1 clothes upperdesk)
+
+Answer:
+Analysis:
+Initial state: 
+(neighbor upperarea lowerarea),
+(neighbor lowerarea upperarea),
+(agent_at robot1 upperarea),
+(agent_hand_free robot1),
+(at dishcloth lowerdesk),
+(at phone lowerdesk),
+(at dish_1 upperdesk),
+(at dish_2 upperdesk),
+(at dish_3 upperdesk),
+(at clothes lowerdesk),
+(at upperdesk upperarea),
+(at lowerdesk lowerarea),
+(at shelf upperarea),
+(ap_at charger lowerarea),
+(ap_at washing_machine lowerarea),
+(not (on charger)),
+(not (on washing_machine)),
+(not (wiped lowerdesk)),
+(not (charged phone)),
+(not (cleaned clothes)),
+(is_dishcloth dishcloth),
+(is_phone phone),
+(is_dish dish_1),
+(is_dish dish_2),
+(is_dish dish_3),
+(is_clothes clothes),
+(is_charger charger),
+(is_washing_machine washing_machine),
+(is_shelf shelf),
+(is_desk upperdesk),
+(is_desk lowerdesk)
+
+(pick robot1 dish_1 upperdesk)
+Resulting state: (agent_at robot1 upperarea), (agent_has_item robot1 dish_1), (other objects unchanged)
+Inverse action: (place robot1 dish_1 upperdesk)
+Inversed state: (agent_at robot1 upperarea), (at dish_1 upperdesk), (agent_hand_free robot1), (other objects unchanged)
+Difference: none
+inversed state is the same as resulting state, action is correct
+
+(place robot1 dish_1 shelf)
+Resulting state: (agent_at robot1 upperarea), (at dish_1 shelf), (agent_hand_free robot1), (other objects unchanged)
+Inverse action: (pick robot1 dish_1 shelf)
+Inversed state: (agent_at robot1 upperarea), (agent_has_item robot1 dish_1), (not (at dish_1 shelf)), (other objects unchanged)
+Difference: none
+inversed state is the same as resulting state, action is correct
+
+(pick robot1 dish_2 upperdesk)
+Resulting state: (agent_at robot1 upperarea), (agent_has_item robot1 dish_2), (other objects unchanged)
+Inverse action: (place robot1 dish_2 upperdesk)
+Inversed state: (agent_at robot1 upperarea), (at dish_2 upperdesk), (agent_hand_free robot1), (other objects unchanged)
+Difference: none
+inversed state is the same as resulting state, action is correct
+
+(place robot1 dish_2 shelf)
+Resulting state: (agent_at robot1 upperarea), (at dish_2 shelf), (agent_hand_free robot1), (other objects unchanged)
+Inverse action: (pick robot1 dish_2 shelf)
+Inversed state: (agent_at robot1 upperarea), (agent_has_item robot1 dish_2), (not (at dish_2 shelf)), (other objects unchanged)
+Difference: none
+inversed state is the same as resulting state, action is correct
+
+(pick robot1 dish_3 upperdesk)
+Resulting state: (agent_at robot1 upperarea), (agent_has_item robot1 dish_3), (other objects unchanged)
+Inverse action: (place robot1 dish_3 upperdesk)
+Inversed state: (agent_at robot1 upperarea), (at dish_3 upperdesk), (agent_hand_free robot1), (other objects unchanged)
+Difference: none
+inversed state is the same as resulting state, action is correct
+
+(place robot1 dish_3 shelf)
+Resulting state: (agent_at robot1 upperarea), (at dish_3 shelf), (agent_hand_free robot1), (other objects unchanged)
+Inverse action: (pick robot1 dish_3 shelf)
+Inversed state: (agent_at robot1 upperarea), (agent_has_item robot1 dish_3), (not (at dish_3 shelf)), (other objects unchanged)
+Difference: none
+inversed state is the same as resulting state, action is correct
+
+(goto robot1 upperarea lowerarea)
+Resulting state: (agent_at robot1 lowerarea), (other objects unchanged)
+Inverse action: (goto robot1 lowerarea upperarea)
+Inversed state: (agent_at robot1 upperarea), (other objects unchanged)
+Difference: none
+inversed state is the same as resulting state, action is correct
+
+(pick robot1 dishcloth lowerdesk)
+Resulting state: (agent_at robot1 lowerarea), (agent_has_item robot1 dishcloth), (other objects unchanged)
+Inverse action: (place robot1 dishcloth lowerdesk)
+Inversed state: (agent_at robot1 lowerarea), (at dishcloth lowerdesk), (agent_hand_free robot1), (other objects unchanged)
+Difference: none
+inversed state is the same as resulting state, action is correct
+
+(wipe robot1 dishcloth lowerarea lowerdesk)
+effect applied successfully, action is correct
+
+(place robot1 dishcloth lowerdesk)
+Resulting state: (agent_at robot1 lowerarea), (at dishcloth lowerdesk), (agent_hand_free robot1), (other objects unchanged)
+Inverse action: (pick robot1 dishcloth lowerdesk)
+Inversed state: (agent_at robot1 lowerarea), (agent_has_item robot1 dishcloth), (not (at dishcloth lowerdesk)), (other objects unchanged)
+Difference: none
+inversed state is the same as resulting state, action is correct
+
+(pick robot1 phone lowerdesk)
+Resulting state: (agent_at robot1 lowerarea), (agent_has_item robot1 phone), (other objects unchanged)
+Inverse action: (place robot1 phone lowerdesk)
+Inversed state: (agent_at robot1 lowerarea), (at phone lowerdesk), (agent_hand_free robot1), (other objects unchanged)
+Difference: none
+inversed state is the same as resulting state, action is correct
+
+(place robot1 phone charger)
+Resulting state: (agent_at robot1 lowerarea), (at phone charger), (agent_hand_free robot1), (other objects unchanged)
+Inverse action: (pick robot1 phone charger)
+Inversed state: (agent_at robot1 lowerarea), (agent_has_item robot1 phone), (not (at phone charger)), (other objects unchanged)
+Difference: none
+inversed state is the same as resulting state, action is correct
+
+(turn_on robot1 charger lowerarea)
+Resulting state: (agent_at robot1 lowerarea), (at phone charger), (on charger)
+Inverse action: (turn_off robot1 charger lowerarea)
+Inversed state: (agent_at robot1 lowerarea), (at phone charger), (not (on charger))
+Difference: none
+inversed state is the same as resulting state, action is correct
+
+(wait_charge_phone robot1 phone charger lowerarea)
+effect applied successfully, action is correct
+
+(turn_off robot1 charger lowerarea)
+Resulting state: (agent_at robot1 lowerarea), (at phone charger), (not (on charger))
+Inverse action: (turn_on robot1 charger lowerarea)
+Inversed state: (agent_at robot1 lowerarea), (at phone charger), (on charger)
+Difference: none
+inversed state is the same as resulting state, action is correct
+
+(pick robot1 phone charger)
+Resulting state: (agent_at robot1 lowerarea), (agent_has_item robot1 phone), (not (at phone charger)), (other objects unchanged)
+Inverse action: (place robot1 phone charger)
+Inversed state: (agent_at robot1 lowerarea), (at phone charger), (agent_hand_free robot1), (other objects unchanged)
+Difference: none
+inversed state is the same as resulting state, action is correct
+
+(pick robot1 clothes lowerdesk)
+Resulting state: (agent_at robot1 lowerarea), (agent_has_item robot1 clothes), (other objects unchanged)
+Inverse action: (place robot1 clothes lowerdesk)
+Inversed state: (agent_at robot1 lowerarea), (at clothes lowerdesk), (agent_hand_free robot1), (other objects unchanged)
+Difference: agent_hand_free is required but robot1 is holding phone
+
+The action is wrong because robot1 is already holding phone
+place the phone before picking clothes
+
+Final answer:
+No, the action sequence is wrong, it cannot accomplish the goal.
+

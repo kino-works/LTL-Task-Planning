@@ -1,59 +1,28 @@
 I’m a service robot currently located in the bedroom of a house.
-My goals are to turn on the kitchen switch, organize all dishes onto the kitchen shelf, boil water, heat the pot, and then turn off the kitchen switch.
-To turn on or off a switch, I must navigate to the room containing that switch.
-To organize dishes, I must pick each dish in the kitchen and place it onto the shelf.
-Boiling water requires using the stove and waiting for 5 minutes once the stove is on.
-Heating the pot requires using the induction and waiting for 3 minutes once the induction is on.
-After boiling water and heating the pot, I must bring each item to the living room desk.
+My goals are to heat the pot and place it on the living room desk, clean the clothes and place them on the desk, turn on the kitchen light switch, and turn off the bathroom light switch.
+To heat the pot, I will go to the kitchen where the pot and induction are located. I will pick up the pot, place it on the induction, turn on the induction, and wait until the pot is heated. After heating, I will carry the pot to the living room desk.
+To clean the clothes, I will go to the bathroom where the clothes and washing machine are located. I will put the clothes in the washing machine, turn it on, and wait until the clothes are cleaned. After washing, I will bring the clothes to the living room desk.
+For the switches, I will ensure the kitchen light switch is turned on, and I will make sure the bathroom light switch is turned off.
+Once all these tasks are complete, the pot will be heated and placed on the living room desk, the clothes will be washed and placed on the desk, the kitchen light will be on, and the bathroom light will be off.
+The robot can only use one hand at a time and can hold only one item.
 
-Action Sequence:
+Action Sequence :
 Step 1:
 robot1 is now in the bedroom.
-(at kitchen_lightswitch kitchen) with goal (on kitchen_lightswitch)
-(at dish_1 kitchen) with goal (at dish_1 shelf)
-(at dish_2 kitchen) with goal (at dish_2 shelf)
-(at dish_3 kitchen) with goal (at dish_3 shelf)
-(at kettle kitchen) with goal (boiled kettle & at kettle desk)
-(at pot kitchen) with goal (heated pot & at pot desk)
-kitchen_lightswitch is unsatisfied, dish_1 is unsatisfied, dish_2 is unsatisfied, dish_3 is unsatisfied, kettle is unsatisfied, pot is unsatisfied.
-Go to complete turnOn(kitchen_lightswitch):
+Goals: (heated pot & at pot desk), (cleaned clothes & at clothes desk), (on kitchen_lightswitch), (not (on bathroom_lightswitch)).
+Current facts:
+- pot at kitchen (unsatisfied)
+- clothes at bathroom (unsatisfied)
+- kitchen_lightswitch OFF (unsatisfied → need ON)
+- bathroom_lightswitch ON (unsatisfied → need OFF)
+
+Go to complete kitchen switch ON:
 (goto robot1 bedroom kitchen)
-(turn_on_switch robot1 kitchen_lightswitch kitchen)
+(turn_on robot1 kitchen_lightswitch kitchen)
 
 Step 2:
-robot1 is now in the kitchen.
-(on kitchen_lightswitch) with goal (on kitchen_lightswitch) – satisfied
-dish_1, dish_2, dish_3 are unsatisfied.
-Go to complete organize(dish_1):
-(pick robot1 dish_1 kitchen)
-(place robot1 dish_1 shelf)
-Go to complete organize(dish_2):
-(pick robot1 dish_2 kitchen)
-(place robot1 dish_2 shelf)
-Go to complete organize(dish_3):
-(pick robot1 dish_3 kitchen)
-(place robot1 dish_3 shelf)
-
-Step 3:
-robot1 is now in the kitchen.
-(dish_1 at shelf), (dish_2 at shelf), (dish_3 at shelf) – satisfied
-kettle and pot are unsatisfied.
-Go to complete boil(kettle):
-(pick robot1 kettle kitchen)
-(place robot1 kettle stove)
-(turn_on robot1 stove kitchen)
-(wait_boil_water robot1 kettle stove kitchen)
-(turn_off robot1 stove kitchen)
-(pick robot1 kettle stove)
-(goto robot1 kitchen livingroom)
-(place robot1 kettle desk)
-
-Step 4:
-robot1 is now in the livingroom.
-(boiled kettle & at kettle desk) – satisfied
-pot is unsatisfied.
-Go to complete heat(pot):
-(goto robot1 livingroom kitchen)
+Kitchen switch is ON (goal satisfied for Turnonswitch).
+Now heat pot:
 (pick robot1 pot kitchen)
 (place robot1 pot induction)
 (turn_on robot1 induction kitchen)
@@ -63,12 +32,28 @@ Go to complete heat(pot):
 (goto robot1 kitchen livingroom)
 (place robot1 pot desk)
 
-Step 5:
-robot1 is now in the livingroom.
-(heated pot & at pot desk) – satisfied
-kitchen_lightswitch with goal (off kitchen_lightswitch) – unsatisfied
-Go to complete turnOff(kitchen_lightswitch):
-(goto robot1 livingroom kitchen)
-(turn_off_switch robot1 kitchen_lightswitch kitchen)
+Step 3:
+Heatedpot satisfied (pot heated & at desk).
+Now go clean clothes (bathroom):
+(goto robot1 livingroom bathroom)
+(pick robot1 clothes bathroom)
+(place robot1 clothes washing_machine)
+(turn_on robot1 washing_machine bathroom)
+(wait_clean_clothes robot1 clothes washing_machine bathroom)
+(turn_off robot1 washing_machine bathroom)
+(pick robot1 clothes washing_machine)
+(goto robot1 bathroom livingroom)
+(place robot1 clothes desk)
 
-All objects are satisfied.
+Step 4:
+Washedclothes satisfied (cleaned & at desk).
+Finally turn OFF bathroom switch:
+(goto robot1 livingroom bathroom)
+(turn_off robot1 bathroom_lightswitch bathroom)
+
+Step 5:
+All goals satisfied:
+- (heated pot) and (at pot desk)
+- (cleaned clothes) and (at clothes desk)
+- (on kitchen_lightswitch)
+- (not (on bathroom_lightswitch))

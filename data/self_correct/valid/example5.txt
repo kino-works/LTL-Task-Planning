@@ -62,8 +62,6 @@ Examined action sequence:
 
 Answer:
 Analysis:
-Answer:
-Analysis:
 Initial state:
 (neighbor kitchen livingroom),
 (neighbor livingroom kitchen),

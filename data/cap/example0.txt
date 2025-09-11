@@ -1,8 +1,9 @@
 I'm a service robot currently located in the bedroom of a house.
 My task is to cook bread, boil water, and cook cup ramen, placing each finished item neatly on the living room desk.
 I must first navigate to the room containing the target object.
-Additionally, each cooking-related task requires waiting for a specific duration: 3 minutes for cook and cup ramen, and 5 minutes for boiling water.
+Additionally, each cooking-related task requires waiting for a specific duration: 3 minutes for bread and cup ramen, and 5 minutes for boiling water.
 After cooking, each prepared item should be placed on the desk in the living room to complete my goals.
+The robot can only use one hand at a time and can hold only one item.
 
 Action Sequence :
 Step 1:

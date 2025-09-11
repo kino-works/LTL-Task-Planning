@@ -119,6 +119,9 @@ def run_episode(
     pddl_init_state, pddl_goal_state = extract_state_pddl(planning_problem, domain="household")
 
     # 3) Refinement loop
+    self_eval_success = False
+    action_description = ""  
+
     for j in range(max_num_refine + 1):
         time.sleep(wait_seconds)
 
@@ -154,14 +157,15 @@ def run_episode(
         if len(parts) == 1:
             print("Validator returned no 'Final answer' token. Breaking.")
             break
-        final_answer = parts[1]
-
-        if 'Yes' in final_answer:
+        final_answer = parts[1].strip()
+        fa_norm = final_answer.lower().strip()
+        if fa_norm.startswith("yes"):
+            self_eval_success = True
             print("Self-evaluation suggests a solution.")
             with open(test_log_file_path, "a") as f:
                 f.write("Self-evaluation suggests a solution.\n")
             break
-        elif 'No' in final_answer:
+        elif fa_norm.startswith("no"):
             print("Self-evaluation suggests a failure.")
             error_description = "Goal is not satisfied. "
             planning_problem = (
@@ -172,6 +176,8 @@ def run_episode(
                 f.write(planning_problem + "\n")
         else:
             print("Unknown validator decision:", final_answer)
+            with open(test_log_file_path, "a") as f:
+                f.write(f"Unknown validator decision: {final_answer}\n")
     # Refinement loop finish
 
     print("Actual analysis:")
@@ -187,17 +193,27 @@ def run_episode(
         actions = [a.strip() for a in parsed]
     else:
         actions = [line.strip() for line in raw_actions.splitlines() if line.strip()]
-    
-    success, failure, err_msg, failed_action = simulator.simulate_actions(actions, test_log_file_path)
 
-    if success and not failure:
+    if not action_description.strip():
+        with open(test_log_file_path, "a") as f:
+            f.write("No action_description; skipping simulation.\n")
+        success, failure, err_msg, failed_action = False, True, "empty plan", None
+    else:
+        success, failure, err_msg, failed_action = simulator.simulate_actions(actions, test_log_file_path)
+
+    if (success and not failure) and self_eval_success:
         validation_status = "Success"
         with open(test_log_file_path, "a") as f:
-            f.write("Simulation completed successfully.\n")
+            reason = "by simulation" if (success and not failure) else "by self-evaluation"
+            f.write(f"Validation marked Success ({reason}).\n")
+            if success and not failure:
+                f.write("Simulation completed successfully.\n")
     else:
         validation_status = "Failure"
         with open(test_log_file_path, "a") as f:
-            f.write(f"Simulation failed at action: {failed_action}, reason: {err_msg}\n")
+            if not (success and not failure):
+                f.write(f"Simulation failed at action: {failed_action}, reason: {err_msg}\n")
+            f.write("Validation marked Failure.\n")
 
     planner.init_messages(is_reinitialize=True)
 
@@ -215,7 +231,7 @@ def main():
     parser.add_argument('--domain', type=str, default="household")
     parser.add_argument("--num_trans_ex", type=int, default=4)
     parser.add_argument("--num_plan_ex", type=int, default=4)
-    parser.add_argument("--num_valid_ex", type=int, default=7)
+    parser.add_argument("--num_valid_ex", type=int, default=8)
     parser.add_argument("--num_test", type=int, default=1)
     parser.add_argument("--max_refine", type=int, default=5)
     parser.add_argument("--max_temp", type=float, default=0.4)

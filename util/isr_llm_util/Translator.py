@@ -24,7 +24,7 @@ class Translator(object):
             raise ValueError(f"Unsupported domain for Translator: {self.arg.domain}")
 
         # Set example root for household domain
-        self.max_examples = 3
+        self.max_examples = 4
         self.num_trans_example = min(arg.num_trans_ex, 3)
         self.prompt_example_root = arg.trans_prompt_dir
 

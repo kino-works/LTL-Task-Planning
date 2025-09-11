@@ -1,0 +1,200 @@
+Question:
+Initial state: 
+(neighbor kitchen livingroom)
+(neighbor livingroom kitchen)
+(neighbor bedroom livingroom)
+(neighbor livingroom bedroom)
+(neighbor bathroom livingroom)
+(neighbor livingroom bathroom)
+(agent_at robot1 livingroom)
+(agent_hand_free robot1)
+(at dishcloth livingroom)
+(at phone bedroom)
+(at clothes bedroom)
+(at dish_1 kitchen)
+(at dish_2 kitchen)
+(at dish_3 kitchen)
+(at livingroom_desk livingroom)
+(at shelf kitchen)
+(ap_at charger bedroom)
+(ap_at washing_machine bathroom)
+(not (on charger))
+(not (on washing_machine))
+(not (wiped livingroom_desk))
+(not (charged phone))
+(not (cleaned clothes))
+(is_dishcloth dishcloth)
+(is_phone phone)
+(is_clothes clothes)
+(is_dish dish_1)
+(is_dish dish_2)
+(is_dish dish_3)
+(is_charger charger)
+(is_washing_machine washing_machine)
+(is_shelf shelf)
+(is_desk livingroom_desk)
+
+Goal state:
+(wiped livingroom_desk)
+(at dishcloth livingroom_desk)
+(charged phone)
+(at phone livingroom_desk)
+(cleaned clothes)
+(at clothes livingroom_desk)
+(at dish_1 shelf)
+(at dish_2 shelf)
+(at dish_3 shelf)
+
+Examined action sequence:
+(pick robot1 dishcloth livingroom)
+(wipe robot1 dishcloth livingroom livingroom_desk)
+(place robot1 dishcloth livingroom_desk)
+(goto robot1 livingroom bedroom)
+(pick robot1 phone bedroom)
+(place robot1 phone charger)
+(turn_on robot1 charger bedroom)
+(wait_charge_phone robot1 phone charger bedroom)
+(turn_off robot1 charger bedroom)
+(pick robot1 phone charger)
+(goto robot1 bedroom livingroom)
+(place robot1 phone livingroom_desk)
+(pick robot1 clothes bedroom)
+(goto robot1 bedroom bathroom)
+(place robot1 clothes washing_machine)
+(turn_on robot1 washing_machine bathroom)
+(wait_clean_clothes robot1 clothes washing_machine bathroom)
+(turn_off robot1 washing_machine bathroom)
+(pick robot1 clothes washing_machine)
+(goto robot1 bathroom livingroom)
+(place robot1 clothes livingroom_desk)
+(goto robot1 livingroom kitchen)
+(pick robot1 dish_1 kitchen)
+(place robot1 dish_1 shelf)
+(pick robot1 dish_2 kitchen)
+(place robot1 dish_2 shelf)
+(pick robot1 dish_3 kitchen)
+(place robot1 dish_3 shelf)
+
+Answer:
+Analysis:
+Initial state: 
+(neighbor kitchen livingroom),
+(neighbor livingroom kitchen),
+(neighbor bedroom livingroom),
+(neighbor livingroom bedroom),
+(neighbor bathroom livingroom),
+(neighbor livingroom bathroom),
+(agent_at robot1 livingroom),
+(agent_hand_free robot1),
+(at dishcloth livingroom),
+(at phone bedroom),
+(at clothes bedroom),
+(at dish_1 kitchen),
+(at dish_2 kitchen),
+(at dish_3 kitchen),
+(at livingroom_desk livingroom),
+(at shelf kitchen),
+(ap_at charger bedroom),
+(ap_at washing_machine bathroom),
+(not (on charger)),
+(not (on washing_machine)),
+(not (wiped livingroom_desk)),
+(not (charged phone)),
+(not (cleaned clothes)),
+(is_dishcloth dishcloth),
+(is_phone phone),
+(is_clothes clothes),
+(is_dish dish_1),
+(is_dish dish_2),
+(is_dish dish_3),
+(is_charger charger),
+(is_washing_machine washing_machine),
+(is_shelf shelf),
+(is_desk livingroom_desk)
+
+(pick robot1 dishcloth livingroom)
+Resulting state: (agent_at robot1 livingroom), (agent_has_item robot1 dishcloth), (other objects unchanged)
+Inverse action: (place robot1 dishcloth livingroom)
+Inversed state: (agent_at robot1 livingroom), (at dishcloth livingroom), (agent_hand_free robot1), (other objects unchanged)
+Difference: none
+inversed state is the same as resulting state, action is correct
+
+(wipe robot1 dishcloth livingroom livingroom_desk)
+effect applied successfully, action is correct
+
+(place robot1 dishcloth livingroom_desk)
+Resulting state: (agent_at robot1 livingroom), (at dishcloth livingroom_desk), (agent_hand_free robot1), (other objects unchanged)
+Inverse action: (pick robot1 dishcloth livingroom_desk)
+Inversed state: (agent_at robot1 livingroom), (agent_has_item robot1 dishcloth), (not (at dishcloth livingroom_desk)), (other objects unchanged)
+Difference: none
+inversed state is the same as resulting state, action is correct
+
+(goto robot1 livingroom bedroom)
+Resulting state: (agent_at robot1 bedroom), (other objects unchanged)
+Inverse action: (goto robot1 bedroom livingroom)
+Inversed state: (agent_at robot1 livingroom), (other objects unchanged)
+Difference: none
+inversed state is the same as resulting state, action is correct
+
+(pick robot1 phone bedroom)
+Resulting state: (agent_at robot1 bedroom), (agent_has_item robot1 phone), (other objects unchanged)
+Inverse action: (place robot1 phone bedroom)
+Inversed state: (agent_at robot1 bedroom), (at phone bedroom), (agent_hand_free robot1), (other objects unchanged)
+Difference: none
+inversed state is the same as resulting state, action is correct
+
+(place robot1 phone charger)
+Resulting state: (agent_at robot1 bedroom), (at phone charger), (agent_hand_free robot1), (other objects unchanged)
+Inverse action: (pick robot1 phone charger)
+Inversed state: (agent_at robot1 bedroom), (agent_has_item robot1 phone), (not (at phone charger)), (other objects unchanged)
+Difference: none
+inversed state is the same as resulting state, action is correct
+
+(turn_on robot1 charger bedroom)
+Resulting state: (agent_at robot1 bedroom), (on charger), (other objects unchanged)
+Inverse action: (turn_off robot1 charger bedroom)
+Inversed state: (agent_at robot1 bedroom), (not (on charger)), (other objects unchanged)
+Difference: none
+inversed state is the same as resulting state, action is correct
+
+(wait_charge_phone robot1 phone charger bedroom)
+effect applied successfully, action is correct
+
+(turn_off robot1 charger bedroom)
+Resulting state: (agent_at robot1 bedroom), (not (on charger)), (at phone charger), (other objects unchanged)
+Inverse action: (turn_on robot1 charger bedroom)
+Inversed state: (agent_at robot1 bedroom), (on charger), (at phone charger), (other objects unchanged)
+Difference: none
+inversed state is the same as resulting state, action is correct
+
+(pick robot1 phone charger)
+Resulting state: (agent_at robot1 bedroom), (agent_has_item robot1 phone), (not (at phone charger)), (other objects unchanged)
+Inverse action: (place robot1 phone charger)
+Inversed state: (agent_at robot1 bedroom), (at phone charger), (agent_hand_free robot1), (other objects unchanged)
+Difference: none
+inversed state is the same as resulting state, action is correct
+
+(goto robot1 bedroom livingroom)
+Resulting state: (agent_at robot1 livingroom), (agent_has_item robot1 phone), (other objects unchanged)
+Inverse action: (goto robot1 livingroom bedroom)
+Inversed state: (agent_at robot1 bedroom), (agent_has_item robot1 phone), (other objects unchanged)
+Difference: none
+inversed state is the same as resulting state, action is correct
+
+(place robot1 phone livingroom_desk)
+Resulting state: (agent_at robot1 livingroom), (at phone livingroom_desk), (agent_hand_free robot1)
+Inverse action: (pick robot1 phone livingroom_desk)
+Inversed state: (agent_at robot1 livingroom), (agent_has_item robot1 phone), (not (at phone livingroom_desk))
+Difference: none
+inversed state is the same as resulting state, action is correct
+
+(pick robot1 clothes bedroom)
+Resulting state: (agent_at robot1 bedroom), (agent_has_item robot1 clothes), (other objects unchanged)
+Inverse action: (place robot1 clothes bedroom)
+Inversed state: (agent_at robot1 bedroom), (at clothes bedroom), (agent_hand_free robot1), (other objects unchanged)
+Difference: (at robot1 bedroom) & (at robot1 livingroom)
+The action is wrong because robot1 is in livingroom, not bedroom
+
+Final answer:
+No, the action sequence is wrong, it cannot accomplish the goal.
+
